@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>「下げすぎ銘柄 10 選」型動画 ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>「下げすぎ銘柄 10 選」型動画 ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1 id="10">「下げすぎ銘柄 10 選」型動画 ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-03-16
+<strong>対象</strong>: 2026 年 3 月頃に SNS 上で拡散していた、「下げすぎ銘柄」を中長期投資・スイング向けに紹介する短尺動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-03-16) で公表済みだった情報のみで判定する。</p>
+<p><strong>位置づけ</strong>: 「下げすぎ＝反発期待」を暗示する銘柄羅列型動画。明示的な「買え」表現や目標株価提示はないが、「底値を狙え」「逆転バガー」という投機表現と SNS フォロー誘導を含む。
+教育解説型（同型観察 1・2）とは異なり結びが「定点観測」「期待先行に注意」ではなく「好評ならまた紹介」で、実質的に投資判断を促す構造。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 動画から抽出した主張</h2>
+<table>
+<thead>
+<tr>
+<th>主張</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>テーマパーク大手 1 社が最高値から株価約半分</td>
+</tr>
+<tr>
+<td>B</td>
+<td>化粧品大手 1 社が最高値から株価約 1/3</td>
+</tr>
+<tr>
+<td>C</td>
+<td>化粧品業界の株価はずっと下げ続けている（中堅 2 社含む）</td>
+</tr>
+<tr>
+<td>D</td>
+<td>バイオ関連も下げチャートが多い</td>
+</tr>
+<tr>
+<td>E</td>
+<td>仮想通貨関連はほぼ全滅</td>
+</tr>
+<tr>
+<td>F</td>
+<td>イーサリアム関連の小型株も「逆転バガー」</td>
+</tr>
+<tr>
+<td>G</td>
+<td>ビットコイン関連の小型株も「逆転バガーどころじゃなかった」</td>
+</tr>
+<tr>
+<td>H</td>
+<td>「下げすぎ銘柄 10 選」と謳いつつ実際は 8 銘柄しか紹介</td>
+</tr>
+<tr>
+<td>I</td>
+<td>「底値を狙え」（暗示される反発期待）</td>
+</tr>
+<tr>
+<td>J</td>
+<td>SNS でも面白い銘柄をポストしている、フォローを呼びかけ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 検証</h2>
+<h3 id="a">主張 A — テーマパーク大手の最高値半減 → ⚠️ 概ね事実だが下落理由は業績悪化ではない</h3>
+<p>該当銘柄は 2023 年に最高値（約 5,800 円台）→ 投稿時点 (2026-03-16) では概ね 3,000 円前後で約半分まで下落は事実。</p>
+<p><strong>重要なポイント</strong>: 投稿時点で公表済みだった最新通期 (FY2025、提出 2025-06-26):
+- 売上 <strong>6,794 億円</strong>（前期比 +9.8%）
+- 営業利益 <strong>1,721 億円</strong>（前期比 +4.1%）
+- 純利益 <strong>1,242 億円</strong>（前期比 +3.3%）</p>
+<p><strong>業績は過去最高水準</strong>。株価下落の主因は業績悪化ではなく、パンデミック後の高すぎた期待値の調整・入園料値上げの集客頭打ち懸念・中長期の人口動態リスクなど。</p>
+<p>→ <strong>業績好調 ≠ 自動的に株価反発</strong>。「下げすぎ」と「底値」は別物。</p>
+<hr />
+<h3 id="bc">主張 B・C — 化粧品大手・中堅の下落 → ⚠️ 事実だが業績悪化の正当な反映</h3>
+<p><strong>化粧品大手 1 社（A 社）</strong> — 投稿時点で公表済み最新通期 (FY2024 = 2024 年 12 月期):</p>
+<table>
+<thead>
+<tr>
+<th>期</th>
+<th>売上</th>
+<th>営業利益</th>
+<th>純利益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FY2021</td>
+<td>10,100 億</td>
+<td>407 億</td>
+<td>469 億</td>
+</tr>
+<tr>
+<td>FY2022</td>
+<td>10,674 億</td>
+<td>388 億</td>
+<td>342 億</td>
+</tr>
+<tr>
+<td>FY2023</td>
+<td>9,730 億</td>
+<td>281 億</td>
+<td>218 億</td>
+</tr>
+<tr>
+<td><strong>FY2024</strong></td>
+<td><strong>9,906 億</strong></td>
+<td><strong>76 億</strong></td>
+<td><strong>-108 億（赤字転落）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ 売上ほぼ横ばいで営業利益と純利益が大幅悪化。<strong>赤字転落</strong>。
+中国市場の不振、原料高、構造改革コスト等が主因。</p>
+<p>→ <strong>株価下落（最高値の約 1/3）は業績悪化の正当な反映</strong>。</p>
+<p><strong>化粧品大手 2 社（B 社）</strong> — 投稿時点で公表済み最新通期 (FY2024):</p>
+<table>
+<thead>
+<tr>
+<th>期</th>
+<th>売上</th>
+<th>営業利益</th>
+<th>純利益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FY2022</td>
+<td>2,891 億</td>
+<td>221 億</td>
+<td>188 億</td>
+</tr>
+<tr>
+<td>FY2023</td>
+<td>3,004 億</td>
+<td>160 億</td>
+<td>117 億</td>
+</tr>
+<tr>
+<td><strong>FY2024</strong></td>
+<td><strong>3,228 億</strong></td>
+<td><strong>174 億</strong></td>
+<td><strong>75 億（前期比 -36%）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ 売上は伸びるが営業利益は減少傾向、純利益は大幅減。化粧品セクター全体が中国インバウンド剥落・原料高で苦戦。</p>
+<p>→ <strong>化粧品業界が下げ続け、は概ね事実</strong>。ただし「下げすぎ」ではなく<strong>構造的逆風による正当な下落</strong>。</p>
+<hr />
+<h3 id="d">主張 D — バイオ関連も下げチャート → ⚠️ 事実だが構造的に「下げすぎ」とは言えない</h3>
+<p>該当バイオベンチャー 1 社の投稿時点で公表済み最新通期 (FY2024):</p>
+<table>
+<thead>
+<tr>
+<th>期</th>
+<th>売上</th>
+<th>営業利益</th>
+<th>純利益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FY2021</td>
+<td>1 億</td>
+<td>-156 億</td>
+<td>-137 億</td>
+</tr>
+<tr>
+<td>FY2022</td>
+<td>1 億</td>
+<td>-163 億</td>
+<td>-147 億</td>
+</tr>
+<tr>
+<td>FY2023</td>
+<td>2 億</td>
+<td>-120 億</td>
+<td>-74 億</td>
+</tr>
+<tr>
+<td><strong>FY2024</strong></td>
+<td><strong>6 億</strong></td>
+<td><strong>-91 億</strong></td>
+<td><strong>-281 億</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>売上 6 億円規模で純損失 281 億円</strong>。コロナワクチン開発失敗以降、商業化された製品なし、現金燃焼継続。</p>
+<p>このバイオ関連株は 2020 年 6 月に約 2,500 円超の最高値（コロナワクチン期待）→ 投稿時点では 100 円前後。<strong>実質 1/25 以下の下落</strong>。</p>
+<p>→ 株価下落は<strong>業績そのものを反映</strong>。「下げすぎ＝反発期待」は危険な暗示。バイオベンチャーの典型的失敗パターンを「割安」と誤認させる構造。</p>
+<hr />
+<h3 id="e">主張 E — 仮想通貨関連は全滅 → ⚠️ 暗号資産価格連動で「全滅」は誇張</h3>
+<p>該当仮想通貨関連企業の投稿時点で公表済み最新通期 (FY2024):</p>
+<table>
+<thead>
+<tr>
+<th>期</th>
+<th>売上</th>
+<th>営業利益</th>
+<th>純利益</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FY2022</td>
+<td>4 億</td>
+<td>-8.6 億</td>
+<td>9.8 億</td>
+</tr>
+<tr>
+<td>FY2023</td>
+<td>3 億</td>
+<td>-4.7 億</td>
+<td>-6.8 億</td>
+</tr>
+<tr>
+<td><strong>FY2024</strong></td>
+<td><strong>11 億</strong></td>
+<td><strong>3.5 億</strong></td>
+<td><strong>44.4 億（黒字転換）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ 投稿時点で見えていたのは<strong>黒字転換</strong>した暗号資産関連企業。FY2025 通期は提出が投稿日<strong>後</strong>のため、過去時点検証では使えない。</p>
+<p>「ほぼ全滅」表現は、ビットコイン価格の急落とそれに連動した株価下落を指していると思われるが、当時の業績情報だけ見れば「全滅」は誇張。</p>
+<p>→ <strong>暗号資産関連株価は暗号資産価格と連動、業績ではない構造リスク</strong>を視聴者に伝えていない点が問題。</p>
+<hr />
+<h3 id="fg">主張 F・G — クォンタム・ビート（暗号資産関連小型株）→ ⚠️ 銘柄特定困難</h3>
+<p>「クォンタム」「ビート」だけでは EDINET の主要収録企業に該当する銘柄が明確に特定できず、視聴者が社名と業種だけで売買を判断できない構造。</p>
+<p>EDINET DB は ~3,800 社収録のうち、必ずしも全上場企業を含まない（特に小型株・新興市場）。</p>
+<p>→ <strong>動画の言及だけでは銘柄特定が困難</strong>。リスク開示として不十分。</p>
+<hr />
+<h3 id="h-10-8">主張 H — 「10 選」と称しつつ実際は 8 銘柄 → ❌ タイトル詐欺</h3>
+<p>実際に名前が出てきた銘柄は 8 銘柄。「化粧品業界はずっと下げ続けている」という業界全体への言及はあるが、個別銘柄数としては 8。</p>
+<p>タイトル「10 選」は SEO/CTR 目的の誇張。動画末尾で「即興で喋ったので雑になった」とエクスキューズ。タイトルとの乖離が情報の正確性を損なう。</p>
+<hr />
+<h3 id="i">主張 I — 「底値を狙え」（暗示される反発期待）→ ❌ 個別銘柄の下落理由を一括りにする粗雑さ</h3>
+<table>
+<thead>
+<tr>
+<th>銘柄類型</th>
+<th>投稿時点での下落理由</th>
+<th>「下げすぎ→反発」が成立するか</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>テーマパーク大手</td>
+<td>業績好調、過去高値からの修正</td>
+<td>ファンダ良好、需給次第で反発の可能性</td>
+</tr>
+<tr>
+<td>化粧品大手 1</td>
+<td><strong>業績悪化</strong>（赤字転落）</td>
+<td>ファンダ回復が前提、即反発困難</td>
+</tr>
+<tr>
+<td>化粧品大手 2</td>
+<td><strong>業績悪化</strong>（純利益 -36%）</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>化粧品中堅</td>
+<td>化粧品セクター逆風</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>バイオベンチャー</td>
+<td><strong>継続赤字、商業化なし</strong></td>
+<td>反発期待は楽観的すぎる</td>
+</tr>
+<tr>
+<td>仮想通貨関連</td>
+<td>暗号資産価格連動</td>
+<td>ビットコイン価格次第</td>
+</tr>
+<tr>
+<td>同（小型 1）</td>
+<td>同上（特定困難）</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>同（小型 2）</td>
+<td>同上（特定困難）</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<p>→ 動画は <strong>8 銘柄を「下げすぎ」一括りで紹介</strong>するが、実態は:
+- 業績好調で下げている
+- 業績悪化で下げている
+- 構造的赤字で下げている
+- 暗号資産価格に連動して下げている</p>
+<p><strong>4 種類の異なる下落理由を一括りにし、「底値→反発」を暗示するのは粗雑</strong>。
+特にバイオベンチャーと暗号資産関連は「下げ過ぎ」が永続的な可能性が高く、塩漬けリスクが極大。</p>
+<hr />
+<h3 id="j-sns">主張 J — SNS フォロー誘導 → ⚠️ フォロワー獲得型構造</h3>
+<p>「面白い銘柄は SNS でポストしている」「フォローしてほしい」「定期的に銘柄サーフィン」「好評ならまた紹介」。</p>
+<p>→ DM 誘導や有料商材販売は確認できないが、<strong>フォロワー獲得を主目的とした銘柄羅列型</strong>動画。
+ショート動画のアルゴリズムでバズらせて他 SNS に誘導する構造で、煽り型カタログの「フォロワー獲得型」に該当。</p>
+<hr />
+<h2 id="3">3. 結論</h2>
+<h3 id="_1">全体評価</h3>
+<p><strong>反論材料あり</strong>（中程度の煽り）。</p>
+<p>虚偽の度合いは中程度:
+- 個々の事実主張（株価下落幅）は概ね事実
+- ただし「下げすぎ→反発期待」の暗示は<strong>異なる下落理由を一括りにした粗雑な投資判断誘導</strong>
+- 「逆転バガー」「底値を狙え」というキャッチコピーで投機性を強調
+- タイトル「10 選」と実際の 8 銘柄の乖離</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>煽り型フルコース</th>
+<th>銘柄羅列ソフト型（本動画）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導</td>
+<td>あり</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>架空銘柄</td>
+<td>あり</td>
+<td>なし（実在企業 6+、未特定 2）</td>
+</tr>
+<tr>
+<td>目標株価提示</td>
+<td>あり（4,000% 等）</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>あり</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>「今すぐ買え」</td>
+<td>「好評ならまた紹介」</td>
+</tr>
+<tr>
+<td>暗示される行動</td>
+<td>即決買い</td>
+<td>「底値を狙え」（やや弱い暗示）</td>
+</tr>
+<tr>
+<td>フォロワー誘導</td>
+<td>あり</td>
+<td>あり</td>
+</tr>
+</tbody>
+</table>
+<p>教育解説型（同型観察 1・2、反論材料なし）と比べると:
+- <strong>下落理由を解説せず銘柄羅列</strong>: 市場マイクロストラクチャの説明がない
+- <strong>結びの注意喚起なし</strong>: 「期待先行で高値掴みするな」のような自己抑制が欠落
+- <strong>「逆転バガー」「底値を狙え」</strong>: 投機表現を多用</p>
+<h3 id="_2">法的観点</h3>
+<ul>
+<li><strong>金商法 38 条（断定的判断の提供禁止）</strong>: 「底値を狙え」「下げすぎ」は投資判断材料の提供で、断定的「上がる」表現ではないため<strong>直接抵触は困難</strong>。</li>
+<li><strong>金商法 29 条（投資助言業）</strong>: 個別銘柄の言及がフォロワー獲得目的で継続的に行われる場合、業として認定される可能性あり。動画単発では助言業認定は難しい。</li>
+<li><strong>タイトル詐欺（10 選なのに 8 銘柄）</strong>: 法的問題というよりプラットフォームの規約違反レベル。</li>
+</ul>
+<h3 id="_3">投資家へのメッセージ</h3>
+<p>「下げすぎ銘柄」リストには<strong>異なる下落理由が混在</strong>:</p>
+<ol>
+<li><strong>業績好調の高値修正</strong>: 反発の可能性はあるがタイミング次第</li>
+<li><strong>業績悪化の正当な下落</strong>: ファンダ回復まで反発困難</li>
+<li><strong>構造的赤字の下落</strong>: 「下げすぎ」が永続するリスク大</li>
+<li><strong>市況連動の下落</strong>: 個別企業の業績ではコントロール不能</li>
+</ol>
+<p>「下げすぎ＝反発期待」の単純な思考は、特に 2-4 のタイプで<strong>塩漬けリスク</strong>を作る。
+動画は分類なしに一括紹介しているため、視聴者が銘柄選別を誤りやすい構造。</p>
+<p>煽り型と教育解説型の見分け方:</p>
+<table>
+<thead>
+<tr>
+<th>銘柄羅列ソフト型の特徴</th>
+<th>教育解説型の特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>銘柄を並べて「下げすぎ」と評する</td>
+<td>業界構造・市場メカニズムを説明</td>
+</tr>
+<tr>
+<td>結びに「好評ならまた紹介」</td>
+<td>結びに「期待先行で高値掴みするな」</td>
+</tr>
+<tr>
+<td>投機表現（「逆転バガー」「底値を狙え」）</td>
+<td>注意喚起表現（「定点観測」「長期で見る」）</td>
+</tr>
+<tr>
+<td>個別銘柄の下落理由を分解しない</td>
+<td>リスク要因を明示</td>
+</tr>
+</tbody>
+</table>
+<p><strong>チェックリスト</strong>:
+- 各銘柄の<strong>下落理由をファンダで分解</strong>してから判断
+- 「逆転バガー」「底値を狙え」というキャッチに乗らず、業績推移を確認
+- 暗号資産関連株は暗号資産価格との連動を理解
+- バイオベンチャーは商業化前の銘柄が多く「割安」とは限らない</p>
+<hr />
+<h2 id="_4">付録 — 同型観察</h2>
+<p>「銘柄羅列型」と「教育解説型」の境界線サンプルとして蓄積中。</p>
+<p><strong>境界線の決め手</strong>:
+- 個別銘柄の<strong>下落理由を分解しているか</strong>
+- <strong>自己抑制表現</strong>（「期待先行で高値掴みするな」等）の有無
+- 銘柄選別の<strong>リスク開示</strong></p>
+<p>本動画は「投機表現はあるがフルコース型ではない」中間カテゴリで、煽り型カタログを 5〜7 種に正式分類する際の重要サンプル。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
