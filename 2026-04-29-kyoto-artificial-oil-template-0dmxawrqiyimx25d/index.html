@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>京都大学人工石油 123 円銘柄 ファクトチェック（テンプレ流用シリーズ観察）</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>京都大学人工石油 123 円銘柄 ファクトチェック（テンプレ流用シリーズ観察）</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1>京都大学人工石油 123 円銘柄 ファクトチェック（テンプレ流用シリーズ観察）</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-04-28
+<strong>対象</strong>: 2026 年 4 月下旬に SNS 上で拡散していた、約 2 分の DM 誘導型煽り動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-04-28) で公表済みだった情報のみで主張の真偽を評価する。</p>
+<p><strong>位置づけ</strong>: 同じ「京都大学人工石油」テーマの先行動画（前日投稿）と<strong>ほぼ同一テンプレを別アカウントが流用</strong>した DM 誘導フルコース型。京都大学発の人工石油・量産設備中核技術を握る無名企業（123 円→12,600 円）を匂わせて DM 誘導する典型構造。先行動画と比べ、目標水増し率は 1.55 倍に増加している。</p>
+</blockquote>
+<hr />
+<h2>1. 動画から抽出された主張</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>主張</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>1 リットル <strong>14 円</strong>の人工石油（<strong>京都大学発表</strong>）</td>
+</tr>
+<tr>
+<td>B</td>
+<td>量産設備をすでに完成</td>
+</tr>
+<tr>
+<td>C</td>
+<td>量産設備の中核技術を握る<strong>無名企業</strong>に資金が流れている</td>
+</tr>
+<tr>
+<td>D</td>
+<td>株価 <strong>123 円</strong>、目標 <strong>12,600 円以上</strong>、予想上昇率 <strong>+8,850.26%</strong></td>
+</tr>
+<tr>
+<td>E</td>
+<td>5 万円で十分、来年は車・家を購入できる</td>
+</tr>
+<tr>
+<td>F</td>
+<td>6 時間後に削除 / 「波に乗る人 / 一生飲み込まれる人」</td>
+</tr>
+<tr>
+<td>G</td>
+<td>コメント・DM で<strong>特定の数字</strong>を送れ</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. 検証</h2>
+<h3>A・B. 京都大学発の人工石油 / 量産設備完成 → ❌ <strong>量産設備は存在せず、技術的妥当性も疑義</strong></h3>
+<h4>A-1. 京都大学発の「ドリーム燃料」</h4>
+<ul>
+<li>京都大学名誉教授・<strong>今中忠行氏</strong>が開発主導したとされる「ドリーム燃料」</li>
+<li>関連企業は 2018 年設立の未上場企業（代表は今中氏）</li>
+<li>ステータス: <strong>未上場</strong>（IPO 情報なし、2026-04-28 時点で公開済み開示なし）</li>
+</ul>
+<h4>A-2. 「水と CO₂ から軽油 1L を 14 円で製造」の科学的妥当性</h4>
+<ul>
+<li><strong>熱力学第二法則に反する可能性</strong>を指摘する記事が業界誌から 2024 年に公開済み</li>
+<li>「永久機関的」と疑義を呈する論調</li>
+<li>査読付き学術論文での再現実験は確認できない</li>
+</ul>
+<h4>A-3. 「量産設備をすでに完成」</h4>
+<ul>
+<li>動画は「発表と同時に量産設備を完成させた」と主張</li>
+<li>一次資料（プレスリリース・有価証券届出書・ニュース報道）で<strong>該当する量産設備の完成発表は確認できない</strong></li>
+<li>仮に商業化レベルの量産設備が存在すれば、京都大学・関連企業から大規模な開示が出るはず</li>
+</ul>
+<p>→ <strong>量産設備の存在自体が一次資料で裏取りできない</strong>。</p>
+<hr />
+<h3>C. 量産設備の中核技術を握る「無名企業」（123 円） → ❌ <strong>該当する上場企業なし</strong></h3>
+<ul>
+<li><strong>株価 123 円付近で京都大学人工石油関連の上場企業は存在しない</strong></li>
+<li>関連企業（前述）は未上場、IPO 情報もなし</li>
+<li>投稿日時点（2026-04-28）で公表済みの 4 月新規上場銘柄に<strong>人工石油関連は確認できない</strong></li>
+</ul>
+<p>→ <strong>架空銘柄匂わせ型</strong>（DM で誘導後、別の商材販売や CFD ブローカーへ送る典型構造）。</p>
+<hr />
+<h3>D. 目標 12,600 円・+8,850.26% → ❌ <strong>算術上不可能、先行動画比で目標を 1.55 倍に水増し</strong></h3>
+<ul>
+<li>123 円 → 12,600 円は <strong>+10,148%（約 102 倍）</strong></li>
+<li>動画の「+8,850.26%」は計算自体も微妙にずれている（123 → 11,007 円相当）</li>
+<li>仮に時価総額 1,000 億円規模の中堅株がこれを達成するには <strong>時価総額 10 兆円</strong> が必要</li>
+<li>良品計画（約 1.6 兆円）・サンリオ（約 2 兆円）を遥かに超える規模で、IPO 直後に達成する物理的根拠なし</li>
+</ul>
+<h4>先行動画との比較</h4>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>先行動画（前日投稿）</th>
+<th>本動画</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>出発株価</td>
+<td>117 円</td>
+<td>123 円</td>
+</tr>
+<tr>
+<td>目標</td>
+<td>6,800 円</td>
+<td>12,600 円</td>
+</tr>
+<tr>
+<td>上昇率</td>
+<td>+5,711%（58 倍）</td>
+<td>+8,850.26%（102 倍）</td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>テンプレ運用元が 1 日で目標水増しを 1.55 倍に増加</strong>させた。煽り耐性が確実に低下。</p>
+<hr />
+<h3>E. 5 万円で来年は車・家 → ❌ 投機煽り</h3>
+<ul>
+<li>「5 万円が車・家になる」=<strong>1,000 倍超のリターン期待</strong>を 1 年で</li>
+<li>仮に達成可能なら、世界中のヘッジファンドが殺到して株価は瞬時に織り込まれる</li>
+<li><strong>「少額で大きなリターン」を断言</strong>するのは金商法 38 条 2 号の断定的判断の提供に該当する疑い</li>
+</ul>
+<hr />
+<h3>F. 6 時間後に削除 / 「波に乗る人 / 飲み込まれる人」 → ❌ 緊急扇動 + 権威分断</h3>
+<ul>
+<li>「6 時間後に削除」: 心理的圧力で判断を急がせる典型</li>
+<li>実際に削除される根拠なし（投稿日から 1 日経過しても本動画は閲覧可能）</li>
+<li>「波に乗る人 / 飲み込まれる人」: 二分法で判断保留を許さない誘導</li>
+</ul>
+<hr />
+<h3>G. 特定の数字 DM 誘導 → ❌ <strong>詐欺の典型動線</strong></h3>
+<ul>
+<li><strong>同じ番号を DM/コメントで送らせる</strong>動線は同シリーズで繰り返し観察</li>
+<li>DM 後の展開: 銘柄非開示のまま CFD ブローカー・LINE オープンチャット・有料商材へ誘導</li>
+<li>過去 SESC 摘発事例の典型動線</li>
+</ul>
+<hr />
+<h2>3. 結論</h2>
+<h3>全体評価</h3>
+<p><strong>反論材料あり</strong>（重要度 <strong>極めて高</strong>、テンプレ流用の決定的証拠を含む）。</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導</td>
+<td>あり（特定の数字をコメント・DM 送付）</td>
+</tr>
+<tr>
+<td>架空銘柄匂わせ</td>
+<td>あり（中核技術を握る無名企業 123 円）</td>
+</tr>
+<tr>
+<td>目標株価過大水増し</td>
+<td>あり（<strong>+10,148%</strong>、先行動画比 1.55 倍）</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>あり（6 時間後削除）</td>
+</tr>
+<tr>
+<td>過去実績演出</td>
+<td>なし（先行動画にはあり）</td>
+</tr>
+<tr>
+<td>権威接触</td>
+<td>あり（京都大学）</td>
+</tr>
+<tr>
+<td>権威分断</td>
+<td>あり（波に乗る人 / 飲み込まれる人）</td>
+</tr>
+<tr>
+<td>時事連動</td>
+<td>あり（エネルギー覇権・人工石油）</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>DM 誘導</td>
+</tr>
+<tr>
+<td>金商法抵触疑い</td>
+<td><strong>38 条 + 29 条</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>法的観点</h3>
+<ul>
+<li><strong>金商法 38 条 2 号</strong>: 「+8,850.26% 上昇」「来年車・家」は断定的判断の提供</li>
+<li><strong>金商法 29 条</strong>: DM 誘導後に業として銘柄推奨を行えば無登録投資助言業</li>
+<li><strong>金商法 158 条</strong>: 架空の量産設備・上場銘柄を匂わせる場合は風説の流布の疑い</li>
+</ul>
+<h3>投資家へのメッセージ</h3>
+<p><strong>「コメント・DM で数字を送れ」型は構造的に詐欺</strong>。</p>
+<p>理由:
+1. 京都大学発の人工石油は<strong>未上場の研究関連企業のみ</strong>で、株式は購入できない
+2. 「量産設備完成」の一次開示は確認できない
+3. 約 2 分で +8,850% を断定する時点で物理的根拠なし
+4. <strong>同じテンプレを別アカウントが翌日に流用</strong>しており、運用元が分散テンプレを回している証拠
+5. 同じ番号が同シリーズで繰り返し使われる詐欺動線</p>
+<p><strong>チェックリスト</strong>:
+- 「数字をコメント / DM で送れ」型は無条件で警戒
+- 「○○大学発」「世界唯一」「量産設備完成」を強調する銘柄は一次開示で必ず裏取り
+- 「6 時間後に削除」「今日が最後」は緊急扇動の典型
+- 別アカが同じテンプレ・同じ番号で同じテーマを連投する場合は運用元統一の可能性</p>
+<h3>通報・対応の参考</h3>
+<ul>
+<li>金商法違反の疑い: 証券取引等監視委員会（SESC）情報受付窓口</li>
+<li>プラットフォーム規約違反: 該当 SNS の通報機能</li>
+</ul>
+<hr />
+<h2>付録 — 同型観察</h2>
+<h3>テンプレ流通の決定的証拠（先行動画 → 本動画）</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>先行動画</th>
+<th>本動画</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>投稿日</td>
+<td>2026-04-27</td>
+<td>2026-04-28（<strong>翌日</strong>）</td>
+</tr>
+<tr>
+<td>投稿者</td>
+<td>（別アカウント A）</td>
+<td><strong>別アカウント B</strong></td>
+</tr>
+<tr>
+<td>テーマ</td>
+<td>京都大学人工石油</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>株価帯</td>
+<td>117 円</td>
+<td>123 円</td>
+</tr>
+<tr>
+<td>目標</td>
+<td>6,800 円</td>
+<td>12,600 円</td>
+</tr>
+<tr>
+<td>DM 番号</td>
+<td>同じ番号</td>
+<td><strong>同じ番号（完全一致）</strong></td>
+</tr>
+<tr>
+<td>権威分断</td>
+<td>「私を信じた人」</td>
+<td>「波に乗る人 / 飲み込まれる人」</td>
+</tr>
+<tr>
+<td>物語修飾</td>
+<td>「神様の領域」</td>
+<td>「兄弟の反撃」「既得権益」</td>
+</tr>
+</tbody>
+</table>
+<p>→ 異なるアカウントが<strong>同一テンプレを連日投下</strong>。「中華系投資詐欺の運用元統一・テンプレ流通」を裏付ける。</p>
+<h3>同番号テンプレの伝播</h3>
+<p>同じ 3 桁番号テンプレが少なくとも 2 アカウント間で共有されており、複数のテーマ（レアアース、水処理、半導体、人工石油）にまたがって展開している。番号単独で詐欺動線の特定要素となり得る。</p>
+<h3>DM 誘導フルコース型の横断比較</h3>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>DM 誘導表現</th>
+<th>銘柄実体</th>
+<th>過大煽り</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>動画 60s</td>
+<td>「特定の数字を返信」</td>
+<td>1 位コード非開示</td>
+<td>+7,124%</td>
+</tr>
+<tr>
+<td>動画 38s</td>
+<td>「DM 希望」「次のターゲット」</td>
+<td>実銘柄 5 つ（テーマ強引）</td>
+<td>「最強」「ロックオン」</td>
+</tr>
+<tr>
+<td>photo 12 枚</td>
+<td>「今日の天気をコメント」</td>
+<td>金（Gold）</td>
+<td>+45%</td>
+</tr>
+<tr>
+<td><strong>動画 117s（本動画）</strong></td>
+<td><strong>「特定の数字を送れ」</strong></td>
+<td><strong>無名企業 123 円</strong></td>
+<td><strong>+8,850.26%</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ DM 誘導フルコース型は番号・形式・テーマを変えながら<strong>同じ構造</strong>で増殖中。</p>
+<h3>チェックリストへの追加候補</h3>
+<ul>
+<li>「○○大学発」「量産設備完成」主張は<strong>プレスリリースと有価証券届出書を必ず突合</strong></li>
+<li>「6 時間後削除」など短時間の緊急扇動は<strong>実際に削除されることはほぼない</strong></li>
+<li><strong>同テーマ・同番号が複数アカで連投</strong>していれば、運用元統一テンプレと判定</li>
+</ul>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
