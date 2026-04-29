@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>「4月は株を買え」型 マクロ断定動画 ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>「4月は株を買え」型 マクロ断定動画 ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1 id="4">「4月は株を買え」型 マクロ断定動画 ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-04-01
+<strong>対象</strong>: 2026 年 4 月初旬に SNS 上で拡散していた、市場全体への買い推奨を断定的に行う 28 秒の短尺動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-04-01) で公表済みだった情報のみで判定する。</p>
+<p><strong>位置づけ</strong>: 短尺マクロ断定型動画。個別銘柄推奨はないが、「買いまくってください」「上がっていくでしょう」「買うべきタイミング」という<strong>金商法 38 条（断定的判断の提供禁止）に明確に抵触する疑い</strong>のある表現を多用。
+教育解説型（反論材料なし）の正反対。銘柄羅列ソフト型より煽り構造が強い。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 動画から抽出した主張</h2>
+<table>
+<thead>
+<tr>
+<th>主張</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>4月は株を「とにかく買いまくってください」（明示推奨）</td>
+</tr>
+<tr>
+<td>B</td>
+<td>下げて不安になっている視聴者がいる</td>
+</tr>
+<tr>
+<td>C</td>
+<td>原油価格が「チャート的にピークを打った」</td>
+</tr>
+<tr>
+<td>D</td>
+<td>原油高が「これ以上激化する心配はほとんどない」</td>
+</tr>
+<tr>
+<td>E</td>
+<td>株価は「4月を安値に上がっていく」（4月底打ち断定）</td>
+</tr>
+<tr>
+<td>F</td>
+<td>日経が上がれば「ほとんどの銘柄が上昇する」</td>
+</tr>
+<tr>
+<td>G</td>
+<td>「ここは株を買うべきタイミングです」（明示推奨）</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 検証</h2>
+<h3 id="ag-38">主張 A・G — 「買いまくってください」「買うべきタイミング」 → ❌ 金商法 38 条抵触の典型表現</h3>
+<p>金融商品取引法 38 条 2 号は、金融商品取引業者等による「<strong>断定的判断の提供</strong>」を禁止する:</p>
+<blockquote>
+<p>「不確実な事項について断定的判断を提供し、又は確実であると誤解させるおそれのあることを告げる行為」</p>
+</blockquote>
+<p>該当表現:
+- 「<strong>買いまくってください</strong>」 — 推奨の極端な強調
+- 「<strong>上がっていくでしょう</strong>」 — 上昇の断定
+- 「<strong>買うべきタイミングです</strong>」 — タイミング判断の断定</p>
+<p>これらは投資判断を不確実な未来予測で誘導する典型例。</p>
+<p><strong>金商法上の扱い</strong>:
+- 動画作成者が投資助言業（金商法 29 条）の登録なしに業として継続的に行えば違法
+- 動画単発でも、SNS で広く配信し視聴者を投資判断に導く構造は規制対象になりうる
+- 業として認定された場合、無登録営業として刑事罰の対象</p>
+<p>→ <strong>法的観点からは最も危険な表現</strong>。</p>
+<hr />
+<h3 id="cd">主張 C・D — 「原油価格がチャート的にピークを打った、これ以上激化する心配はない」 → ⚠️ 過去時点で断定不能</h3>
+<p>投稿時点 (2026-04-01) で公表済みだった原油価格動向を確認すると:</p>
+<ul>
+<li>2026 年初は中東情勢悪化を受け WTI 原油は 80-85 ドル/バレル前後</li>
+<li>2026 年 3 月は OPEC+ の生産調整議論やドル動向で調整、おおむね 75-80 ドル</li>
+<li>2026 年 4 月初旬は 70-75 ドル付近</li>
+</ul>
+<p>技術的に短期的なピークアウトに見える局面ではあるが:
+- OPEC+ の追加減産・地政学リスク次第で<strong>再上昇は十分ありえる</strong>
+- 「チャート的にピーク」は後付け解釈で、当時時点では確定不能
+- 「これ以上激化する心配はほとんどない」は予測であって事実ではない</p>
+<p>→ <strong>チャート分析の主観的解釈を「事実」のように断定</strong>。投稿時点で原油の方向を断言できる根拠はない。</p>
+<hr />
+<h3 id="e-4">主張 E — 「株価は4月を安値に上がっていく」 → ❌ 短期予測を断定する危険性</h3>
+<p>株価の短期方向は確率的にしか語れない要素:
+- 金利動向（FRB・日銀の政策）
+- 為替（円ドル相場）
+- 企業業績（決算シーズン）
+- 地政学（中東・台湾海峡・ウクライナ）
+- 需給（機関投資家のポジション、信用買い残）
+- 流動性（中央銀行の流動性供給）</p>
+<p>これらの<strong>多変量要因の合成</strong>で短期株価が決まる。動画は「<strong>原油チャート分析</strong>」1 点のみで全体方向を断定。論理破綻。</p>
+<p>「4月を安値に上がっていく」は:
+- 4月中旬以降の決算ガイダンス次第で下落も可能
+- 米中通商・地政学イベント次第で短期急落も可能
+- 「4月の安値」がいつ・どの水準かも不明</p>
+<p>→ <strong>確率的にしか語れない短期予測を確定的に語る</strong>。これも金商法 38 条の典型抵触。</p>
+<hr />
+<h3 id="f">主張 F — 「日経が上がればほとんどの銘柄が上昇」 → ❌ セクター分散の現実を無視</h3>
+<p>実際の市場では:
+- 日経平均が上昇しても<strong>逆相関セクター</strong>（金融、ディフェンシブ等）は下落することが多い
+- 業績悪化銘柄は指数上昇局面でも独自に下落
+- 中小型株は指数連動性が低く、逆動きすることも頻繁</p>
+<p>「ほとんどの銘柄が上昇」は雑な単純化。視聴者が<strong>指数連動 ETF 以外</strong>を買った場合、指数上昇でも自分の保有銘柄が下落するシナリオは普通にある。</p>
+<p>→ <strong>指数と個別銘柄の連動性を過大評価</strong>した粗雑な前提。</p>
+<hr />
+<h3 id="b">主張 B — 「下げて不安になっている方もいる」 → ✅ 視聴者心理を捕捉した導入</h3>
+<p>事実陳述ではなくマーケティング的な導入。「不安な人を慰める」立て付けで「買え」推奨に繋ぐ構造で、煽り型動画によく見られるテンプレ。
+→ 検証対象ではないが、<strong>煽り構造の一部として記録</strong>。</p>
+<hr />
+<h2 id="3">3. 結論</h2>
+<h3 id="_1">全体評価</h3>
+<p><strong>反論材料あり（重要度高）</strong> — 金商法 38 条抵触疑い。</p>
+<p>虚偽の度合いは大:
+- <strong>断定的判断の提供</strong>（金商法 38 条）に該当する表現を 3 箇所以上で使用
+- 短尺 28 秒で根拠を提示せず断定だけを並べる構造
+- 「原油チャート 1 点」で日経全体の方向を断定する論理破綻
+- リスク開示・損失可能性への言及なし
+- 個別銘柄の業績・需給・地政学リスクを完全無視</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>本動画（マクロ断定型）</th>
+<th>銘柄羅列ソフト型</th>
+<th>教育解説型</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>個別銘柄推奨</td>
+<td>なし（市場全体）</td>
+<td>あり（並列）</td>
+<td>あり / なし</td>
+</tr>
+<tr>
+<td>断定推奨表現</td>
+<td><strong>「買いまくってください」</strong></td>
+<td>「底値を狙え」（暗示）</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>上昇予測</td>
+<td><strong>「上がっていくでしょう」断定</strong></td>
+<td>暗示のみ</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>根拠提示</td>
+<td>原油チャート 1 点</td>
+<td>株価下落幅のみ</td>
+<td>業界構造解説</td>
+</tr>
+<tr>
+<td>リスク開示</td>
+<td><strong>なし</strong></td>
+<td>部分的</td>
+<td>あり</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td><strong>「買うべきタイミング」</strong></td>
+<td>「好評ならまた」</td>
+<td>「期待先行に注意」</td>
+</tr>
+<tr>
+<td>金商法 38 条</td>
+<td><strong>抵触疑い大</strong></td>
+<td>直接抵触は困難</td>
+<td>該当なし</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_2">法的観点</h3>
+<p><strong>金商法 38 条（断定的判断の提供禁止）に明確に抵触する疑い</strong>:
+- 「買いまくってください」 — 推奨の断定
+- 「4月を安値に上がっていく」 — 上昇方向の断定
+- 「ほとんどの銘柄が上昇する」 — 個別銘柄への波及効果の断定
+- 「買うべきタイミングです」 — タイミング判断の断定</p>
+<p>業として継続的に同種動画を投稿していれば、<strong>金商法 29 条違反（無登録投資助言業）</strong> の刑事罰対象になりうる。</p>
+<p>参考: 金商法違反の過去事例では、SNS で個別銘柄を継続的に推奨し有料サロン誘導していた者に有罪判決の事例あり。本動画は個別銘柄推奨ではないが、「マクロ断定」型でも継続性次第で同様の論点。</p>
+<h3 id="_3">投資家へのメッセージ</h3>
+<p><strong>短尺・断定型の動画には絶対に乗らないこと</strong>。理由:</p>
+<ol>
+<li><strong>28 秒で投資判断は形成できない</strong>: 株価の方向を決める変数は多数で、1 動画で網羅不能</li>
+<li><strong>「買いまくれ」型の表現は法令違反の疑いが濃厚</strong>: 配信者がリスクを取って違反している可能性</li>
+<li><strong>「原油 → 日経」の単純連動は実態と乖離</strong>: セクター分散・業績連動・地政学を無視した粗雑な前提</li>
+<li><strong>損失への言及がない動画は信用しない</strong>: リスク開示なしの推奨は極めて危険</li>
+</ol>
+<p><strong>チェックリスト</strong>:
+- このタイプの動画を見たら、根拠の数（≥ 3 つ）と根拠の独立性、リスク開示の有無を確認
+- 「上がる」「下がる」を断定する個人投稿は<strong>全て金商法 38 条疑いとして警戒</strong>
+- 投資判断は決算・需給・地政学・金利の<strong>多変量で</strong>評価
+- 短期方向は<strong>確率的</strong>であることを忘れない</p>
+<h3 id="_4">通報・対応の参考</h3>
+<ul>
+<li>金商法違反の疑いがある場合: 証券取引等監視委員会（SESC）情報受付窓口</li>
+<li>プラットフォームの規約違反: 該当 SNS の通報機能</li>
+</ul>
+<hr />
+<h2 id="_5">付録 — 同型観察</h2>
+<p>「マクロ断定型」（短尺・市場全体推奨・断定表現）は、SNS 投資情報の中で<strong>最も金商法リスクが高い</strong>カテゴリ。
+個別銘柄推奨型は架空銘柄や数値水増しで虚偽性が露骨だが、マクロ断定型は「市場全体の方向」を語るため<strong>虚偽認定が一見しにくく、合法性を装える</strong>点で巧妙。</p>
+<table>
+<thead>
+<tr>
+<th>カテゴリ</th>
+<th>主な煽り構造</th>
+<th>検出のしやすさ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>個別銘柄推奨フルコース</td>
+<td>DM 誘導+目標株価+緊急扇動</td>
+<td>高（架空銘柄や数値で露骨）</td>
+</tr>
+<tr>
+<td>銘柄羅列ソフト型</td>
+<td>「下げすぎ→反発」暗示</td>
+<td>中（投機表現が手がかり）</td>
+</tr>
+<tr>
+<td><strong>マクロ断定型</strong></td>
+<td><strong>市場全体への断定推奨</strong></td>
+<td><strong>低（一見合法的に見える）</strong></td>
+</tr>
+<tr>
+<td>教育解説型（反論材料なし）</td>
+<td>業界構造説明＋慎重結び</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<p>煽り型カタログ正式分類時、「<strong>マクロ断定型</strong>」を独立カテゴリとして登録すべき。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
