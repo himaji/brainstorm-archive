@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>「IPO 失敗談」型 教訓動画 ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>「IPO 失敗談」型 教訓動画 ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1 id="ipo">「IPO 失敗談」型 教訓動画 ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-04-28
+<strong>対象</strong>: 2026 年 4 月下旬に SNS 上で拡散していた、ある体験者の IPO 投資失敗談を一人称で語る短尺動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-04-28) で公表済みだった情報のみで判定する。</p>
+<p><strong>位置づけ</strong>: 投資デビュー時の IPO 失敗談（一人称・体験談）。
+「IPO は黙っても上がる」という神話を<strong>自分の失敗で否定</strong>する<strong>逆の啓蒙系</strong>。
+煽り型カタログには該当しない。「<strong>反論材料なし</strong>」分類のサンプル候補。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 動画から抽出した主張</h2>
+<table>
+<thead>
+<tr>
+<th>主張</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>投資デビュー銘柄は通信大手の IPO（2018 年）</td>
+</tr>
+<tr>
+<td>B</td>
+<td>「公開前に先行で持つと黙っても上がる」と聞いた</td>
+</tr>
+<tr>
+<td>C</td>
+<td>過去の郵政系・通信系 IPO は上昇していた</td>
+</tr>
+<tr>
+<td>D</td>
+<td>「企業を知っているしタイミングが良い」と判断</td>
+</tr>
+<tr>
+<td>E</td>
+<td>公開した瞬間に「ドドドドーン」と下がった</td>
+</tr>
+<tr>
+<td>F</td>
+<td>担当の証券会社員にも「すいません」と謝られた</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 検証</h2>
+<h3 id="abd-ipo">主張 A・B・D — 投資デビューが通信大手 IPO → ✅ 体験談として整合</h3>
+<p>通信大手 (9434) は 2018-12-19 に東証 1 部上場。当時の状況:
+- 公開価格 <strong>1,500 円</strong>
+- 初値 <strong>1,463 円</strong>（<strong>公開価格割れ</strong>）
+- 上場直後に通信大手としての立ち位置の不透明感、料金値下げ圧力、米中貿易摩擦の影響などで売られる
+- 2019 年安値で 1,200 円台前半まで下落</p>
+<p>→ 当時の「IPO は当選すれば儲かる」という個人投資家の通念に対して、<strong>初値が公開価格割れ</strong>となった象徴的な事例。</p>
+<p>体験者が「投資デビューが通信大手 IPO だった」と語る発言は事実関係として整合する。</p>
+<hr />
+<h3 id="c-ipo">主張 C — 郵政系・通信系の過去 IPO は上がった → ✅ 概ね真</h3>
+<p><strong>郵政系 (7182) IPO</strong>: 2015-11-04 上場
+- 公開価格 1,400 円 → 初値 1,680 円（<strong>公開価格 +20%</strong>）
+- 同時上場のかんぽ生命・親会社も初値が公開価格を上回る</p>
+<p><strong>通信系過去 IPO（旧 9437）</strong>: 1998 年 10 月上場
+- 公開価格 39 万円 → 初値 49 万円（<strong>公開価格 +25%</strong>）
+- 1999 年 IT バブルで一時 700 万円超まで上昇</p>
+<p>→ 郵政系・通信系が IPO で上昇したのは事実。体験者の「過去実績で判断した」発言は当時の合理的な判断材料に基づく。</p>
+<p>ただし「<strong>過去の IPO が上がった = 次の IPO も上がる</strong>」という推論は普遍的に成立しない。これが本動画の<strong>最大の教訓</strong>。</p>
+<hr />
+<h3 id="ef">主張 E・F — 公開瞬間にドドドドーンと下がった、担当も謝った → ✅ 真（実際の値動きと整合）</h3>
+<p>通信大手 (9434) IPO 当日（2018-12-19）の値動き:
+- <strong>始値 1,463 円</strong>（公開価格 1,500 円から -2.5%）
+- 引値 1,282 円（始値からさらに -12.4%、公開価格から -14.5%）
+- 翌日以降も低迷</p>
+<p>→ 「公開した瞬間にドドドドーン」は誇張ではなく実際の値動きと整合。
+証券会社担当者が顧客に謝ることも、業界実態として珍しくない（顧客対応として）。</p>
+<hr />
+<h2 id="3">3. 結論</h2>
+<h3 id="_1">全体評価</h3>
+<p><strong>反論材料なし</strong>（候補確定）。</p>
+<ul>
+<li>個人体験談として事実関係は整合</li>
+<li>「IPO は黙っても上がる」神話を<strong>自分の失敗で否定</strong>する逆の啓蒙系</li>
+<li>推奨ではなく<strong>反省・教訓</strong></li>
+<li>DM・緊急扇動・断定推奨なし</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>煽り型（IPO 投機煽り型）</th>
+<th>本動画（IPO 失敗談・教訓系）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>「儲かる」断定</td>
+<td>あり</td>
+<td><strong>なし</strong>（むしろ「下がった」）</td>
+</tr>
+<tr>
+<td>体験者は誰か</td>
+<td>匿名・架空</td>
+<td><strong>実名・実在人物</strong></td>
+</tr>
+<tr>
+<td>メッセージ</td>
+<td>「IPO は儲かる」</td>
+<td><strong>「IPO は楽勝じゃない」</strong></td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>「今すぐ買え」</td>
+<td>反省・教訓</td>
+</tr>
+</tbody>
+</table>
+<p>「IPO は当たればテンバガー級の儲け」という神話に対する<strong>実体験ベースの否定</strong>は、視聴者の過信を抑える教育的価値が高い。</p>
+<h3 id="_2">法的観点</h3>
+<p>該当なし。失敗談・体験談は断定的判断の提供（金商法 38 条）に該当しない。
+むしろ「<strong>過去の上昇 ≠ 次の上昇</strong>」という重要なリスク要因を実例で示しており、投資教育として優良。</p>
+<h3 id="_3">投資家へのメッセージ</h3>
+<p>IPO 投資の留意点（本体験から導ける教訓）:</p>
+<ol>
+<li><strong>過去の IPO 上昇は次の IPO の上昇を保証しない</strong></li>
+<li>郵政系・通信系過去 IPO が上がったから = 次も上がる、は成立しない</li>
+<li><strong>大型 IPO は需給で初値が決まる</strong></li>
+<li>公開規模が大きいほど初値の上昇余地は小さい</li>
+<li>この事例は公募 2.4 兆円規模の大型案件で需給的に厳しかった</li>
+<li><strong>「黙っても上がる」型の勧誘は警戒</strong></li>
+<li>「IPO 神話」を強調する勧誘は短期投機を促す</li>
+<li><strong>担当者の「期待されてた」発言を真に受けない</strong></li>
+<li>証券会社の担当者は顧客の利益とインセンティブが一致しない場合がある</li>
+</ol>
+<hr />
+<h2 id="_4">付録 — 同型観察</h2>
+<p>「<strong>反論材料なし</strong>」分類サンプルとして蓄積中。</p>
+<p>新カテゴリ「<strong>逆の啓蒙系</strong>」: 過去の失敗談・反省・教訓を語る形式で、SNS 投資情報の中で<strong>極めて稀</strong>な健全タイプ。
+体験談ベースで「儲かる」神話を否定するため、抽象的な解説型より説得力が高い。</p>
+<p>煽り型カタログの正式分類時に「<strong>逆の啓蒙系（失敗談・教訓）</strong>」を独立カテゴリとして登録すべき。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
