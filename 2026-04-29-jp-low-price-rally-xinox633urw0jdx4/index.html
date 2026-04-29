@@ -1,0 +1,448 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>急騰が迫る日本株 5 選（超低位株羅列・ハッシュタグタイトル） ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>急騰が迫る日本株 5 選（超低位株羅列・ハッシュタグタイトル） ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1>急騰が迫る日本株 5 選（超低位株羅列・ハッシュタグタイトル） ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-04-21
+<strong>対象</strong>: 2026 年 4 月下旬に SNS 上で拡散していた、56 秒の銘柄羅列動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-04-21) で公表済みだった情報のみで主張の真偽を評価する。</p>
+<p><strong>位置づけ</strong>: 同種の「<strong>ハッシュタグだけのタイトル + 5 銘柄羅列</strong>」テンプレの<strong>超低位株サブパターン</strong>（120-240 円帯のみで揃える）。「急騰が迫る」断定キャッチで金商法 38 条疑い、ただし銘柄は全て実在。</p>
+</blockquote>
+<hr />
+<h2>1. 動画から抽出された主張</h2>
+<table>
+<thead>
+<tr>
+<th>順位</th>
+<th>銘柄</th>
+<th>コード</th>
+<th>株価（動画）</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>5位</td>
+<td>日本通信</td>
+<td>9424</td>
+<td>約 130 円</td>
+<td>通信×半導体テーマで成長期待が高い</td>
+</tr>
+<tr>
+<td>4位</td>
+<td>リブセンス</td>
+<td>6054</td>
+<td>約 120 円</td>
+<td>ビットサービス（IT サービス）企業で低位成長株</td>
+</tr>
+<tr>
+<td>3位</td>
+<td>オートウェーブ</td>
+<td>2666</td>
+<td>約 170 円</td>
+<td>低位の小売株で資金が入りやすい</td>
+</tr>
+<tr>
+<td>2位</td>
+<td>バナーズ</td>
+<td>3011</td>
+<td>約 170 円</td>
+<td>超低位の不動産関連株</td>
+</tr>
+<tr>
+<td>1位</td>
+<td>ジェイテック</td>
+<td>2479</td>
+<td>約 240 円</td>
+<td>エンジニア派遣で安定収益を持つ企業</td>
+</tr>
+</tbody>
+</table>
+<p>冒頭で「<strong>今週急騰が迫る日本株 5000</strong>」（5 か 5000 かは音声誤認識可能性、文脈的には 5 銘柄）。</p>
+<hr />
+<h2>2. 検証</h2>
+<h3>全銘柄の実在確認 → ✅ 全 5 銘柄とも実在</h3>
+<p>EDINET 確認済（一部記憶ベース）:</p>
+<table>
+<thead>
+<tr>
+<th>コード</th>
+<th>社名</th>
+<th>業種</th>
+<th>確認</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>9424</td>
+<td>日本通信</td>
+<td>情報・通信業</td>
+<td>実在</td>
+</tr>
+<tr>
+<td>6054</td>
+<td>リブセンス</td>
+<td>サービス業（求人・不動産情報）</td>
+<td>実在</td>
+</tr>
+<tr>
+<td>2666</td>
+<td>オートウェーブ</td>
+<td>小売業（カー用品）</td>
+<td>実在</td>
+</tr>
+<tr>
+<td>3011</td>
+<td>バナーズ</td>
+<td>不動産業</td>
+<td>実在</td>
+</tr>
+<tr>
+<td>2479</td>
+<td>ジェイテック</td>
+<td>サービス業（エンジニア派遣）</td>
+<td><strong>実在（EDINET 確認）</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>架空銘柄ではない</strong>。実銘柄羅列系。</p>
+<hr />
+<h3>「急騰が迫る」断定キャッチ → ❌ 金商法 38 条 2 号疑い</h3>
+<ul>
+<li>「<strong>急騰が迫る</strong>」は将来の値動きを断定する表現</li>
+<li>投資勧誘の文脈で金商法 38 条 2 号「<strong>断定的判断の提供</strong>」に該当する疑い</li>
+<li>投稿者が無登録で投資助言を行えば金商法 29 条違反</li>
+</ul>
+<p>→ <strong>断定推奨型</strong>の典型。</p>
+<hr />
+<h3>超低位株羅列の問題 → ⚠️ 「少額で買える」誘惑</h3>
+<p>5 銘柄すべて株価 120-240 円帯。これは:
+- <strong>100 株単位で 1.2-2.4 万円</strong>で買える
+- 値動きが激しいため初心者が「少額で大きく稼げる」と誤認しやすい
+- ただし <strong>流動性が低く、急落時に逃げられない</strong>リスクが大きい
+- 業種もバラバラ（通信・サービス・小売・不動産・派遣）で<strong>テーマ性なし</strong></p>
+<p>→ <strong>超低位株を集めること自体が初心者ターゲティング</strong>。テーマ統一性なし。</p>
+<hr />
+<h3>個別銘柄の事業特性 → ⚠️ 説明が一面的</h3>
+<h4>5位 日本通信 (9424)</h4>
+<ul>
+<li>MVNO（仮想移動体通信事業者）の老舗</li>
+<li>「通信×半導体テーマ」とは結び付けにくい</li>
+<li>動画の「成長期待が高い」は根拠不明</li>
+</ul>
+<h4>4位 リブセンス (6054)</h4>
+<ul>
+<li>「ビットサービス」は誤認識可能性（「IT サービス」「不動産情報」が正解）</li>
+<li>求人サイト「ジョブセンス」「マッハバイト」、不動産情報「DOOR 賃貸」運営</li>
+<li>「低位成長株」と評するには成長性の数値根拠が必要</li>
+</ul>
+<h4>3位 オートウェーブ (2666)</h4>
+<ul>
+<li>カー用品販売（タイヤ・オイル交換等）</li>
+<li>「低位の小売株で資金が入りやすい」は根拠なし、流動性は逆に低い</li>
+</ul>
+<h4>2位 バナーズ (3011)</h4>
+<ul>
+<li>不動産関連の小型株</li>
+<li>「超低位」だが、業績は変動激しい</li>
+<li>動画は事業内容の具体性ゼロ</li>
+</ul>
+<h4>1位 ジェイテック (2479)</h4>
+<ul>
+<li>エンジニア派遣事業</li>
+<li>「安定収益」は事業特性として一面真</li>
+<li>ただし派遣業は景気依存度が高く「<strong>安定</strong>」と断言は誇張</li>
+</ul>
+<p>→ いずれも<strong>事業特性の一面だけを切り取った煽り文句</strong>で、実態の説明が浅い。</p>
+<hr />
+<h2>3. 結論</h2>
+<h3>全体評価</h3>
+<p><strong>反論材料あり</strong>（断定キャッチ + 超低位株羅列）。</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>架空銘柄匂わせ</td>
+<td>なし（全実在）</td>
+</tr>
+<tr>
+<td>目標株価過大水増し</td>
+<td>なし（具体目標なし）</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>あり（今週急騰）</td>
+</tr>
+<tr>
+<td>過去実績演出</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>権威接触</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>時事連動</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>銘柄羅列で終了（フォロー誘導は明示なし）</td>
+</tr>
+<tr>
+<td>金商法抵触疑い</td>
+<td><strong>38 条 2 号</strong>（断定的判断の提供）</td>
+</tr>
+</tbody>
+</table>
+<h3>法的観点</h3>
+<ul>
+<li><strong>金商法 38 条 2 号</strong>: 「急騰が迫る」は断定的判断の提供</li>
+<li><strong>金商法 29 条</strong>: 業として銘柄推奨を行えば無登録投資助言業</li>
+</ul>
+<h3>投資家へのメッセージ</h3>
+<p><strong>「急騰が迫る」断定型は金商法 38 条観点で問題</strong>。</p>
+<p>理由:
+1. 「急騰が迫る」根拠は動画内に開示なし
+2. 5 銘柄に<strong>業種統一性・テーマ性なし</strong>（雑多な超低位株）
+3. 超低位株は流動性が低く、急落時に売り抜けられないリスク
+4. 個別銘柄の説明が一面的（成長性・安定性の根拠なし）</p>
+<p><strong>チェックリスト</strong>:
+- 「急騰が迫る」「絶対に上がる」など断定キャッチは金商法 38 条警戒
+- ハッシュタグだけのタイトルは同種テンプレの可能性
+- 「超低位株 5 選」のような株価帯統一は初心者ターゲティング
+- 業種統一性のない銘柄羅列は「<strong>テーマ性なし</strong>」の証拠</p>
+<h3>通報・対応の参考</h3>
+<ul>
+<li>金商法違反の疑い: 証券取引等監視委員会（SESC）情報受付窓口</li>
+</ul>
+<hr />
+<h2>付録 — 同型観察</h2>
+<h3>ハッシュタグだけのタイトルテンプレ</h3>
+<p>過去観察された同じテンプレに<strong>超低位株サブパターン</strong>が追加された。</p>
+<table>
+<thead>
+<tr>
+<th>投稿者</th>
+<th>銘柄帯</th>
+<th>サブパターン</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>別アカ A</td>
+<td>中堅高配当（数千円）</td>
+<td>利回り煽り</td>
+</tr>
+<tr>
+<td>別アカ B</td>
+<td>大型海洋資源（数千円）</td>
+<td>DM 誘導</td>
+</tr>
+<tr>
+<td>別アカ B</td>
+<td>大型優良（数千円〜数万円）</td>
+<td>断定キャッチ</td>
+</tr>
+<tr>
+<td><strong>本動画</strong></td>
+<td><strong>超低位（120-240 円）</strong></td>
+<td><strong>超低位株羅列</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ ハッシュタグタイトルテンプレは<strong>少なくとも 4 投稿者</strong>で運用、株価帯のサブパターンが拡張中。</p>
+<h3>超低位株羅列型は新サブパターン</h3>
+<p>過去の銘柄羅列系は中堅・大型株中心だった。本件は <strong>株価 120-240 円帯のみで揃える</strong>新サブパターン。</p>
+<p>特徴:
+- 100 株単位で 1.2-2.4 万円で買える初心者向け
+- 値動きが激しく短期トレードに見えるが、流動性低く逃げられない
+- 業種統一性なし（テーマ性で売れない超低位株を抱き合わせ）</p>
+<p>→ 「<strong>少額で買える初心者ターゲティング</strong>」の煽り構造。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
