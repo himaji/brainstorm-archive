@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>「少額投資には意味があるか」型 教育解説動画 ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>「少額投資には意味があるか」型 教育解説動画 ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1 id="_1">「少額投資には意味があるか」型 教育解説動画 ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2022-12-13
+<strong>対象</strong>: 2022 年 12 月中旬に SNS 上で拡散していた、少額投資の意味について長尺で解説する 8 分超の教育解説動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2022-12-13) で公表済みだった情報のみで判定する。</p>
+<p><strong>位置づけ</strong>: 質問への回答形式の長尺教育解説動画。「少額投資にも意味があるか」というテーマの哲学・実践論。
+個別銘柄推奨・断定的判断の提供・DM 誘導・緊急扇動など煽り構造は一切なし。「<strong>反論材料なし</strong>」分類のサンプル候補。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 動画から抽出された主張</h2>
+<table>
+<thead>
+<tr>
+<th>主張</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>質問者: 月 1 万円投資、年利 5% で年 1.5 万円、週 3 時間使うと時給 100 円以下、無意味では?</td>
+</tr>
+<tr>
+<td>B</td>
+<td>結論: 少額投資には意味がある</td>
+</tr>
+<tr>
+<td>C</td>
+<td>大金を急に投資した人の末路（退職金破滅、相続破産）の事例</td>
+</tr>
+<tr>
+<td>D</td>
+<td>お金にまつわる 5 つの力（貯める・稼ぐ・増やす・守る・使う）</td>
+</tr>
+<tr>
+<td>E</td>
+<td>増やす力・守る力は短期では身につかない、実践経験が必要</td>
+</tr>
+<tr>
+<td>F</td>
+<td>少額投資で得られる「2 つのもの」: 投資による利益 + 投資経験</td>
+</tr>
+<tr>
+<td>G</td>
+<td>バフェット最初の投資 114 ドル → 6 ドル利益のエピソード</td>
+</tr>
+<tr>
+<td>H</td>
+<td>実体験で学べる心理的罠（暴落耐性、感情を無視できない）</td>
+</tr>
+<tr>
+<td>I</td>
+<td>学者の主張: 「投資を始めることで金融リテラシーが高まる」</td>
+</tr>
+<tr>
+<td>J</td>
+<td>まとめ: 知識・経験が将来の自己投資、長期効果を含めて考える</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="2">2. 検証</h2>
+<h3 id="ab">主張 A・B — 質問内容と結論 → ✅ 質問への回答形式として整合</h3>
+<p>質問者の試算「月 1 万円・年利 5%・週 3 時間で時給 100 円」は計算上整合（30 万円 × 5% = 1.5 万円、週 3 時間 × 52 週 = 156 時間、時給 96 円）。</p>
+<p>動画作成者の結論「意味はある」は<strong>断定的推奨ではなく価値観の提示</strong>:
+- 「自信を持って続けていきましょう」
+- 投資判断を断定するのではなく、<strong>継続の意義を肯定する教育的姿勢</strong></p>
+<p>→ 金商法 38 条の断定的判断の提供には<strong>該当しない</strong>。</p>
+<hr />
+<h3 id="c">主張 C — 大金を急に投資した人の末路 → ✅ 一般論として概ね事実</h3>
+<p>退職金で投資信託に手を出して大損する事例:
+- 銀行・証券会社の手数料が高い投資信託（毎月分配型・グローバルソブリンなど）の販売実績は問題視されてきた
+- 金融庁も「顧客本位の業務運営」原則で批判</p>
+<p>相続で土地を相続してアパート建設して空室で破綻する事例:
+- 過去の地主向けアパート建設ブームに関連する事例多数
+- 建設業者が「相続対策」と謳って勧誘した結果、空室・家賃下落で苦境のケース報告多数</p>
+<p>→ <strong>両事例とも実際に頻発する社会問題として正確</strong>。</p>
+<hr />
+<h3 id="d-5">主張 D — お金にまつわる 5 つの力 → ⚠️ 独自概念だが論理は妥当</h3>
+<p>「貯める力・稼ぐ力・増やす力・守る力・使う力」は動画作成者の独自フレームワーク。</p>
+<p>各力の独立性は妥当:
+- 「貯める力」（節約）と「稼ぐ力」（収入向上）は別スキル
+- 「増やす力」（投資運用）と「守る力」（リスク管理・防衛）は別物
+- 「使う力」（消費の質）も独立</p>
+<p>→ <strong>教育的フレームワークとして論理は妥当</strong>。ただし独自命名であることは留意。</p>
+<hr />
+<h3 id="e">主張 E — 増やす力・守る力は短期では身につかない → ✅ 投資教育として妥当</h3>
+<p>実証的にも:
+- 投資行動経済学では「経験の蓄積」が判断の質を左右する
+- バフェット・グレアムら投資家自身が「数十年の実践で学んだ」と公言
+- 「実践経験なしの大金投資が失敗する」のは多数の事例で示される</p>
+<p>→ <strong>投資教育としての主張は妥当</strong>。</p>
+<hr />
+<h3 id="g-114-6">主張 G — バフェット最初の投資 114 ドル → 6 ドル利益 → ✅ 史実</h3>
+<p>バフェットは 11 歳時（1942 年）に Cities Service Preferred 株を:
+- 妹と共同で 3 株、1 株 38 ドルで購入（合計 114 ドル）
+- 株価が一時 27 ドルまで下落、バフェットは妹の不安に動揺
+- 40 ドルまで戻ったところで売却、5 ドル前後の利益（動画の「6 ドル」は記憶での表現）
+- 後にこの株は 200 ドルまで上昇（売り損ね）</p>
+<p>この経験から「短期で売らないこと」「他人の不安に左右されないこと」を学んだとバフェット自身が著書・インタビューで何度も語っている。</p>
+<p>→ <strong>史実として整合</strong>。「経験から学ぶ」主張の補強として適切な引用。</p>
+<hr />
+<h3 id="i">主張 I — 学者の主張: 「投資を始めることで金融リテラシーが高まる」 → ✅ 実証研究の議論</h3>
+<p>行動経済学・個人資産形成研究では:
+- 「金融リテラシー → 投資参加」（リテラシー優先説）
+- 「投資参加 → 金融リテラシー」（実践優先説）</p>
+<p>の双方向因果について議論が続いている。</p>
+<p>近年の研究では<strong>双方向の効果が認められる</strong>結論が多く、動画の主張は学術的議論の一側面として正確。</p>
+<p>→ <strong>学術的に妥当な引用</strong>（決着済みではないが、議論の一極として正当）。</p>
+<hr />
+<h3 id="j">主張 J — まとめ: 長期効果を含めて考える → ✅ 投資教育として妥当な結論</h3>
+<p>「短期的な利益額」と「長期的な経験価値」を分けて考える視点は:
+- 自己投資論として標準的な議論
+- 機会費用と長期リターンのトレードオフ
+- 著名投資家が繰り返し述べる思考様式</p>
+<p>→ <strong>結論としても妥当</strong>。</p>
+<hr />
+<h2 id="3">3. 結論</h2>
+<h3 id="_2">全体評価</h3>
+<p><strong>反論材料なし</strong>（候補確定）。</p>
+<ul>
+<li>個別銘柄推奨・断定的判断の提供なし</li>
+<li>教育的フレームワーク（5 つの力）と一般論で論理展開</li>
+<li>バフェット史実・学者の主張など事実引用</li>
+<li>結びは「自信を持って続けて」という励まし</li>
+<li>8 分超の長尺で根拠を順に説明する構造</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>煽り型（個別銘柄推奨）</th>
+<th>本動画（教育解説・哲学型）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>個別銘柄推奨</td>
+<td>あり</td>
+<td><strong>なし</strong></td>
+</tr>
+<tr>
+<td>目標株価・上昇率予測</td>
+<td>あり</td>
+<td><strong>なし</strong></td>
+</tr>
+<tr>
+<td>DM・コメント誘導</td>
+<td>あり</td>
+<td><strong>なし</strong></td>
+</tr>
+<tr>
+<td>緊急扇動表現</td>
+<td>あり</td>
+<td><strong>なし</strong></td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>「今すぐ買え」</td>
+<td><strong>「自信を持って続けて」</strong></td>
+</tr>
+<tr>
+<td>動画長</td>
+<td>30-60 秒</td>
+<td><strong>8 分 24 秒</strong>（長尺で根拠を展開）</td>
+</tr>
+<tr>
+<td>史実引用</td>
+<td>なし</td>
+<td>あり（バフェット 114 ドル）</td>
+</tr>
+<tr>
+<td>学術引用</td>
+<td>なし</td>
+<td>あり（金融リテラシー研究）</td>
+</tr>
+<tr>
+<td>用語解説</td>
+<td>なし</td>
+<td>あり（5 つの力）</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">法的観点</h3>
+<p>該当なし。「意味はある」「続けてほしい」は投資判断を促す断定推奨ではなく<strong>価値観の提示</strong>で、金商法 38 条には抵触しない。
+個別銘柄推奨もないため金商法 29 条（投資助言業）にも該当しない。</p>
+<h3 id="_4">投資家へのメッセージ</h3>
+<p>教育解説型の見分け方の重要パターン:</p>
+<table>
+<thead>
+<tr>
+<th>教育解説・哲学型の特徴（本動画）</th>
+<th>煽り型の特徴</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>質問→回答の論理構造</td>
+<td>「絶対に買うべき」「神」キャッチ</td>
+</tr>
+<tr>
+<td>史実・学術引用</td>
+<td>数値根拠なしの断定</td>
+</tr>
+<tr>
+<td>結びは励まし・教訓</td>
+<td>結びは「今すぐ」「保存」「DM」</td>
+</tr>
+<tr>
+<td>8 分超の長尺で根拠展開</td>
+<td>30-60 秒で銘柄を羅列</td>
+</tr>
+<tr>
+<td>個別銘柄推奨なし</td>
+<td>個別銘柄推奨あり</td>
+</tr>
+<tr>
+<td>自己投資・経験価値の重視</td>
+<td>短期利益のみ強調</td>
+</tr>
+</tbody>
+</table>
+<p>長尺でしっかり根拠を展開する<strong>教育解説・哲学型</strong>は、SNS 投資情報の中で<strong>極めて稀</strong>な健全タイプ。</p>
+<hr />
+<h2 id="_5">付録 — 同型観察</h2>
+<p>「<strong>反論材料なし</strong>」分類サンプルとして蓄積中。</p>
+<p>新カテゴリ「<strong>教育解説・哲学型</strong>」: 個別銘柄ではなく<strong>投資論・人生論を長尺で展開</strong>する形式。
+SNS 投資情報の中で<strong>極めて稀</strong>な健全タイプ。視聴者の判断ベクトルを形成するという意味で影響大。</p>
+<p>煽り型カタログ正式分類時、「<strong>教育解説・哲学型</strong>」を独立カテゴリ候補として登録。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
