@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>NTT 100 株購入手順チュートリアル ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>NTT 100 株購入手順チュートリアル ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1>NTT 100 株購入手順チュートリアル ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-03-22
+<strong>対象</strong>: 2026 年 3 月下旬に SNS 上で拡散していた、16 秒の操作手順チュートリアル動画。</p>
+<blockquote>
+<p><strong>位置づけ</strong>: NTT (9432) を NISA で 100 株購入する画面操作を実演しているだけの短尺チュートリアル。煽り表現・推奨表現・DM 誘導は皆無。反論材料なし系の対比サンプルとして記録。</p>
+</blockquote>
+<hr />
+<h2>1. 動画から抽出された主張</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>主張</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>NTT 株 100 株は 30 秒で購入できる</td>
+</tr>
+<tr>
+<td>B</td>
+<td>操作手順: NTT 検索 → 取引 → 現物買い → NISA → 100 株 → 指値 → パスワード → 発注</td>
+</tr>
+<tr>
+<td>C</td>
+<td>NTT の株主優待についての詳細は本文をチェック</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. 検証</h2>
+<h3>A・B. NTT 株 100 株購入手順 → ✅ 一般的な証券アプリ操作手順</h3>
+<ul>
+<li>大手ネット証券アプリで一般的な購入フロー</li>
+<li>NISA 口座での現物買いは 18 歳以上で可能</li>
+<li>指値注文の説明も実務上正しい</li>
+<li><strong>30 秒で発注できる</strong>は実務上ほぼ事実（操作慣れている前提）</li>
+</ul>
+<p>→ 操作手順自体は正確、煽り表現なし。</p>
+<h3>C. NTT 株主優待 → ✅ 実在</h3>
+<p>NTT (9432) の株主優待制度（投稿日 2026-03-22 時点で公表済み）:
+- 100 株以上保有
+- 2 年以上保有: dポイント 1,500 ポイント
+- 5 年以上保有: dポイント 3,000 ポイント</p>
+<p>→ 株主優待の存在自体は事実。</p>
+<hr />
+<h2>3. 結論</h2>
+<h3>全体評価</h3>
+<p><strong>反論材料なし</strong>（教育系・操作チュートリアル）。</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>架空銘柄匂わせ</td>
+<td>なし（実在 NTT 9432）</td>
+</tr>
+<tr>
+<td>目標株価過大水増し</td>
+<td>なし（株価予想なし）</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>過去実績演出</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>権威接触</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>時事連動</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>プロフィール誘導（株主優待詳細）</td>
+</tr>
+<tr>
+<td>金商法抵触疑い</td>
+<td><strong>なし</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>視聴者への留意事項</h3>
+<p>「初心者にも分かりやすい操作手順動画」として有用。ただし:
+- <strong>NTT を「推奨」しているわけではない</strong>（チュートリアル素材としての NTT）
+- 同じ手順で他社株も購入できるが、銘柄選定の判断は別途必要
+- 株主優待は「保有期間 2 年・5 年」の長期保有が条件で、すぐにポイント受領できるわけではない</p>
+<p>→ 操作手順を覚える教材としての価値はあり、煽動性なし。</p>
+<hr />
+<h2>付録 — 反論材料なし系サンプルとしての位置づけ</h2>
+<p>教育解説・哲学型・操作チュートリアル・失敗談などの「<strong>煽り型該当なし</strong>」の対比サンプル群と並ぶ。</p>
+<table>
+<thead>
+<tr>
+<th>形式</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>動画</td>
+<td>信用買い残・売り仕掛け解説（市場マイクロストラクチャ）</td>
+</tr>
+<tr>
+<td>動画</td>
+<td>南鳥島レアアース 7 銘柄定点観測のすすめ</td>
+</tr>
+<tr>
+<td>動画</td>
+<td>IPO 失敗談</td>
+</tr>
+<tr>
+<td>動画 8 分 24 秒</td>
+<td>両学長少額投資論（哲学・教育）</td>
+</tr>
+<tr>
+<td><strong>動画 16 秒（本動画）</strong></td>
+<td><strong>NTT 100 株購入操作手順</strong></td>
+</tr>
+</tbody>
+</table>
+<p>→ 本動画は最短尺の「操作手順チュートリアル」枠で新パターン。</p>
+<p>煽り型と非煽り型の境界を明確化する素材として記録。「<strong>操作手順 + 実在優良株 + 短尺 + 推奨ゼロ</strong>」の組み合わせは安全な動画フォーマット。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
