@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>「最強日本株」型 DM 誘導動画 ファクトチェック</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>「最強日本株」型 DM 誘導動画 ファクトチェック</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1 id="dm">「最強日本株」型 DM 誘導動画 ファクトチェック</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-04-23
+<strong>対象</strong>: 2026 年 4 月下旬に SNS 上で拡散していた、レアアース・海洋資源テーマで実銘柄 5 選を並べた後に DM 誘導する短尺動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-04-23) で公表済みだった情報のみで判定する。</p>
+<p><strong>位置づけ</strong>: 38 秒の短尺で実銘柄 5 選を並べた後、「次のターゲットはすでにロックオン済み」「DM 希望」と DM 誘導する<strong>フルコース型煽り</strong>。
+銘柄自体はレアアース・海洋資源テーマの実在大手商社・海運だが、銘柄選定とテーマの実態は乖離。</p>
+</blockquote>
+<hr />
+<h2 id="1">1. 動画から抽出した主張</h2>
+<table>
+<thead>
+<tr>
+<th>順位</th>
+<th>銘柄</th>
+<th>コード</th>
+<th>業種</th>
+<th>キャッチ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>双日</td>
+<td>2768</td>
+<td>卸売業（総合商社）</td>
+<td>レアアース供給チェーンの本命</td>
+</tr>
+<tr>
+<td>2</td>
+<td>JX 金属</td>
+<td>5016</td>
+<td>非鉄金属</td>
+<td>レアアース直撃</td>
+</tr>
+<tr>
+<td>3</td>
+<td>三井海洋開発</td>
+<td>6269</td>
+<td>機械</td>
+<td>海底鉱物探査・掘削の専業</td>
+</tr>
+<tr>
+<td>4</td>
+<td>川崎汽船</td>
+<td>9107</td>
+<td>海運業</td>
+<td>海底資源輸送、海洋インフラ株</td>
+</tr>
+<tr>
+<td>5</td>
+<td>日本郵船</td>
+<td>9101</td>
+<td>海運業</td>
+<td>政府連携の海洋戦略</td>
+</tr>
+</tbody>
+</table>
+<p>末尾:
+- 「<strong>次のターゲットはすでにロックオン済み</strong>」
+- 「<strong>DM 希望</strong>さらツイッター x」（DM 誘導）
+- 「<strong>5 銘柄で分散投資 500 株 ルールは自分ルール 責任は負いません</strong>」（免責文言）</p>
+<hr />
+<h2 id="2">2. 検証</h2>
+<h3 id="1-5">主張 1-5 位 — 銘柄実在確認 → ✅ 全て実在</h3>
+<table>
+<thead>
+<tr>
+<th>銘柄</th>
+<th>コード</th>
+<th>業種</th>
+<th>検証</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双日</td>
+<td>2768</td>
+<td>卸売業</td>
+<td>実在（旧ニチメン+日商岩井合併、総合商社）</td>
+</tr>
+<tr>
+<td>JX 金属</td>
+<td>5016</td>
+<td>非鉄金属</td>
+<td>実在（2024-12-19 上場、ENEOS HD からスピンオフ）</td>
+</tr>
+<tr>
+<td>三井海洋開発</td>
+<td>6269</td>
+<td>機械</td>
+<td>実在（FPSO 大手）</td>
+</tr>
+<tr>
+<td>川崎汽船</td>
+<td>9107</td>
+<td>海運業</td>
+<td>実在</td>
+</tr>
+<tr>
+<td>日本郵船</td>
+<td>9101</td>
+<td>海運業</td>
+<td>実在</td>
+</tr>
+</tbody>
+</table>
+<p>→ <strong>5 銘柄全て実在</strong>。架空銘柄ではない。</p>
+<p>JX 金属 (5016) は 2024-12-19 にスピンオフ上場した新規銘柄で、<strong>レアアース・電子材料事業を展開</strong>しており、テーマとの関連性は事実。</p>
+<hr />
+<h3 id="_1">主張 — テーマ関連性（南鳥島レアアース・海洋資源） → ⚠️ テーマと銘柄の関連は薄い〜中程度</h3>
+<table>
+<thead>
+<tr>
+<th>銘柄</th>
+<th>レアアース・海洋資源との実際の関連性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>双日</td>
+<td>商社として広範な商材を扱うが、<strong>レアアース供給チェーンの「本命」とまでは言えない</strong></td>
+</tr>
+<tr>
+<td>JX 金属</td>
+<td>銅・レアメタル・電子材料が主力で、<strong>レアアース直接事業は限定的</strong></td>
+</tr>
+<tr>
+<td>三井海洋開発</td>
+<td>FPSO（浮体式生産設備）専業で、<strong>南鳥島レアアース採掘船建造は別ビジネス</strong></td>
+</tr>
+<tr>
+<td>川崎汽船</td>
+<td>海運主力、<strong>海底資源輸送はごく限定的</strong></td>
+</tr>
+<tr>
+<td>日本郵船</td>
+<td>同上</td>
+</tr>
+</tbody>
+</table>
+<p>→ 動画は「レアアース・海洋資源テーマ」で銘柄を<strong>強引に括る</strong>が、<strong>実際の事業セグメントとの関連は限定的</strong>。</p>
+<hr />
+<h3 id="dm-dm-dm">DM 誘導「次のターゲットはロックオン済み」「DM 希望」 → ❌ 典型 DM 誘導</h3>
+<p>「次のターゲット」=「<strong>まだ開示してない次の推奨銘柄が控えている</strong>」匂わせ。</p>
+<p>これは<strong>典型的な DM 誘導手口</strong>:
+1. 動画で 5 銘柄を実在大手で並べて信用を獲得
+2. 「次のターゲット」匂わせで好奇心を喚起
+3. DM 誘導で個別チャネルに引き入れ
+4. 実在大手以外の<strong>仕手株 / 非上場 / 高額有料商材</strong>を売る</p>
+<p>→ <strong>DM 誘導フルコース型</strong>。</p>
+<hr />
+<h3 id="_2">「責任は負いません」免責文言 → ⚠️ 法的免責にはならない</h3>
+<p>「責任は負いません」「投資は自己責任」と免責文言を入れても:
+- <strong>金商法 38 条（断定的判断の提供禁止）</strong>は免責不可
+- <strong>金商法 29 条（投資助言業登録）</strong>は免責不可
+- <strong>金商法 158 条（風説の流布禁止）</strong>も免責不可</p>
+<p>「ロックオン済み」「最強日本株」は<strong>断定的判断の提供</strong>に該当する可能性あり。</p>
+<hr />
+<h2 id="3">3. 結論</h2>
+<h3 id="_3">全体評価</h3>
+<p><strong>反論材料あり</strong>（重要度 <strong>高</strong>、DM 誘導フルコース型）。</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導</td>
+<td>あり（「DM 希望」「次のターゲット」）</td>
+</tr>
+<tr>
+<td>架空銘柄</td>
+<td>なし（実銘柄）</td>
+</tr>
+<tr>
+<td>目標株価過大水増し</td>
+<td>なし（具体数値提示なし）</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>あり（「最強」「ロックオン」）</td>
+</tr>
+<tr>
+<td>テーマ強引化</td>
+<td>あり（レアアース・海洋資源で実銘柄を括る）</td>
+</tr>
+<tr>
+<td>免責文言</td>
+<td>あり（ただし法的に無効）</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>DM 誘導</td>
+</tr>
+<tr>
+<td>金商法抵触疑い</td>
+<td><strong>29 条 + 38 条</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="_4">法的観点</h3>
+<ul>
+<li><strong>金商法 38 条 2 号</strong>: 「最強日本株」「ロックオン済み」は断定的判断の提供</li>
+<li><strong>金商法 29 条</strong>: DM 誘導後に業として銘柄推奨を行えば無登録投資助言業</li>
+<li>「責任は負いません」の免責文言は<strong>法的に無効</strong></li>
+</ul>
+<h3 id="_5">投資家へのメッセージ</h3>
+<p><strong>「次のターゲット」「DM 希望」「ロックオン済み」の表現は全て煽り型の誘導</strong>。</p>
+<p>理由:
+1. 実在大手 5 銘柄で<strong>信用を演出</strong>して油断させる
+2. <strong>DM チャネルで監視外の勧誘</strong>を行う構造
+3. 「責任は負いません」と免責しても<strong>法的責任を回避できない</strong>
+4. テーマ（レアアース・海洋資源）と銘柄の<strong>実態は乖離</strong>している</p>
+<p><strong>チェックリスト</strong>:
+- 「DM」「LINE」「ツイッター」誘導は無条件で警戒
+- 「次のターゲット」「ロックオン」表現は煽り型のサイン
+- テーマで銘柄を括る動画は、<strong>事業セグメントの実態</strong>を確認
+- 「責任は負いません」と書いてあっても法的免責にはならない</p>
+<h3 id="_6">通報・対応の参考</h3>
+<ul>
+<li>金商法違反の疑い: 証券取引等監視委員会（SESC）情報受付窓口</li>
+<li>特商法違反: 消費者庁・国民生活センター</li>
+<li>プラットフォーム規約違反: 該当 SNS の通報機能</li>
+</ul>
+<hr />
+<h2 id="_7">付録 — 同型観察</h2>
+<p>DM 誘導フルコース型の比較:</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>数値水増し型</th>
+<th>匂わせ型（本動画）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導表現</td>
+<td>「数字を返信」</td>
+<td>「DM 希望」</td>
+</tr>
+<tr>
+<td>架空銘柄</td>
+<td>あり（1 位コード非開示）</td>
+<td>なし（実銘柄 5 つ）</td>
+</tr>
+<tr>
+<td>目標株価過大</td>
+<td>+7,000% 級</td>
+<td>提示なし（むしろ匂わせ型）</td>
+</tr>
+<tr>
+<td>テーマ</td>
+<td>暴落タイミング</td>
+<td>レアアース・海洋資源</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>あり</td>
+<td>あり</td>
+</tr>
+</tbody>
+</table>
+<p>→ どちらも DM 誘導でチャネル外勧誘を狙う構造。</p>
+<p>南鳥島レアアース型の煽り動画（架空銘柄+DM 誘導+緊急扇動+権威分断）と本動画（実銘柄+DM 誘導+海洋資源テーマ）はテーマが同じ。
+<strong>同種運用元の可能性</strong>もあるが特定はできない。</p>
+<p>煽り型カタログ正式分類時、「<strong>DM 誘導フルコース型</strong>」を独立カテゴリ化候補。</p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
