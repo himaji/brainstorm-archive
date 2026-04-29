@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>壁打ちHTML共有スキルの設計</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>壁打ちHTML共有スキルの設計</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+
+<h2>サマリ</h2>
+<ul>
+  <li><strong>議論の目的</strong>: 各プロジェクトでの壁打ち内容をワンコマンドで HTML 化し、URL を知っている人だけ閲覧できる形で共有できるスキル <code>brainstorm-publish</code> の設計。</li>
+  <li><strong>主な決定事項</strong>:
+    <ul>
+      <li><strong>ホスティング</strong>: GitHub Pages（公開リポジトリ）+ 推測困難なランダムパス + <code>&lt;meta name="robots" content="noindex,nofollow"&gt;</code></li>
+      <li><strong>リポジトリ</strong>: <code>himaji/brainstorm-archive</code>（1リポに集約、しばらくはこの運用）</li>
+      <li><strong>URL 構造</strong>: <code>https://himaji.github.io/brainstorm-archive/{YYYY-MM-DD}-{slug}-{16文字hash}/</code>。ハッシュは長め（事実上アクセス困難）</li>
+      <li><strong>入力</strong>: 両対応。会話セッションの自然言語範囲指定（「直近1往復」「ここまでの○○の議論」）と、既存 Markdown ファイルパス指定</li>
+      <li><strong>整形</strong>: 会話モードは D-A 形式（冒頭サマリ + 会話ログ忠実版）。ファイルモードは Markdown を素直に HTML 化</li>
+      <li><strong>メタデータ</strong>: タイトル/slug は自動推論、<code>--title</code> <code>--slug</code> で上書き可</li>
+      <li><strong>一覧</strong>: 一覧ページは作らない。ローカルの <code>~/.brainstorm-archive-index.json</code> で自分用に管理</li>
+      <li><strong>初期化</strong>: <code>gh</code> CLI で <code>himaji/brainstorm-archive</code> を作成、Pages 有効化、ダミー <code>index.html</code> と <code>.nojekyll</code> と <code>tools/template.html</code> を配置</li>
+    </ul>
+  </li>
+  <li><strong>未解決事項</strong>:
+    <ul>
+      <li>Pages のビルド完了待ち（push 後 1〜2 分）。スキル側はポーリングせず即 URL 返却 + 注記する方針で進めた</li>
+      <li>Markdown → HTML 変換は WSL 環境に <code>pandoc</code> も <code>python3-venv</code> も無かったため、<strong>Claude が直接 HTML を生成</strong> する方針に切り替えた（依存ゼロ化）</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>会話ログ</h2>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>各プロジェクトで壁打ちしているときに内容を html 化して github の url 知ってる人だけに公開するやつでデプロイして url を返すスキルを作りたい。</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>設計のため、いくつか確認させてください。1問ずつ聞きます。</p>
+<p><strong>Q1. ホスティング方式はどれが希望ですか？</strong></p>
+<ul>
+  <li><strong>A. GitHub Pages（公開リポジトリ）+ 推測困難なランダムパス</strong> — 例: <code>https://himaji.github.io/brainstorm-archive/{ランダムなハッシュ}/</code>。1つのリポジトリに追加していくスタイル。HTML がそのままブラウザで開ける。検索エンジンには noindex 指定で対応可。</li>
+  <li><strong>B. Secret Gist + htmlpreview.github.io</strong> — シークレット Gist は一覧に出ない。URL がやや長く、外部プレビューサービス依存。</li>
+  <li><strong>C. プライベートリポジトリ + GitHub Pages（要 GitHub Pro）</strong> — 完全に認証されたユーザーのみ。Pro プラン必要。</li>
+</ul>
+<p>おすすめは A（運用がシンプル、見た目も自由、ランダムハッシュで実質シークレット）。</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>A で noindex かな</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p><strong>Q2. 入力ソース（HTML 化する元データ）は何ですか？</strong></p>
+<ul>
+  <li>A. 現在進行中の Claude Code 会話セッションの内容（範囲指定で抽出）</li>
+  <li>B. ユーザーが指定する Markdown ファイル</li>
+  <li>C. 両対応</li>
+</ul>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>両対応かな。でもセッション全部は想定していない。今のやり取りっていったら直近 1 往復の会話部分、ここまでの XXX に関するやり取りっていったら議題が始まったところから終わるところまでを抽出したい。むずいかな？</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>全然むずくないです。Claude の文脈理解・抽出が一番得意な領域で、スキルは「ユーザー指示に従って会話から該当範囲を抽出 → 整形」と書くだけで済みます。</p>
+<p><strong>Q3. HTML の中身の整形方針はどれが希望ですか？</strong></p>
+<ul>
+  <li>A. 会話ログそのまま</li>
+  <li>B. Q&amp;A 形式に整形</li>
+  <li>C. 議事録風サマリ</li>
+  <li>D. ハイブリッド: 冒頭にサマリ（C相当）、その下に整形済み会話ログ（A or B）</li>
+</ul>
+<p>共有用途なら D が一番万能。</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>D の A パターンかな。それとは別に md ファイル指定も対応してね。</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p><strong>Q4. リポジトリの準備はどうしますか？</strong></p>
+<ul>
+  <li>A. 手動で1回だけ用意してもらう</li>
+  <li>B. スキル実行時に未作成なら自動作成（<code>gh</code> CLI 使用）</li>
+  <li>C. 半自動: 存在チェック後、無ければ確認してから作成</li>
+</ul>
+<p><code>gh</code> CLI は使える環境ですか？</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>gh 使えるはず。A もここからできないかな？それ用のリポジトリ作って、そこに全て貯める運用でしばらくはいいと思う</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>「今ここから作っちゃいたい」気持ちは分かりますが、設計をあと数問で固めてから一気に <strong>(1) リポ作成 → (2) Pages 有効化 → (3) noindex 設定 → (4) スキル本体作成</strong> まで通す方がムダがない。先に設計確定させましょう。</p>
+<p><strong>Q5. 個別ブレインストームの URL 構造はどうしますか？</strong></p>
+<ul>
+  <li>A. 完全ランダムハッシュのみ</li>
+  <li>B. 日付 + slug + ランダム短縮ハッシュ</li>
+  <li>C. slug + ランダム短縮ハッシュ</li>
+</ul>
+<p>おすすめは B。slug とタイトルは内容から自動推論する形でどうか。</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>b でハッシュは長くていいよ。ほとんどアクセス困難な状態がいい</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>長めハッシュ了解、16 文字くらいに（base36 で 36^16 ≈ 8×10^24 通り、事実上推測不可）。</p>
+<p><strong>Q6. タイトル / slug の決め方は？</strong></p>
+<ul>
+  <li>A. 完全自動推論</li>
+  <li>B. 任意で引数指定可、無ければ自動推論</li>
+  <li>C. 必ず実行時に確認</li>
+</ul>
+<p>関連で1つ: 一覧ページは作らない（リポのトップ <code>index.html</code> はダミー + noindex）。自分用の管理は <strong>ローカルに <code>~/.brainstorm-archive-index.json</code></strong>（タイトル・URL・日付・slug の一覧）に追記、で問題ないか。</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>B、関連も問題ないです</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>設計を固めて、Auto mode で一気に実装に進みました。リポジトリ作成、Pages 有効化、テンプレート配置、スキル本体（<code>Skill.md</code> / <code>SKILL.md</code> / <code>brainstorm-publish.zip</code>）作成、ローカルインデックス初期化までを完了。最後にこのセッション自体をテストデプロイ。</p>
+</div>
+
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
