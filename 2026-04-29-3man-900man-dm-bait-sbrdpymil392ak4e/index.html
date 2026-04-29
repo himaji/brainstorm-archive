@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>3 万円→900 万円 DM 誘導動画 ファクトチェック（株価番号同期・締切矛盾型）</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>3 万円→900 万円 DM 誘導動画 ファクトチェック（株価番号同期・締切矛盾型）</h1>
+<div class="meta">
+<span>2026-04-29</span>
+<span class="source">from fact-check-public.md</span>
+</div>
+</header>
+<main>
+<h1>3 万円→900 万円 DM 誘導動画 ファクトチェック（株価番号同期・締切矛盾型）</h1>
+<p><strong>調査日</strong>: 2026-04-29
+<strong>動画投稿日</strong>: 2026-03-11
+<strong>対象</strong>: 2026 年 3 月中旬に SNS 上で拡散していた、80 秒の DM 誘導型煽り動画。</p>
+<blockquote>
+<p><strong>過去時点検証ルール</strong>: 動画投稿日 (2026-03-11) で公表済みだった情報のみで主張の真偽を評価する。</p>
+<p><strong>位置づけ</strong>: DM 誘導フルコース型の中で<strong>株価と DM 番号を「106」で同期させる新サブパターン</strong>。さらに「3 月 5 日までに仕込め」と動画内で言いながら<strong>投稿日が 3 月 11 日</strong>で<strong>既に締切が過ぎている</strong>という運用ミスがあり、テンプレ大量配布の物証となる。</p>
+</blockquote>
+<hr />
+<h2>1. 動画から抽出された主張</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>主張</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>2026 年までに 2200 万円を貯める最短ルートは「株を買うだけ」</td>
+</tr>
+<tr>
+<td>B</td>
+<td>準備資金 <strong>3 万円</strong>で目標 <strong>900 万円</strong>（<strong>300 倍</strong>）</td>
+</tr>
+<tr>
+<td>C</td>
+<td><strong>3 月 5 日までに仕込め</strong>（動画投稿は 3 月 11 日 = <strong>既に締切過ぎ</strong>）</td>
+</tr>
+<tr>
+<td>D</td>
+<td>日米総額 <strong>1600 億ドル（5 兆円）超大型エネルギーインフラプロジェクト</strong>発表</td>
+</tr>
+<tr>
+<td>E</td>
+<td>プロジェクトに直接関係する <strong>2 銘柄</strong>を今すぐ買うべき</td>
+</tr>
+<tr>
+<td>F</td>
+<td>株価 <strong>106 円</strong>、予測最高値 <strong>12,850 円</strong>（+<strong>12,022%</strong>）</td>
+</tr>
+<tr>
+<td>G</td>
+<td>来年は車や家を買い換えできる</td>
+</tr>
+<tr>
+<td>H</td>
+<td><strong>コメント欄に「106」と書け</strong> → DM で銘柄コード送付</td>
+</tr>
+<tr>
+<td>I</td>
+<td>「無料は趣味」「生活に困っていない」</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>2. 検証</h2>
+<h3>A・B. 3 万円→900 万円（300 倍） → ❌ 算術上不可能</h3>
+<ul>
+<li>3 万円→900 万円は <strong>300 倍 / +29,900%</strong></li>
+<li>動画内の +12,022% とすら整合しない（+12,022% なら 3 万→約 365 万円）</li>
+<li><strong>動画内の数値同士が矛盾</strong>している（運用元のテンプレ流用ミス）</li>
+</ul>
+<p>→ 数値の内部矛盾。</p>
+<hr />
+<h3>C. 「3 月 5 日までに仕込め」と投稿日 3 月 11 日の締切矛盾 → ❌ <strong>運用ミスの決定的証拠</strong></h3>
+<ul>
+<li>動画内で「<strong>必ず 3 月 5 日までに仕込んでください</strong>」と断言</li>
+<li>投稿日は <strong>2026-03-11</strong></li>
+<li><strong>既に 6 日経過した状態で投稿</strong>されている</li>
+<li>これは「テンプレを 1 度作って大量に流す」運用の決定的証拠</li>
+<li>元のテンプレが 2026-03-04 頃に作成されたが、流用時に締切日を更新せず投稿</li>
+<li>投稿者が運用元から提供されたテンプレをそのまま流した可能性が高い</li>
+</ul>
+<p>→ <strong>大量分散テンプレの運用ミス</strong>を物証として記録。</p>
+<hr />
+<h3>D. 「日米 1600 億ドル超大型エネルギーインフラプロジェクト」 → ⚠️ 部分一致だが煽動的に簡略化</h3>
+<p>投稿日 (2026-03-11) 時点で公表済みの関連動向:
+- 2025-09 の高市・トランプ会談で<strong>日本側 1500 億ドル規模のエネルギー・防衛関連投資</strong>の議論
+- アラスカ LNG プロジェクトに関する協議
+- ただし <strong>1600 億ドル超大型エネルギーインフラ</strong>として正式に「発表」されたかは不明確
+- 「直接関係する 2 銘柄」を 106 円で匂わせる根拠としては不十分</p>
+<p>→ <strong>時事連動型・部分一致を煽動的に簡略化</strong>。</p>
+<hr />
+<h3>E・F. 株価 106 円・予測 12,850 円・+12,022% → ❌ <strong>該当する上場企業なし、川崎重工は別銘柄</strong></h3>
+<h4>E-1. 株価 106 円帯のエネルギーインフラ関連銘柄</h4>
+<ul>
+<li>投稿日時点で公表済み「日米 5 兆円エネルギーインフラ」関連で<strong>株価 106 円付近の上場企業は存在しない</strong></li>
+<li>ハッシュタグの川崎重工 (7012) は実在大型株だが、株価は <strong>8,000-10,000 円帯</strong>で <strong>106 円ではない</strong></li>
+<li>川崎重工の実 EDINET 情報: 業種=輸送用機器、大型株</li>
+<li>1/100 の価格を提示している → <strong>架空銘柄匂わせ</strong></li>
+</ul>
+<p>→ 106 円銘柄は実在しない。川崎重工の株価から 0 を 2 つ取った可能性も含め、<strong>実在する 106 円のエネルギー関連銘柄は確認できない</strong>。</p>
+<h4>E-2. 12,850 円目標 / +12,022%</h4>
+<ul>
+<li>106 → 12,850 円は <strong>+12,022%（121 倍）</strong></li>
+<li>仮に時価総額 100 億円規模の超低位株がこれを達成するには <strong>時価総額 1.2 兆円</strong> 必要</li>
+<li>6 ヶ月で達成する物理的根拠なし</li>
+</ul>
+<p>→ <strong>投機煽り型</strong>。</p>
+<hr />
+<h3>G. 「来年は車や家を買い換え」 → ❌ 投機煽り</h3>
+<ul>
+<li>3 万円が 900 万円になっても家 1 軒は買えない（住宅ローン頭金程度）</li>
+<li>数値の内部一貫性すら破綻</li>
+</ul>
+<hr />
+<h3>H. 「コメント欄に 106 と書け」 → ❌ <strong>株価と DM 番号を同期させる新サブパターン</strong></h3>
+<ul>
+<li>同シリーズで観察された DM 番号テンプレは「666」「888」が主流だったが、<strong>本動画は「106」</strong>で<strong>株価 106 円と完全一致</strong></li>
+<li>視聴者の記憶定着・誤入力防止に最適化された運用</li>
+</ul>
+<p>→ <strong>株価と DM 番号を同期させる新サブパターン</strong>。</p>
+<hr />
+<h3>I. 「無料は趣味」「生活に困っていない」 → ❌ 自己権威誇大型</h3>
+<ul>
+<li>同シリーズで頻出する自己権威呈示</li>
+<li>「私は損得で発信していない」アピールで信憑性を作る詐欺の典型</li>
+</ul>
+<hr />
+<h2>3. 結論</h2>
+<h3>全体評価</h3>
+<p><strong>反論材料あり</strong>（重要度 <strong>極めて高</strong>、運用ミス物証あり）。</p>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DM 誘導</td>
+<td>あり（株価と同期した「106」）</td>
+</tr>
+<tr>
+<td>架空銘柄匂わせ</td>
+<td>あり（106 円エネルギー銘柄なし）</td>
+</tr>
+<tr>
+<td>目標株価過大水増し</td>
+<td>あり（<strong>+12,022%</strong>、内部矛盾あり）</td>
+</tr>
+<tr>
+<td>緊急扇動</td>
+<td>あり（3 月 5 日までに仕込め）+ <strong>締切過ぎ運用ミス</strong></td>
+</tr>
+<tr>
+<td>過去実績演出</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>権威接触</td>
+<td>あり（日米 5 兆円）</td>
+</tr>
+<tr>
+<td>時事連動</td>
+<td>あり（高市・トランプエネルギー）</td>
+</tr>
+<tr>
+<td>自己権威誇大</td>
+<td>あり（無料は趣味）</td>
+</tr>
+<tr>
+<td>結びの姿勢</td>
+<td>DM 誘導</td>
+</tr>
+<tr>
+<td>金商法抵触疑い</td>
+<td><strong>38 条 + 29 条 + 158 条</strong></td>
+</tr>
+</tbody>
+</table>
+<h3>法的観点</h3>
+<ul>
+<li><strong>金商法 38 条 2 号</strong>: 「+12,022%」「来年車・家」は断定的判断の提供</li>
+<li><strong>金商法 29 条</strong>: DM 誘導後の銘柄推奨は無登録投資助言業</li>
+<li><strong>金商法 158 条</strong>: 架空の 106 円銘柄を匂わせるのは風説の流布の疑い</li>
+</ul>
+<h3>投資家へのメッセージ</h3>
+<p><strong>「コメントに数字を書け」型は構造的に詐欺</strong>。</p>
+<p>理由:
+1. 動画内の数値が内部矛盾（300 倍 vs +12,022%）
+2. <strong>「3 月 5 日までに」と言いながら 3 月 11 日に投稿</strong>= テンプレ流用の物証
+3. 株価 106 円のエネルギーインフラ銘柄は実在しない
+4. 川崎重工は実在するが株価帯が 1/100 で別物
+5. 「無料は趣味」アピールは詐欺の自己呈示パターン</p>
+<p><strong>チェックリスト</strong>:
+- 動画内の数値矛盾を必ず確認（300 倍 vs +12,022%）
+- 締切日付がある場合は投稿日と照合（テンプレ運用ミス検出）
+- 「コメントに数字を書け」型は無条件で警戒
+- ハッシュタグの大型株銘柄と動画内の株価帯が 100 倍違う場合は架空銘柄</p>
+<h3>通報・対応の参考</h3>
+<ul>
+<li>金商法違反の疑い: 証券取引等監視委員会（SESC）情報受付窓口</li>
+<li>プラットフォーム規約違反: 該当 SNS の通報機能</li>
+</ul>
+<hr />
+<h2>付録 — 同型観察</h2>
+<h3>DM 番号テンプレの拡張</h3>
+<p>DM 誘導フルコース型は同テーマ・同番号を複数アカで連投する運用が観察されてきた。本件で観察された新規パターン:</p>
+<ul>
+<li><strong>株価と DM 番号を「106」で同期</strong>（記憶定着・誤入力防止）</li>
+<li><strong>「3 月 5 日までに」と「3 月 11 日投稿」の運用ミス</strong>（テンプレ大量配布の物証）</li>
+</ul>
+<p>→ DM 番号テンプレは「単一番号→分散番号→株価との同期」の進化過程。</p>
+<h3>テンプレ大量配布の物証</h3>
+<p>過去の DM 誘導フルコース型は単発の大量再生狙いに見えたが、本件で「複数アカ・複数地域・<strong>締切後でも投稿される</strong>」運用パターンが見えた。これは運用元が一括作成したテンプレを後日大量配布している決定的証拠。</p>
+<h3>チェックリストへの追加候補</h3>
+<ul>
+<li>「○月○日までに仕込め」の締切表現は<strong>投稿日と必ず照合</strong>（運用ミス検出）</li>
+<li>DM 番号と株価が一致する場合は番号サブパターンとして記録</li>
+<li>「無料は趣味」アピールは自己権威誇大型のシグナル</li>
+<li>ハッシュタグの大型株と動画内株価が 100 倍違う場合は架空銘柄判定</li>
+</ul>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
