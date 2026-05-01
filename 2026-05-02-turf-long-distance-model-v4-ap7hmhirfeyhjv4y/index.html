@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>芝長距離特化モデル v4_long_wide 設計書</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>芝長距離特化モデル v4_long_wide 設計書</h1>
+<div class="meta">
+<span>2026-05-02</span>
+<span class="source">from 2026-05-02-turf-long-distance-model-v4-design.md</span>
+</div>
+</header>
+<main>
+<ul>
+<li><strong>作成日</strong>: 2026-05-02</li>
+<li><strong>対象レース</strong>: 2026-05-03 天皇賞春 (G1 京都 3200m 芝)</li>
+<li><strong>目的</strong>: 芝 2400m+ レースに特化した v4 モデルを作り、明日の天皇賞春の予想に投入する（投入判断は out-of-sample バックテスト ROI で決める）</li>
+</ul>
+<h2>1. 背景</h2>
+<ul>
+<li>v3_wide は LightGBM ではなく <code>config.yaml</code> のウェイト + Python の手書きスコアリングモデル（スピード指数 + 上がり3F + 騎手 + 血統 + ペース補正 + ワイド EV 計算）。</li>
+<li>v3 は本番で運用されているが<strong>バックテスト未実施</strong>。ユーザーも ROI 1.0 超えに懐疑的。</li>
+<li>Turso 本番 DB に重賞のオッズ・予想・結果が 2021–2025 で揃っており（578 レース）、バックテスト基盤の前提条件は整っている。</li>
+<li>スクリプト <code>scripts/</code> にバックテスト集計ツールは未実装。</li>
+</ul>
+<h2>2. スコープ</h2>
+<ul>
+<li><strong>対象</strong>: 芝 2400m 以上のレース（重賞のみ、Turso DB 既存データに準拠）</li>
+<li><strong>非対象</strong>: ダート、芝 2400m 未満、新馬・未勝利・条件戦</li>
+<li><strong>明日朝までに完了させる</strong>: タイムボックス。ML 化（LightGBM 等）はスコープ外（次回以降）</li>
+<li><strong>投入判断</strong>: 自動デプロイ条件は「out-of-sample バックテスト ROI 1.0+」。未達の場合は天皇賞春は v3_wide のまま運用</li>
+</ul>
+<h2>3. 成功基準</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>基準</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>必須</strong>: out-of-sample (2025) ROI</td>
+<td><strong>1.00 以上</strong>（未達なら投入しない）</td>
+</tr>
+<tr>
+<td>参考: 的中率</td>
+<td>v3 と比較（劣化していないこと）</td>
+</tr>
+<tr>
+<td>参考: 推奨買い目数 / レース</td>
+<td>0 件にならないこと（モデルが何も推奨しない退化を避ける）</td>
+</tr>
+</tbody>
+</table>
+<p>ROI 計算は <code>Odds.betType='wide'</code> の確定オッズ × 推奨 <code>bet_amount</code> で行う。look-ahead を避けるため、推奨時点 odds (<code>alternativePicks[*].odds</code>) はバックテストでは使わない。</p>
+<h2>4. アプローチ</h2>
+<h3>Phase 1: バックテスト基盤の構築（共通インフラ）</h3>
+<p><code>scripts/backtest-wide.ts</code> を新規作成：</p>
+<ul>
+<li>入力: <code>--model &lt;model_id&gt;</code>, <code>--surface 芝</code>, <code>--min-distance 2400</code>, <code>--from YYYY-MM-DD</code>, <code>--to YYYY-MM-DD</code></li>
+<li>処理: 該当レースの <code>Prediction.alternativePicks</code> を取得 → 各 pick (pick1.number, pick2.number, bet_amount) を抽出 → <code>RaceResult</code> で 1〜3 着判定 → <code>Odds(betType=wide)</code> で確定オッズ参照 → 投資額・払戻額・的中数を集計</li>
+<li>出力: 全体 ROI / 的中率 / 推奨数、年別・距離別・オッズ帯別の層別表</li>
+<li>v3 にも v4 にも使えるように汎化する（model_id をパラメータ化）</li>
+</ul>
+<h3>Phase 2: v3 ベースライン測定 + 失敗パターン抽出</h3>
+<ul>
+<li>v3_wide で 2021–2024 (Train) と 2025 (Test) の両方を測定</li>
+<li><strong>抽出すべき失敗パターン例</strong>：</li>
+<li>距離帯別 ROI（2400 / 2500 / 3000+）</li>
+<li>競馬場別 ROI（京都 / 阪神 / 東京 / 中山 …）</li>
+<li>オッズ帯別 ROI（〜10 倍 / 10〜30 / 30+）</li>
+<li>馬場状態別 ROI（良 / 稍重 / 重 / 不良）</li>
+<li>「v3 が高 confidence で外したレース」と「拾えなかった的中レース」のリスト</li>
+<li>出力: <code>docs/research/v3_wide_long_distance_baseline_2026-05-02.md</code></li>
+</ul>
+<h3>Phase 3: v4_long_wide 実装</h3>
+<p>ディレクトリ構成：</p>
+<pre><code>backend/models/v4_long_wide/
+├── __init__.py
+├── config.yaml
+└── model.py
+</code></pre>
+<ul>
+<li><strong>A 戦略</strong>: v3 のロジックをコピーして <code>config.yaml</code> のウェイトを芝 2400m+ 向けに最適化</li>
+<li>最適化対象: <code>factor_weights.*</code>, <code>parameters.temperature</code>, <code>parameters.ev_threshold</code></li>
+<li>手法: grid search（離散的なウェイト候補）で Train set の ROI を最大化</li>
+<li>最適化スクリプト: <code>scripts/tune-v4-long.ts</code>（または Python）</li>
+<li><strong>B 戦略（A で ROI 1.0+ 未達なら追加）</strong>: ロジック修正</li>
+<li>候補1: 距離信頼度 <code>_distance_trust</code> の傾きを長距離向けに緩く（2400m+ でも過去 1600m 走を使えるように）</li>
+<li>候補2: <code>cornerPositions</code>（4 角通過順）を <code>position_score</code> に追加（最近スクレイプ済み）</li>
+<li>候補3: スタミナ指標 = 過去 2400m+ 走の上がり 3F の安定性</li>
+<li>Phase 2 で出た失敗パターンを見て候補から優先度付け</li>
+</ul>
+<h3>Phase 4: v4 バックテスト &amp; 投入判断</h3>
+<ul>
+<li>v4 で予想生成 → Phase 1 のバックテストで Test set (2025) の ROI を測定</li>
+<li>ROI 1.0+ → <code>scripts/run-predict.ts --model v4_long_wide</code> で天皇賞春に予想生成 → DB 反映 → main merge → CF Pages 自動デプロイ</li>
+<li>ROI &lt; 1.0 → v3_wide のまま運用、knowledge は memory &amp; 設計書に残して次戦に向けて再挑戦</li>
+</ul>
+<h2>5. データ分割（look-ahead 回避）</h2>
+<table>
+<thead>
+<tr>
+<th>期間</th>
+<th>用途</th>
+<th>サンプル数（重賞 2400m+ 推定）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2021–2024</td>
+<td>Train（v4 のウェイト最適化、失敗パターン分析の母集団）</td>
+<td>~100 レース</td>
+</tr>
+<tr>
+<td>2025</td>
+<td>Test（投入判断用、out-of-sample）</td>
+<td>~25 レース</td>
+</tr>
+<tr>
+<td>2026</td>
+<td>予想実行のみ、評価データには含めない</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+<p><strong>注意</strong>: 2026-05-03 の天皇賞春そのものは未来データなので Train/Test には含まれない（look-ahead 問題は発生しない）。</p>
+<h2>6. 採点（評価）の正しさ</h2>
+<ul>
+<li>ROI 計算は <code>投資額の合計（bet_amount の総和）</code> を分母に、<code>的中時の払戻額（bet_amount × 確定 wide オッズ）</code> を分子に</li>
+<li><code>bet_amount</code> は <code>Prediction.alternativePicks[*].bet_amount</code> を信頼する（kelly 計算済の値）</li>
+<li>ワイドは 1 着 + 2 着 / 1 着 + 3 着 / 2 着 + 3 着 のいずれかにヒットすれば的中。3 通りそれぞれの確定オッズが <code>Odds</code> テーブルにある</li>
+<li>同着・除外の取扱いは v1 では考慮しない（極小ケース、影響を切り捨て）</li>
+</ul>
+<h2>7. リスクと却下案</h2>
+<table>
+<thead>
+<tr>
+<th>リスク</th>
+<th>緩和策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Phase 1 のバックテストに想定外バグ → 全体的に数値が信用できない</td>
+<td>サンプル 1 レースで手計算と突き合わせる単体検証ステップを Phase 1 に組み込む</td>
+</tr>
+<tr>
+<td>Phase 2 の失敗パターン分析でサンプル不足（2400m+ 重賞は年 25 程度）</td>
+<td>距離帯を細かく切りすぎず、「2400 / 2500–2999 / 3000+」の 3 区分に止める</td>
+</tr>
+<tr>
+<td>v4 が Train set にオーバーフィット（grid search の典型病）</td>
+<td>Test set の ROI で投入判断する。Train ROI が高くても Test &lt; 1.0 なら不採用</td>
+</tr>
+<tr>
+<td>時間切れで明日朝までに終わらない</td>
+<td>Phase 1 → 2 まで完了して v3 のベースラインだけは握る。v4 投入は諦め、知見は次戦へ</td>
+</tr>
+</tbody>
+</table>
+<p><strong>却下案</strong>:
+- ML レイヤー追加（meta model）/ 完全 ML 化: 1 日では検証品質が担保できない。次回以降
+- v3 の本体改修（v3 を直接いじる）: 既存運用へ影響。新モデル v4 として並列構築し、置き換えは投入判断後</p>
+<h2>8. 成果物</h2>
+<ul>
+<li><code>frontend/scripts/backtest-wide.ts</code> — モデル汎用ワイドバックテスト</li>
+<li><code>docs/research/v3_wide_long_distance_baseline_2026-05-02.md</code> — v3 のベースライン + 失敗パターン</li>
+<li><code>backend/models/v4_long_wide/model.py</code> + <code>config.yaml</code> — 新モデル</li>
+<li><code>frontend/scripts/tune-v4-long.ts</code> — ウェイト grid search（or Python 同等）</li>
+<li><code>docs/research/v4_long_wide_backtest_2026-05-02.md</code> — v4 のバックテスト結果と投入判断記録</li>
+<li>天皇賞春の予想（投入判断が GO の場合のみ）</li>
+</ul>
+<h2>9. オープン項目</h2>
+<ul>
+<li>Phase 1 のバックテスト集計を TS で書くか Python (backend/) で書くか — TS 推奨（既存 scripts/ と統一、Drizzle で DB アクセスが楽）</li>
+<li>grid search の探索空間サイズ（粗 vs 細） — Phase 2 完了時に改めて見積もる</li>
+</ul>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
