@@ -1,0 +1,333 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>競馬予想モデル v3_wide のステップアップ局面における乖離買いの罠</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>競馬予想モデル v3_wide のステップアップ局面における乖離買いの罠</h1>
+<div class="meta">
+<span>2026-05-01</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>サマリ</h2>
+<ul>
+  <li><strong>議論の目的</strong>: 2026 天皇賞(春) の予想で <em>タガノデュード</em> がモデル v3_wide 上で 1 位（複勝 32%）と高評価されているのに対し、市場は 7 番人気 (63.8倍) と低評価。この乖離の原因を特定し、戦略上どう扱うべきか判断する。</li>
+  <li><strong>主な決定事項</strong>:
+    <ul>
+      <li>初期診断（v2_wide / v3_wide の <code>_distance_trust</code> に <code>max(0.5, ...)</code> の下限があり、過去最長 2200m 馬の 3200m 走行価値が半分しか減らない）は、本モデルが「オッズとの乖離を買う」設計である以上、それ自体は <strong>「補正すべき問題」ではない</strong>。距離補正で乖離を消したら戦略が成立しない。</li>
+      <li>ただし、<strong>乖離が市場ミスプライスなのか、モデル誤差由来の見せかけなのか</strong>を区別する必要がある。バックテスト 638 レース・約 1900 ピックで層別集計した結果、<strong>「ステップアップ × 市場 5 人気以下」局面では戦略 ROI が崩壊する</strong> ことが定量的に確認された。</li>
+      <li>具体値: 通常局面 × 市場 5 人気以下のモデル上位馬は単勝 ROI 145% で本物のエッジ。ステップアップ局面に入った瞬間 ROI 62% に低下。タガノ型（モデル 1 位 × ステップアップ × 5 人気以下）は <strong>n=25 で単勝 0 勝、ROI 0%</strong>。</li>
+      <li>5/3 天皇賞春のタガノデュードはこの 4.3% のトラップ条件に完全該当。<strong>過去データに沿うなら推奨に従わない</strong>のが妥当。</li>
+    </ul>
+  </li>
+  <li><strong>未解決事項</strong>:
+    <ul>
+      <li>ステップアップ判定（<code>max_past_distance &lt; race_distance × 0.85</code>）を <code>run-predict.ts</code> 後段または review 出力で除外フィルタとして実装するか、判断材料に留めるか。</li>
+      <li>n=25 という小サンプルでの判断強度。82 件の上位カテゴリ全体（ROI 62%）の方が推論基盤として強い。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>会話ログ</h2>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>タガノデュードがやたらと高いけどなんでかね？</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>タガノデュードは 5/3 天皇賞(春) の 11 番。全モデル（v3_place / v2_wide）で 1 位評価でした。</p>
+  <pre><code class="language-text">--- model: v3_place ---
+11 タガノデュード   | R=53   | SI=66.5 | 3F=59.3 | win=32.42
+ 4 アクアヴァーナル  | R=51.8 | SI=49.6 | 3F=59   | win=25.74
+12 ヘデントール    | R=48.7 | SI=51.1 | 3F=54.3 | win=13.89
+ 7 クロワデュノール  | R=47.7 | SI=59.4 | 3F=56   | win=11.23
+
+--- model: v2_wide ---
+11 タガノデュード   | R=29.3 | SI=22.3 | 3F=40.8 | win=22.4
+ 7 クロワデュノール  | R=29.3 | SI=19.9 | 3F=38.1 | win=22.39
+ 3 アドマイヤテラ   | R=27.6 | SI=17.3 | 3F=36   | win=16.01
+</code></pre>
+  <p>ところが市場は <strong>7 番人気 odds=63.8</strong>。過去走を見ると違和感の正体が見えます。</p>
+  <table>
+    <thead><tr><th>馬</th><th>直近走の距離帯</th><th>主な戦績</th></tr></thead>
+    <tbody>
+      <tr><td><strong>タガノデュード</strong></td><td><strong>1800〜2200m</strong></td><td>小倉大賞典1着 / 京都2000m1着 / 大阪杯4着</td></tr>
+      <tr><td>クロワデュノール</td><td>2000〜2400m</td><td><strong>大阪杯1着</strong>（タガノが4着のレース）</td></tr>
+      <tr><td>ヘデントール</td><td><strong>3200/3400m</strong></td><td><strong>前年天皇賞春1着</strong> / ダイヤモンドS1着</td></tr>
+      <tr><td>アクアヴァーナル</td><td><strong>3000m</strong> 中心</td><td>阪神大賞典2着 / 京都3000m1着</td></tr>
+    </tbody>
+  </table>
+  <p>タガノデュードは <strong>3200m 経験ゼロ</strong> なのに SI=66.5 / 3F=59.3 と高い。<code>backend/models/v2_wide/model.py</code> の特徴量計算を見ると:</p>
+  <pre><code class="language-python">def _speed_index(time_sec, distance, track_cond, race_distance, surface):
+    base = _interpolate_base_time(distance, surface)   # 過去走の距離の基準タイム
+    si = (base - time_sec) * 10 + 50                   # SI は過去距離基準で計算
+    trust = max(0.5, 1.0 - abs(distance - race_distance) / 2000)
+    return si, trust
+
+def _last3f_index(last3f):
+    return (33.5 - last3f) * 10 + 50    # 距離補正なし</code></pre>
+  <p>1800m→3200m でも 2200m→3200m でも、trust は 0.5 で頭打ち。さらに last3f は v2 では距離補正ゼロ。短距離で出した上がり 33.6 がそのまま 3200m の指数になる。</p>
+</div>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>あれ、いま v3 なんだが。それでもあまり変わらず？</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>v3 のコードを確認しましたが、<strong>根は同じ</strong>です。改善点と限界を分けると:</p>
+  <ul>
+    <li>v3 で改善されたこと:
+      <ul>
+        <li><code>trust</code> を「値」に掛けるのを「重み」側に移した（数学的に正しい）</li>
+        <li><code>last3f</code> 側にも距離 trust を適用</li>
+        <li><code>daily_bias</code> 補正の追加</li>
+      </ul>
+    </li>
+    <li>v3 でも変わらないこと:
+      <pre><code class="language-python"># v3_wide/model.py L82-84
+def _distance_trust(past_dist: int, race_dist: int) -&gt; float:
+    return max(0.5, 1.0 - abs(past_dist - race_dist) / 2000)  # ← v2 と同じ式・同じ下限</code></pre>
+    </li>
+  </ul>
+  <p>さらに距離適性を別系統で補う <code>distance_fitness</code> は重み 0.2、<code>same_dist_cat_top3_rate × 2.0 × 0.2</code> で max でも +0.4 点。一方 position_score は 1.5 × 10 で +15 点級、speed_index は 0.35 × 60 で +21 点級。スケールが 2 桁違うので距離不足は打ち消せず、しかも <strong>加点のみで減点はない</strong>。</p>
+</div>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>オッズとの乖離を買うモデルなので、それは問題にしない</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>なるほど。それなら距離補正の話は的外れですね。市場との乖離こそが alpha なので、過去走を距離補正で薄めると乖離自体が消えて、戦略が成立しない。</p>
+  <p>その前提で <strong>なぜ高いか</strong> を言い直すと:</p>
+  <ul>
+    <li>直近 4 走で <strong>1着・1着・3着・4着</strong>（position_score の重み 1.5 で +15 点級）</li>
+    <li>上がり 33.6〜34.8 と速い</li>
+    <li>持ちタイムも各距離で標準以上（1:45.2 / 2:01.1 / 2:11.9）</li>
+  </ul>
+  <p>→ R=53、複勝 32%。市場の 7 番人気 = 単勝 1.6% / 複勝 10〜15% に対する <code>32% vs 13%</code> の差を「買い」として拾っている。<strong>設計通りの挙動</strong>。</p>
+  <p>気にする観点があるとすれば「中距離 G3 勝ち馬が G1 長距離に出てきたケースで、過去どれくらい当たってるか」のキャリブレーション。バックテストで確認できます。</p>
+</div>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>見てみて</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>v3_wide 予想 <strong>641 件（2016-05-01 〜 2026-05-03）</strong>を対象に、層別集計しました。</p>
+  <ul>
+    <li>「ステップアップ」 = horse の <code>pastResults</code> の最長距離 &lt; race の距離 × 0.85</li>
+    <li>「市場 5 人気以下」 = popularity ≥ 5</li>
+    <li>対象は各レースのモデル上位 3 位以内の馬（合計 約 1,914 ピック）</li>
+  </ul>
+
+  <h3>モデル上位 3 位以内の馬の実勝率</h3>
+  <table>
+    <thead>
+      <tr><th>カテゴリ</th><th>n</th><th>複勝率</th><th>単勝率</th><th>平均単勝</th><th>単勝ROI近似</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>ステップアップ × 5人気以下</strong></td><td>82</td><td><strong>9.8%</strong></td><td><strong>1.2%</strong></td><td>50.8</td><td><strong>62%</strong></td></tr>
+      <tr><td>ステップアップ × 4人気以内</td><td>81</td><td>53.1%</td><td>22.2%</td><td>5.5</td><td>122%</td></tr>
+      <tr><td><strong>通常 × 5人気以下</strong></td><td>712</td><td>16.3%</td><td><strong>4.5%</strong></td><td>32.3</td><td><strong>145%</strong></td></tr>
+      <tr><td>通常 × 4人気以内</td><td>1039</td><td>46.8%</td><td>19.5%</td><td>5.1</td><td>99%</td></tr>
+    </tbody>
+  </table>
+
+  <h3>タガノデュード型（モデル1位 × 5人気以下 × ステップアップ）</h3>
+  <ul>
+    <li>n=25 / 単勝 <strong>0/25（0%）</strong> / 複勝 3/25（12%）/ 単勝ROI 0%</li>
+  </ul>
+
+  <h3>解釈</h3>
+  <p>「オッズ乖離買い」戦略は <strong>通常レースでは ROI 145% で本物のエッジ</strong> を出している。市場が見落としている穴馬を実際に拾えており、設計通り。</p>
+  <p>ところが <strong>ステップアップ局面に入った瞬間に ROI が 145% → 62% へ崩れる</strong>。市場の 5 人気以下に対し:</p>
+  <ul>
+    <li>通常: 単勝 4.5%（市場期待 ~3.1% より高い → 乖離が本物）</li>
+    <li>ステップアップ: 単勝 1.2%（市場期待 ~2% とほぼ同じ → <strong>乖離は見せかけ</strong>）</li>
+  </ul>
+  <p>つまり「乖離買いだから距離問題は気にしない」は半分正しいが半分誤り。<strong>距離乖離を起点とした「乖離」は市場ミスプライスではなくモデル誤差</strong> なので、ここを買うと負ける。タガノ型に絞ると n=25 で単勝 0 勝という具体的な負け実績つき。</p>
+
+  <h3>示唆</h3>
+  <ul>
+    <li>全体としてモデルを信用するなら、<strong>「ステップアップフィルタ」を出力後段に挟んで該当馬は推奨から外す</strong> のが最小実装で効く（残り 4 カテゴリの ROI を保ったまま、負けトラップ 82件 ÷ 1914件 ≒ 4.3% を除外）。</li>
+    <li>5/3 天皇賞春のタガノデュードはまさにこの 4.3% に該当。<strong>今回は推奨に従わないのが過去データに沿った判断</strong>。</li>
+  </ul>
+</div>
+
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
