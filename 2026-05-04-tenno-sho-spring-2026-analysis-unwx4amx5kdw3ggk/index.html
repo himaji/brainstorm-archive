@@ -239,6 +239,72 @@
   <li><strong>0.1 秒差の意味</strong>: #4 が 3:13.9、3 着 #3 が 3:13.8、1-2 着 #7/#15 が 3:13.7。3200m で 0.1-0.2 秒差は鼻〜半馬身レベル。モデルの精度の問題ではなく、長距離 G1 の宿命的なノイズに見える。</li>
 </ul>
 
+<h2>追記 — topK=5 を外したらどうなるか</h2>
+
+<p>本番 DB に保存された S2 picks は <strong>5 点</strong>。これは <code>predict.py</code> 内の <code>S2_TOPK = 5</code> による cap。pairs_top_ev (top 30 by EV) と DB 内の全 105 ワイドオッズから、jointP × R で計算された jointP / EV を全 nC2 ペアで再現すると以下になる:</p>
+
+<table>
+  <thead><tr><th>制限</th><th>点数</th></tr></thead>
+  <tbody>
+    <tr><td>現状 (topK=5, jp≥0.05, ev≥1.0)</td><td><strong>5 点</strong></td></tr>
+    <tr><td><strong>topK=5 を外す (jp≥0.05 AND ev≥1.0)</strong></td><td><strong>22 点</strong></td></tr>
+    <tr><td>jp≥0.05 のみ</td><td>36 点</td></tr>
+    <tr><td>ev≥1.0 のみ</td><td>62 点</td></tr>
+    <tr><td>全 nC2 ペア</td><td>105 点</td></tr>
+  </tbody>
+</table>
+
+<p>22 点の中に <strong>的中ペアが 2 件</strong> 含まれていた:</p>
+<ul>
+  <li>11 位 <strong>3-15</strong> (jointP=0.0552, ev=1.97, ワイド 32.3-39.0 倍) ★HIT</li>
+  <li>21 位 <strong>7-15</strong> (jointP=0.0510, ev=1.83, ワイド 32.5-39.3 倍) ★HIT</li>
+</ul>
+
+<p>100 円ずつなら投資 2,200 円 / 払戻 約 6,500-7,200 円 で <strong>ROI 約 295%</strong>。1-3 着の 3 頭中 2 頭を絡めた配当 30 倍超のワイドを 22 点に圧縮できていたが、topK=5 で先頭 5 件 (全て #4 軸) のみ採用された結果、的中ペアは取りこぼされた。</p>
+
+<h3>topK=5 はどこから来たか</h3>
+
+<p>履歴を辿ると <strong>PR #109 (C-2 bet selection sweep)</strong> の最良 cell をそのまま採用したもの。当時の sweep grid:</p>
+
+<pre><code>topK = {1, 2, 3, 5}
+evMin = {0.0}
+jpMin = {0.0, 0.03, 0.05, 0.08}
+maxHorseOdds (mho) = {30, 50, 100, 1000}
+maxPop = {99, 8}
+minSumPop (msp) = {0, 10}</code></pre>
+
+<p>11,980 cell 走らせた中で <strong>S2 ベスト cell = topK=5 / jpMin=0.05 / mho=30 / msp=10</strong> (test_n=56 / hit=7 / test_roi=2.16 / CI 下限 0.76)。これを predict.py に直接ハードコードした。</p>
+
+<h3>その後の修正で topK=5 の意味が変質</h3>
+
+<p>採用後、運用上の問題で 3 つの constraint が外/緩されている:</p>
+
+<table>
+  <thead><tr><th>PR</th><th>変更</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr><td>#112</td><td>maxHorseOdds 制約 30 → ∞ (撤廃)</td><td>人気集中レースで picks=0 を回避</td></tr>
+    <tr><td>#114</td><td>ev ≥ 1.0 floor 追加</td><td>期待値マイナス pick 排除</td></tr>
+    <tr><td>#115</td><td>jpMin 0.08 → 0.05</td><td>pastResults 補完で jointP 分布が下方シフト</td></tr>
+  </tbody>
+</table>
+
+<p>結果として現状の S2 は <strong>「sweep で最良 cell に到達した時の constraint セット」とは別物</strong> になっている:</p>
+
+<ul>
+  <li>当時の cell では mho≤30 / msp≥10 の縛りで <strong>候補ペア数自体が小さかった</strong> (大半のレースで qualify するペア ≤ 5) → topK=5 cap は <strong>binding していない</strong> だけで、cell の真の効果は jpMin/mho/msp の AND だった可能性が高い</li>
+  <li>PR #112 で mho 制約を外したことで <strong>候補ペアが爆発的に増えた</strong> (今回 22 件) → 突然 topK=5 cap が binding に変質し、<strong>jointP 同率付近で恣意的に切り捨てる装置</strong> になった</li>
+  <li>今回の天皇賞春は jointP=0.0552 が 12 件 tied で、その上位の 0.0667 (3 件) と 0.0722 (2 件) を含めても上位 17 件まで「ほぼ同率」。ここから先頭 5 件を取るのは精度ではなくほぼランダム抽選</li>
+</ul>
+
+<h3>含意</h3>
+
+<ul>
+  <li><strong>S2 の sweep 最良 cell は再検証が必要</strong>: PR #112/#114/#115 の修正後に topK の感度を sweep し直した記録がない。「mho=∞, msp=0, evMin=1.0, jpMin=0.05」で固定し <code>topK ∈ {5, 8, 10, 15, 20, ∞}</code> を sweep して CI 下限の topK 依存性を確認すべき</li>
+  <li><strong>単発レース 1 件で topK 拡張は決められない</strong>: 「天皇賞春で 5→22 にすれば的中したから topK 上げよう」は典型的な selection bias。期待されるべきは「topK を緩めた cell が <em>test 期間全体で</em> 同等以上の CI 下限を出すか」</li>
+  <li><strong>低コストの並走運用が妥当</strong>: 当面の picks は現状の topK=5 のまま、forward test 期間 (6 ヶ月想定) は <strong>「topK=∞ かつ qualify 全部買い」シミュレーション値を別途記録</strong>。両者の forward ROI を比較してから sweep 再走と picks 仕様変更を一括で決める</li>
+  <li><strong>jpMin=0.05 の足切りが緩いのも合わせて再検討</strong>: 22 件中 11 件は jp=0.0552 / 0.0510 で閾値ギリギリ。jpMin を 0.06 / 0.07 に上げると tied 群を一段カットできるが、これも sweep で確認すべき</li>
+</ul>
+
 <h2>会話ログ</h2>
 
 <div class="turn user">
@@ -273,6 +339,26 @@
   <li>v5 S2 が 12 人気 #15 を odds-free で 4-15 に拾えていた点が技術的なハイライト</li>
   <li>長距離 3200m で「届くか否か」を分離できる特徴量設計が次の課題</li>
 </ul>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>s2 って制限かけなければ何点買ってたんだっけ</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p><code>predict.py</code> を再実行 (<code>--keep-tmp</code>) し、DB の全 105 ワイドオッズと p_norm から全 nC2 ペアの jointP / EV を再計算。topK=5 を外すと <strong>22 点</strong> qualify。うち 2 点 (3-15 / 7-15) が的中 → ROI 約 295%。</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>これなんで 5 点に制限されてるんだっけ？それも踏まえて論考して追記して</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>PR #109 (C-2 sweep) の最良 cell <code>topK=5 / jpMin=0.05 / mho=30 / msp=10</code> をそのまま採用。その後 PR #112 (mho 撤廃) / #114 (ev≥1.0 floor) / #115 (jpMin 緩和) で constraint が外され、<strong>当時 binding していなかった topK=5 cap が binding に変質</strong>。今回のように jointP tied 群で恣意的に切り捨てる装置になっている。topK 単独の再 sweep が必要 — 「追記」セクションに記述。</p>
 </div>
 
 </main>
