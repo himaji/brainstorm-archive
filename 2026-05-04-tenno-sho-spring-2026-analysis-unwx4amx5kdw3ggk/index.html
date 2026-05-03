@@ -305,6 +305,72 @@ minSumPop (msp) = {0, 10}</code></pre>
   <li><strong>jpMin=0.05 の足切りが緩いのも合わせて再検討</strong>: 22 件中 11 件は jp=0.0552 / 0.0510 で閾値ギリギリ。jpMin を 0.06 / 0.07 に上げると tied 群を一段カットできるが、これも sweep で確認すべき</li>
 </ul>
 
+<h2>追記 2 — backtest で topK 感度を再確認</h2>
+
+<p>論考の最後で「sweep を再走させて確認すべき」と書いた件を実際に走らせた。本番現行 constraint (<code>evMin=1.0 / jpMin=0.05 / mho=∞ / msp=0</code>) を固定し、topK のみ振った S2 backtest:</p>
+
+<table>
+  <thead><tr><th>topK</th><th>test_n</th><th>hits</th><th>test_roi</th><th>CI下限</th><th>P/L (¥100/点)</th></tr></thead>
+  <tbody>
+    <tr><td>1</td><td>18</td><td>1</td><td>0.567</td><td>0.000</td><td>-780</td></tr>
+    <tr><td>2</td><td>36</td><td>3</td><td>0.778</td><td>0.000</td><td>-800</td></tr>
+    <tr><td><strong>3</strong></td><td>54</td><td>5</td><td><strong>1.267</strong></td><td><strong>0.296</strong></td><td><strong>+1,440</strong></td></tr>
+    <tr><td><strong>5 (現行)</strong></td><td>87</td><td>6</td><td>0.952</td><td>0.257</td><td><strong>-420</strong></td></tr>
+    <tr><td>8</td><td>129</td><td>6</td><td>0.642</td><td>0.174</td><td>-4,620</td></tr>
+    <tr><td>10</td><td>154</td><td>7</td><td>0.691</td><td>0.235</td><td>-4,760</td></tr>
+    <tr><td>15</td><td>192</td><td>8</td><td>0.670</td><td>0.239</td><td>-6,330</td></tr>
+    <tr><td>20</td><td>203</td><td>8</td><td>0.634</td><td>0.221</td><td>-7,430</td></tr>
+    <tr><td>∞</td><td>212</td><td>8</td><td>0.607</td><td>0.211</td><td>-8,330</td></tr>
+  </tbody>
+</table>
+
+<p>(test = 2025-01-01 以降の 19 重賞、150 train races / 19 test races / 17,385 pairs)</p>
+
+<h3>主要な発見</h3>
+
+<ul>
+  <li><strong>本番現行 (topK=5) は test 期間で実際に損失</strong>: 87 bets / 6 hits / ROI 0.952 で -420 円。PR #109 の sweep 当時 (mho=30 / msp=10 込みで test_n=56 / ROI 2.16 / +6,510 円) と<strong>同じ topK でも別物</strong>になった。</li>
+  <li><strong>topK=3 が現行 constraint 下では最良</strong>: ROI 1.267 / CI 下限 0.296 / +1,440 円。topK=5 より「<strong>絞った方が儲かる</strong>」 → jointP 順位の信頼性は上位 3 件までしか効いていない。</li>
+  <li><strong>topK を増やすほど崩壊</strong>: 8 → ∞ で hits 数は 6→8 に微増するが bets が 129→212 に膨らみ、ROI と P/L は単調悪化。「topK 外せば的中ペアが増える」は今回のレース固有の selection bias で、test 期間全体では成立しない。</li>
+  <li><strong>天皇賞春の「topK=22 で +4,300 円」は 1 レース逸話</strong>: 同じ条件を test 期間に適用すると ROI 0.607 / -8,330 円。先の追記で警告した「単発レースで topK 拡張は決められない」がそのまま実証された。</li>
+</ul>
+
+<h3>jpMin の感度も確認</h3>
+
+<p>topK=∞ 固定で jpMin を振ると、現行 0.05 が <strong>local minimum</strong>:</p>
+
+<table>
+  <thead><tr><th>jpMin</th><th>test_n</th><th>hits</th><th>test_roi</th><th>CI下限</th><th>P/L</th></tr></thead>
+  <tbody>
+    <tr><td>0.03</td><td>432</td><td>13</td><td>1.154</td><td>0.455</td><td>+6,650</td></tr>
+    <tr><td><strong>0.04</strong></td><td>310</td><td>12</td><td><strong>1.304</strong></td><td><strong>0.471</strong></td><td><strong>+9,420</strong></td></tr>
+    <tr><td><strong>0.05 (現行)</strong></td><td>212</td><td>8</td><td>0.607</td><td>0.211</td><td><strong>-8,330</strong></td></tr>
+    <tr><td>0.06</td><td>164</td><td>7</td><td>0.649</td><td>0.204</td><td>-5,760</td></tr>
+    <tr><td>0.07</td><td>101</td><td>7</td><td>1.053</td><td>0.358</td><td>+540</td></tr>
+    <tr><td>0.08 (PR #115 前)</td><td>65</td><td>6</td><td>1.274</td><td>0.338</td><td>+1,780</td></tr>
+  </tbody>
+</table>
+
+<p>jpMin=0.05 だけが谷になっている (0.04 / 0.07 / 0.08 はいずれも黒字)。<strong>PR #115 で jpMin を 0.08 → 0.05 に下げたのが test 期間で逆効果</strong>になっていた。</p>
+
+<h3>含意 — 構造的な問題</h3>
+
+<ul>
+  <li><strong>PR #112 / #114 / #115 の累積で本番が劣化している可能性</strong>: 個別 PR は妥当な修正に見えるが、test 期間ベースでは重ね合わせで <strong>ROI 2.16 → 0.95</strong> に落ちている。「sweep で見つけた最良 cell の周辺は最適化されているが、cell 外に出た瞬間に landscape が変わる」典型。</li>
+  <li><strong>本来取るべきだった対応</strong>: PR #112 (mho 撤廃) の時点で、constraint を変えた以上 topK / jpMin も同時 sweep し直すべきだった。1 軸ずつ patch した結果、cell 全体が最良点から離れた。</li>
+  <li><strong>当面の暫定運用案</strong> (どれも単独では決められない、要ユーザー判断):
+    <ul>
+      <li>(a) topK を 5 → 3 に戻す (test ROI 0.95 → 1.27、ただし test_n=54 で CI 下限 0.30 と弱い)</li>
+      <li>(b) jpMin を 0.05 → 0.08 に戻す (PR #115 前に巻き戻し、test ROI 0.95 → 1.27 / CI 下限 0.34)</li>
+      <li>(c) jpMin=0.04 + topK=∞ に切り替え (test ROI 1.30 / CI 下限 0.47 / 最大の P/L だが picks 数 16 倍化、運用負荷)</li>
+      <li>(d) C-2 sweep をフルに再走 (mho/msp/topK/jpMin 同時 grid) し、現行 landscape での最良 cell を取り直す ← 本筋</li>
+    </ul>
+  </li>
+  <li><strong>天皇賞春の「topK 外せば当たった」は罠</strong>: 単発の的中の裏に、test 期間全体での損失拡大が隠れていた。当初の追記で「単発レースで決められない」と書いた懸念が、まさにこの sweep で具体的な数値として裏付けられた。</li>
+</ul>
+
+<p>結論として、<strong>天皇賞春の picks 取りこぼしは「topK の問題」ではなく「PR #112/#114/#115 の累積で cell が最良点から離れたこと」の症状</strong>。topK を緩めても解決せず、constraint 全体を sweep し直す必要がある。</p>
+
 <h2>会話ログ</h2>
 
 <div class="turn user">
@@ -359,6 +425,16 @@ minSumPop (msp) = {0, 10}</code></pre>
 <div class="turn assistant">
 <div class="role">Assistant</div>
 <p>PR #109 (C-2 sweep) の最良 cell <code>topK=5 / jpMin=0.05 / mho=30 / msp=10</code> をそのまま採用。その後 PR #112 (mho 撤廃) / #114 (ev≥1.0 floor) / #115 (jpMin 緩和) で constraint が外され、<strong>当時 binding していなかった topK=5 cap が binding に変質</strong>。今回のように jointP tied 群で恣意的に切り捨てる装置になっている。topK 単独の再 sweep が必要 — 「追記」セクションに記述。</p>
+</div>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>そのあと、テストし直して収支確認してみて</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p><code>backtest_topk_sweep.py</code> を書いて現行 constraint 固定で topK 振り直し。結果: <strong>本番現行 (topK=5) は test 期間で ROI 0.952 = 損失</strong> (-420 円 / 19 重賞)。topK=3 に絞ると ROI 1.27 / +1,440 円で改善、topK=∞ は ROI 0.61 / -8,330 円で大崩壊。<strong>天皇賞春の「topK 外せば当たる」は selection bias</strong> と裏付け。並行して jpMin 感度も確認 → 0.04 や 0.08 は黒字、現行 0.05 だけが local minimum。<strong>PR #112/#114/#115 の累積で cell が最良点から離れた</strong>のが構造的問題。topK 緩和では解決せず、constraint 全体を再 sweep するのが本筋 — 「追記 2」セクションに記述。</p>
 </div>
 
 </main>
