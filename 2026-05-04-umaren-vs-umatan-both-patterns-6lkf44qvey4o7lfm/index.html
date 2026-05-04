@@ -1,0 +1,332 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>馬連 2 枚 vs 馬単両面 — どちらが得かのパターンと市場データの傾向</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328; --fg-muted: #59636e;
+    --bg: #ffffff; --bg-soft: #f6f8fa;
+    --border: #d0d7de; --link: #0969da;
+    --code-bg: #f6f8fa; --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da; --assistant-accent: #8250df;
+    --good: #1a7f37; --bad: #cf222e;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3; --fg-muted: #9198a1;
+      --bg: #0d1117; --bg-soft: #161b22;
+      --border: #30363d; --link: #4493f8;
+      --code-bg: #161b22; --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8; --assistant-accent: #c297ff;
+      --good: #3fb950; --bad: #f85149;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg); background: var(--bg);
+    line-height: 1.7; font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 96px; }
+  header.page { border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 32px; }
+  header.page h1 { margin: 0 0 8px; font-size: 1.7rem; line-height: 1.3; }
+  header.page .meta { color: var(--fg-muted); font-size: 0.875rem; display: flex; flex-wrap: wrap; gap: 12px; }
+  header.page .meta .source { padding: 2px 8px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 999px; }
+  main h2 { margin-top: 2.5em; padding-bottom: 0.3em; border-bottom: 1px solid var(--border); font-size: 1.4rem; }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0; padding: 0.5em 1em;
+    color: var(--fg-muted); background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em; padding: 0.15em 0.4em;
+    background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg); border: 1px solid var(--code-border); border-radius: 6px;
+    padding: 14px 16px; overflow-x: auto; line-height: 1.5;
+  }
+  main pre code { padding: 0; border: 0; background: none; font-size: 0.875em; }
+  main table {
+    border-collapse: collapse; width: 100%;
+    margin: 1em 0; font-size: 0.9em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 6px 10px; text-align: left; vertical-align: top;
+  }
+  main th { background: var(--bg-soft); }
+  .good { color: var(--good); font-weight: 600; }
+  .bad { color: var(--bad); font-weight: 600; }
+  .key { background: var(--bg-soft); padding: 12px 16px; border-radius: 6px; border: 1px solid var(--border); }
+  footer.page {
+    margin-top: 64px; padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted); font-size: 0.8rem; text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>馬連 2 枚 vs 馬単両面 — どちらが得かのパターンと市場データの傾向</h1>
+<div class="meta">
+<span>2026-05-04</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+
+<h2>サマリ</h2>
+
+<div class="key">
+<p>同じ 200 円で「馬連 2 枚」と「馬単両面 (各 100 円)」を比較。理論的にも実データ的にも <strong>3 つの状態</strong> が存在する:</p>
+
+<ul>
+  <li><span class="good">A</span>: <strong>来る順番に関わらず馬単両面が勝ち</strong> — 市場のミスプライス。機械的に乗り換えれば確定で得 (15.6%)</li>
+  <li><span class="bad">B</span>: <strong>来る順番に関わらず馬連 2 枚が勝ち</strong> — 馬単両方向に金が分散している珍しい状態 (13.3%)</li>
+  <li>C: <strong>方向依存</strong> — 来た順次第で勝者が逆転 (71.1%、過半数)</li>
+</ul>
+
+<p>774 レース 72,544 ペアを実際に集計した結果、<strong>馬連オッズ帯で完全な反転構造</strong>が観察された:</p>
+<ul>
+  <li>馬連 <strong>10 倍以下 (本命級)</strong> → 馬連 2 枚有利 (B &gt; A)</li>
+  <li>馬連 <strong>30〜1000 倍 (中穴〜穴)</strong> → 馬単両面有利 (A &gt; B)</li>
+</ul>
+</div>
+
+<h2>1. 問題設定</h2>
+
+<p>2 頭 (A, B) を絞り込んだ上で 200 円の予算がある。以下 2 つのどちらが得か:</p>
+
+<ul>
+  <li><strong>馬連 2 枚買い</strong>: A-B のセット 200 円。順番不問で 1-2 着に入れば的中。控除率 22.5% (返還率 77.5%)</li>
+  <li><strong>馬単両面買い</strong>: A→B 100 円 + B→A 100 円。どっちの順で来ても片方だけ的中。控除率 25% (返還率 75%)</li>
+</ul>
+
+<h3>勝敗判定式</h3>
+
+<p>馬連 2 枚の払戻 (200 円) = <code>200 × q</code> (q は馬連オッズ)。馬単両面の片方が当たった時の払戻 = <code>100 × e</code> (e はその方向の馬単オッズ)。</p>
+
+<p>馬単両面が勝つ条件:</p>
+<pre><code>e_AB &gt; 2q  AND  e_BA &gt; 2q</code></pre>
+
+<p>馬連 2 枚が勝つ条件:</p>
+<pre><code>e_AB &lt; 2q  AND  e_BA &lt; 2q</code></pre>
+
+<p>どちらでもない (片方だけ満たす) のが「方向依存」。</p>
+
+<h2>2. 公正市場では構造的に「両方向で馬単勝ち」は不可能</h2>
+
+<p>真の確率 <code>pAB</code> / <code>pBA</code> + 控除率込みの公正オッズは:</p>
+
+<pre><code>q     = 0.775 / (pAB + pBA)
+e_AB  = 0.75  / pAB
+e_BA  = 0.75  / pBA</code></pre>
+
+<p>「馬単 AB &gt; 2q」を変形すると <strong>pBA / pAB &gt; 1.067</strong> が必要。「馬単 BA &gt; 2q」は <strong>pAB / pBA &gt; 1.067</strong> が必要。両方を同時に満たすのは数学的に不可能 (一方が大きければ他方が小さい)。</p>
+
+<p>つまり <strong>真の確率に基づく公正な市場では、両方向で馬単両面が勝つことは絶対にない</strong>。</p>
+
+<h2>3. それでも実市場で起きる理由 — 別プール問題</h2>
+
+<p>馬連と馬単は <strong>完全に別の pari-mutuel プール</strong>。オッズは「真の確率」ではなく「そのプール内でどれだけ買われたか」で決まる。</p>
+
+<p>日本の市場では馬連が圧倒的人気 (馬単の 5-10 倍規模)。同じ A-B 組合せでも:</p>
+<ul>
+  <li>馬連プールには金が集中 → 馬連オッズが本来より<strong>低くなる</strong></li>
+  <li>馬単プールはガラ空き → 馬単オッズが本来より<strong>高くなる</strong></li>
+</ul>
+
+<p>このプール間ミスプライスが十分大きいと、上の不等式が両方成立する (= A カテゴリ)。</p>
+
+<h2>4. 実データ集計 — 全 72,544 ペアのカテゴリ分布</h2>
+
+<table>
+  <thead><tr><th>カテゴリ</th><th>件数</th><th>比率</th></tr></thead>
+  <tbody>
+    <tr><td><span class="good">A</span> 馬単両面が両方向勝ち</td><td>11,325</td><td><strong>15.6%</strong></td></tr>
+    <tr><td><span class="bad">B</span> 馬連 2 枚が両方向勝ち</td><td>9,624</td><td><strong>13.3%</strong></td></tr>
+    <tr><td>C 方向依存 (来た順で逆転)</td><td>51,595</td><td><strong>71.1%</strong></td></tr>
+  </tbody>
+</table>
+
+<p>過半数 (71.1%) が <strong>方向依存</strong>。確定的な勝敗が付くのは A + B = 約 29% だけ。</p>
+
+<h3>方向依存 (C) の意味</h3>
+
+<p>例: 馬連 10 倍、馬単 5→8 が 15 倍、馬単 8→5 が 30 倍のケース。</p>
+
+<table>
+  <thead><tr><th>来た順</th><th>馬連 2 枚払戻</th><th>馬単両面払戻</th><th>勝者</th></tr></thead>
+  <tbody>
+    <tr><td>5 → 8 (人気順)</td><td>2,000 円</td><td>1,500 円</td><td><span class="bad">馬連</span></td></tr>
+    <tr><td>8 → 5 (逆順)</td><td>2,000 円</td><td>3,000 円</td><td><span class="good">馬単両面</span></td></tr>
+  </tbody>
+</table>
+
+<p>同じペアでも来た順番で勝者が変わる。これが C カテゴリ。</p>
+
+<h2>5. 馬連オッズ帯ごとの完全な反転構造</h2>
+
+<table>
+  <thead><tr><th>馬連オッズ帯</th><th>A 比率 (馬単勝ち)</th><th>B 比率 (馬連勝ち)</th><th>優位</th></tr></thead>
+  <tbody>
+    <tr><td>0-5 倍 (大本命)</td><td>0.7%</td><td>17.0%</td><td><span class="bad">馬連 ★ 圧勝</span></td></tr>
+    <tr><td>5-10 倍</td><td>2.2%</td><td>11.9%</td><td><span class="bad">馬連</span></td></tr>
+    <tr><td>10-30 倍</td><td>5.4%</td><td>9.8%</td><td><span class="bad">馬連</span></td></tr>
+    <tr><td>30-100 倍</td><td>11.7%</td><td>6.7%</td><td><span class="good">馬単</span></td></tr>
+    <tr><td>100-300 倍</td><td>13.5%</td><td>7.7%</td><td><span class="good">馬単</span></td></tr>
+    <tr><td>300-1000 倍</td><td>17.4%</td><td>11.6%</td><td><span class="good">馬単</span></td></tr>
+    <tr><td>1000 倍以上 (超穴)</td><td>23.0%</td><td>26.8%</td><td>両極端</td></tr>
+  </tbody>
+</table>
+
+<h3>本命級 (馬連 10 倍以下) で馬連が勝つ理由</h3>
+
+<p><strong>「明確な 1 着候補」がいると、馬単 AB 方向にだけ金が集中する</strong>。</p>
+<ul>
+  <li>馬単 AB が極端に短くなる (本来の確率より低い)</li>
+  <li>結果、AB 方向で <code>e_AB &lt; 2q</code> になりやすい</li>
+  <li>BA 方向は誰も買わないので <code>e_BA &gt; 2q</code> のまま</li>
+  <li>→ C (方向依存) になりがち、極端なら B (馬連 2 枚勝ち)</li>
+</ul>
+
+<h3>中穴〜穴 (馬連 30〜1000 倍) で馬単が勝つ理由</h3>
+
+<p><strong>「夢買い」は馬連でしかしない</strong>。</p>
+<ul>
+  <li>「もしかしたら来るかも」程度の人気薄ペアは、当てにくい馬単では誰も買わない</li>
+  <li>馬単 AB / BA とも金が薄い → 両方向で本来確率より高いオッズ</li>
+  <li>馬連には夢買い金が集中して相対的にオッズが圧縮される</li>
+  <li>→ 両方向で <code>e &gt; 2q</code> になり A 領域へ</li>
+</ul>
+
+<h3>超穴 (1000 倍超) で両極端になる理由</h3>
+
+<p>プール自体が薄い (購入金額が少ない) ので、たまたま誰かが片方向に大金を入れると簡単に偏る。逆に均等に少額分散されることもあり、ノイズ支配。</p>
+
+<h2>6. 馬単両面が勝つ実例 (margin 大きい順)</h2>
+
+<h3>馬連 10〜100 倍帯 (実用的)</h3>
+
+<table>
+  <thead><tr><th>日付</th><th>レース</th><th>ペア</th><th>馬連</th><th>馬単 AB</th><th>馬単 BA</th><th>馬単両面の優位</th></tr></thead>
+  <tbody>
+    <tr><td>2024-10-13</td><td>G1 秋華賞</td><td>#2-#11</td><td>54.7</td><td>173.7</td><td>182.8</td><td>+58.8%</td></tr>
+    <tr><td>2022-10-08</td><td>G3 サウジアラビアRC</td><td>#2-#4</td><td>49.9</td><td>161.5</td><td>155.3</td><td>+55.6%</td></tr>
+    <tr><td>2022-03-20</td><td>G2 阪神大賞典</td><td>#3-#7</td><td>57.9</td><td>165.0</td><td>182.7</td><td>+42.5%</td></tr>
+    <tr><td>2025-02-15</td><td>G3 デイリー杯クイーンC</td><td>#6-#8</td><td>84.4</td><td>238.5</td><td>244.0</td><td>+41.3%</td></tr>
+    <tr><td>2024-10-13</td><td>G1 秋華賞</td><td>#10-#11</td><td>91.6</td><td>256.8</td><td>262.1</td><td>+40.2%</td></tr>
+  </tbody>
+</table>
+
+<h3>重賞での極端例 (margin 100% 超)</h3>
+
+<table>
+  <thead><tr><th>日付</th><th>レース</th><th>ペア</th><th>馬連</th><th>馬単 AB</th><th>馬単 BA</th><th>min(e/q)</th></tr></thead>
+  <tbody>
+    <tr><td>2023-11-26</td><td>G1 ジャパンカップ</td><td>#9-#15</td><td>3,800</td><td>19,826</td><td>20,098</td><td>5.22×</td></tr>
+    <tr><td>2024-12-28</td><td>G1 ホープフルS</td><td>#2-#14</td><td>822</td><td>4,101</td><td>5,975</td><td>4.98×</td></tr>
+    <tr><td>2017-04-30</td><td>G1 天皇賞(春)</td><td>#2-#8</td><td>1,213</td><td>5,288</td><td>7,012</td><td>4.36×</td></tr>
+    <tr><td>2020-10-25</td><td>G1 菊花賞</td><td>#5-#12</td><td>1,615</td><td>6,581</td><td>6,907</td><td>4.08×</td></tr>
+  </tbody>
+</table>
+
+<h2>7. 馬連 2 枚が勝つ実例 (B カテゴリ、馬連 30 倍以下)</h2>
+
+<p>「両方向の馬単オッズが揃って <code>2q</code> を下回る」状態:</p>
+
+<table>
+  <thead><tr><th>日付</th><th>馬連</th><th>馬単 AB</th><th>馬単 BA</th><th>馬連 2 枚優位</th></tr></thead>
+  <tbody>
+    <tr><td>2026-04-18</td><td>25.9</td><td>39.5</td><td>39.3</td><td>+31%</td></tr>
+    <tr><td>2025-03-08</td><td>27.8</td><td>44.0</td><td>46.1</td><td>+21%</td></tr>
+    <tr><td>2026-04-18</td><td>19.2</td><td>31.7</td><td>28.0</td><td>+21%</td></tr>
+    <tr><td>2026-04-18</td><td>11.8</td><td>18.8</td><td>20.0</td><td>+18%</td></tr>
+  </tbody>
+</table>
+
+<p>これらは「実力拮抗だが両方向が均等に買われている」ケース。<code>e_AB ≈ e_BA ≈ 1.5q</code> 付近で両方とも 2q を下回る状態。</p>
+
+<h2>8. C 群 (方向依存) の生々しい現実</h2>
+
+<p>馬連 30 倍以下の C 群 5,829 件で、<strong>馬単オッズ比 (max/min) の中央値は 1.48×</strong>。</p>
+
+<p>つまり「同じペアが来ても、順番が違うだけで配当が <strong>1.5 倍違う</strong>」のが普通。馬連 2 枚は順番に関わらず一定なので、<strong>馬連の安定感の正体は配当差の平準化</strong>。</p>
+
+<h2>9. 実用的な使い分け</h2>
+
+<table>
+  <thead><tr><th>ペアの性格</th><th>馬連オッズ帯</th><th>推奨</th><th>理由</th></tr></thead>
+  <tbody>
+    <tr>
+      <td>本命同士の鉄板組合せ</td><td>1〜10 倍</td>
+      <td><strong>馬連 2 枚</strong></td>
+      <td>馬単 AB 方向に金が集中して甘くないため、馬連有利が 17%、馬単有利は 0.7%</td>
+    </tr>
+    <tr>
+      <td>軸馬 + 中穴の組合せ</td><td>10〜30 倍</td>
+      <td><strong>馬連 2 枚</strong> (やや有利)</td>
+      <td>馬連有利 9.8% vs 馬単有利 5.4%。順番が読めるなら馬単片方買いも</td>
+    </tr>
+    <tr>
+      <td>中穴ペア</td><td>30〜100 倍</td>
+      <td><strong>馬単両面</strong> (有利)</td>
+      <td>馬単有利 11.7% vs 馬連有利 6.7%。発走直前のオッズで両方向が <code>&gt;2q</code> なら確実乗り換え</td>
+    </tr>
+    <tr>
+      <td>穴狙い</td><td>100〜1000 倍</td>
+      <td><strong>馬単両面</strong></td>
+      <td>馬単有利 13-17% vs 馬連有利 8-12%。穴の馬単はプール薄でオッズが甘い</td>
+    </tr>
+    <tr>
+      <td>超穴・大穴</td><td>1000 倍超</td>
+      <td>その都度確認</td>
+      <td>両極端 (A 23%, B 27%, C 50%)。プールが薄くノイズ支配、見てから判断</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>10. 注意点</h2>
+
+<ul>
+  <li><strong>当たる確率は変わらない</strong>: A 状態で乗り換えても、ペアが 1-2 着に来るかどうかの期待値は同じ。「払戻が増える」だけで「当たりやすくなる」わけではない</li>
+  <li><strong>オッズは発走直前まで揺れる</strong>: A 判定は瞬間的なもの。締切間際に確認 → 即購入の運用が必要</li>
+  <li><strong>控除率の差を踏まえても勝てるのが A の意味</strong>: 馬連 22.5% vs 馬単 25% の控除差を超えるミスプライスが起きている状態</li>
+  <li><strong>2 頭に絞れているのが前提</strong>: そもそも 2 頭の組合せが当たらないと意味がない。「馬連 2 枚を買う予定だったレースで A 状態を発見したら馬単両面に切り替える」という限定運用が現実的</li>
+  <li><strong>15.6% は珍しくない</strong>: 全 774 レースで A 状態のペアは平均 14.6 個。発走前にオッズ表をスキャンする習慣があるなら活用余地は大きい</li>
+</ul>
+
+<h2>結論</h2>
+
+<div class="key">
+<ul>
+  <li>馬連と馬単は別プールなので、市場の集中度の偏りでオッズが歪む</li>
+  <li>本命級ほど馬連有利、穴ほど馬単両面有利という<strong>反転構造</strong>がデータで確認された</li>
+  <li>A (馬単両面確定勝ち) は 15.6% で発生、機械的乗り換えで確定的に得 — ただし「当たる確率」は変わらないので別途予想が必要</li>
+  <li>大半 (71%) は方向依存。「来た順次第」で勝敗が分かれる。馬連 2 枚を選ぶ意味は<strong>順番リスクの平準化</strong>と理解できる</li>
+</ul>
+</div>
+
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
