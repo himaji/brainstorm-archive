@@ -8,26 +8,18 @@
 <style>
   :root {
     color-scheme: light dark;
-    --fg: #1f2328;
-    --fg-muted: #59636e;
-    --bg: #ffffff;
-    --bg-soft: #f6f8fa;
-    --border: #d0d7de;
-    --link: #0969da;
-    --tag-bg: #ddf4ff;
-    --tag-fg: #0969da;
+    --fg: #1f2328; --fg-muted: #59636e;
+    --bg: #ffffff; --bg-soft: #f6f8fa;
+    --border: #d0d7de; --link: #0969da;
+    --tag-bg: #ddf4ff; --tag-fg: #0969da;
     --card-hover: #eef4ff;
   }
   @media (prefers-color-scheme: dark) {
     :root {
-      --fg: #e6edf3;
-      --fg-muted: #9198a1;
-      --bg: #0d1117;
-      --bg-soft: #161b22;
-      --border: #30363d;
-      --link: #4493f8;
-      --tag-bg: #0c2d6b;
-      --tag-fg: #79c0ff;
+      --fg: #e6edf3; --fg-muted: #9198a1;
+      --bg: #0d1117; --bg-soft: #161b22;
+      --border: #30363d; --link: #4493f8;
+      --tag-bg: #0c2d6b; --tag-fg: #79c0ff;
       --card-hover: #1c2333;
     }
   }
@@ -36,163 +28,82 @@
   body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
                  "Noto Sans JP", Meiryo, sans-serif;
-    color: var(--fg);
-    background: var(--bg);
-    line-height: 1.6;
-    font-size: 16px;
+    color: var(--fg); background: var(--bg);
+    line-height: 1.6; font-size: 16px;
     -webkit-font-smoothing: antialiased;
   }
-  .wrap {
-    max-width: 720px;
-    margin: 0 auto;
-    padding: 24px 16px 96px;
-  }
-  header.page {
-    border-bottom: 1px solid var(--border);
-    padding-bottom: 16px;
-    margin-bottom: 12px;
-  }
-  header.page h1 {
-    margin: 0 0 4px;
-    font-size: 1.5rem;
-  }
-  header.page .meta {
-    color: var(--fg-muted);
-    font-size: 0.85rem;
-  }
+  .wrap { max-width: 720px; margin: 0 auto; padding: 24px 16px 96px; }
+  header.page { border-bottom: 1px solid var(--border); padding-bottom: 16px; margin-bottom: 12px; }
+  header.page h1 { margin: 0 0 4px; font-size: 1.5rem; }
+  header.page .meta { color: var(--fg-muted); font-size: 0.85rem; }
   .filters {
-    position: sticky;
-    top: 0;
-    background: var(--bg);
-    padding: 8px 0 12px;
-    margin-bottom: 8px;
-    z-index: 10;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+    position: sticky; top: 0; background: var(--bg);
+    padding: 8px 0 12px; margin-bottom: 8px; z-index: 10;
+    display: flex; flex-direction: column; gap: 8px;
     border-bottom: 1px solid var(--border);
   }
-  .filters .search-row {
-    display: flex;
-    gap: 6px;
-    align-items: center;
-  }
+  .filters .search-row { display: flex; gap: 6px; align-items: center; }
   .filters input {
-    flex: 1;
-    padding: 10px 12px;
-    font-size: 1rem;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    background: var(--bg-soft);
-    color: var(--fg);
-    -webkit-appearance: none;
-    appearance: none;
+    flex: 1; padding: 10px 12px; font-size: 1rem;
+    border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg-soft); color: var(--fg);
+    -webkit-appearance: none; appearance: none;
   }
   .filters input:focus { outline: 2px solid var(--link); outline-offset: -1px; }
   .filters .clear {
-    padding: 8px 12px;
-    font-size: 0.85rem;
-    border: 1px solid var(--border);
-    background: var(--bg-soft);
-    color: var(--fg-muted);
-    border-radius: 8px;
-    cursor: pointer;
+    padding: 8px 12px; font-size: 0.85rem;
+    border: 1px solid var(--border); background: var(--bg-soft);
+    color: var(--fg-muted); border-radius: 8px; cursor: pointer;
   }
   .filters .clear:active { background: var(--card-hover); }
-  .tag-filter {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-  }
+  .tag-filter { display: flex; flex-wrap: wrap; gap: 6px; }
   .tag-toggle {
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    color: var(--fg);
-    border-radius: 999px;
-    padding: 5px 12px;
-    font-size: 0.8rem;
-    cursor: pointer;
-    font: inherit;
-    line-height: 1.2;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    color: var(--fg); border-radius: 999px; padding: 5px 12px;
+    font-size: 0.8rem; cursor: pointer; font: inherit; line-height: 1.2;
   }
   .tag-toggle.active {
-    background: var(--tag-bg);
-    color: var(--tag-fg);
-    border-color: var(--tag-fg);
+    background: var(--tag-bg); color: var(--tag-fg); border-color: var(--tag-fg);
   }
-  .tag-toggle .count {
-    color: var(--fg-muted);
-    margin-left: 4px;
-    font-size: 0.72rem;
-  }
+  .tag-toggle .count { color: var(--fg-muted); margin-left: 4px; font-size: 0.72rem; }
   .tag-toggle.active .count { color: var(--tag-fg); }
-  .list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
+  .list { display: flex; flex-direction: column; gap: 8px; }
   .empty {
-    color: var(--fg-muted);
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 32px 0;
-    display: none;
+    color: var(--fg-muted); font-size: 0.9rem;
+    text-align: center; padding: 32px 0; display: none;
   }
   .empty.show { display: block; }
   .card {
-    display: block;
-    text-decoration: none;
-    color: inherit;
-    background: var(--bg-soft);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 16px;
-    min-height: 64px;
+    display: block; text-decoration: none; color: inherit;
+    background: var(--bg-soft); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px 16px; min-height: 64px;
     transition: background 0.1s ease;
   }
   .card:active { background: var(--card-hover); }
-  @media (hover: hover) {
-    .card:hover { background: var(--card-hover); }
-  }
+  @media (hover: hover) { .card:hover { background: var(--card-hover); } }
   .card .title {
-    font-weight: 600;
-    font-size: 1.0rem;
-    color: var(--link);
-    margin: 0 0 6px;
-    line-height: 1.4;
+    font-weight: 600; font-size: 1.0rem; color: var(--link);
+    margin: 0 0 6px; line-height: 1.4;
   }
   .card .meta-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px 10px;
-    font-size: 0.8rem;
-    color: var(--fg-muted);
-    align-items: center;
+    display: flex; flex-wrap: wrap; gap: 6px 10px;
+    font-size: 0.8rem; color: var(--fg-muted); align-items: center;
   }
   .card .source {
     font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-    font-size: 0.75rem;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 1px 6px;
+    font-size: 0.75rem; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px;
   }
   .card .tags { display: inline-flex; gap: 4px; flex-wrap: wrap; }
   .card .tag {
-    background: var(--tag-bg);
-    color: var(--tag-fg);
-    border-radius: 999px;
-    padding: 1px 8px;
-    font-size: 0.72rem;
-    font-weight: 500;
+    background: var(--tag-bg); color: var(--tag-fg);
+    border-radius: 999px; padding: 1px 8px;
+    font-size: 0.72rem; font-weight: 500;
   }
   footer.page {
-    margin-top: 48px;
-    padding-top: 12px;
+    margin-top: 48px; padding-top: 12px;
     border-top: 1px solid var(--border);
-    color: var(--fg-muted);
-    font-size: 0.75rem;
-    text-align: center;
+    color: var(--fg-muted); font-size: 0.75rem; text-align: center;
   }
 </style>
 </head>
@@ -200,7 +111,7 @@
 <div class="wrap">
 <header class="page">
 <h1>Brainstorm Archive</h1>
-<div class="meta"><span id="counts">himaji / brainstorm-archive · 23 / 23 件</span></div>
+<div class="meta"><span id="counts">himaji / brainstorm-archive · 24 / 24 件</span></div>
 </header>
 
 <div class="filters">
@@ -209,12 +120,13 @@
     <button class="clear" id="clear" type="button">クリア</button>
   </div>
   <div class="tag-filter" id="tag-filter">
+    <button class="tag-toggle" type="button" data-tag="horse-racing">horse-racing<span class="count">3</span></button>
     <button class="tag-toggle" type="button" data-tag="反論材料なし">反論材料なし<span class="count">3</span></button>
-    <button class="tag-toggle" type="button" data-tag="horse-racing">horse-racing<span class="count">2</span></button>
+    <button class="tag-toggle" type="button" data-tag="v5">v5<span class="count">2</span></button>
+    <button class="tag-toggle" type="button" data-tag="ml">ml<span class="count">2</span></button>
     <button class="tag-toggle" type="button" data-tag="wide-bet">wide-bet<span class="count">2</span></button>
-    <button class="tag-toggle" type="button" data-tag="v5">v5<span class="count">1</span></button>
+    <button class="tag-toggle" type="button" data-tag="features">features<span class="count">1</span></button>
     <button class="tag-toggle" type="button" data-tag="backtest">backtest<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="ml">ml<span class="count">1</span></button>
     <button class="tag-toggle" type="button" data-tag="競馬予想">競馬予想<span class="count">1</span></button>
     <button class="tag-toggle" type="button" data-tag="バックテスト">バックテスト<span class="count">1</span></button>
     <button class="tag-toggle" type="button" data-tag="モデル評価">モデル評価<span class="count">1</span></button>
@@ -222,6 +134,17 @@
 </div>
 
 <main class="list" id="list">
+  <a class="card"
+     href="https://himaji.github.io/brainstorm-archive/2026-05-04-v5-long-lgbm-features-n4oly7akagkzayeq/"
+     data-title="v5_long_lgbm の特徴量と予測パイプライン (全 33 項目)"
+     data-tags="horse-racing,v5,ml,features">
+    <div class="title">v5_long_lgbm の特徴量と予測パイプライン (全 33 項目)</div>
+    <div class="meta-row">
+      <span>2026-05-04</span>
+      <span class="source">session</span>
+      <span class="tags"><span class="tag">horse-racing</span><span class="tag">v5</span><span class="tag">ml</span><span class="tag">features</span></span>
+    </div>
+  </a>
   <a class="card"
      href="https://himaji.github.io/brainstorm-archive/2026-05-04-tenno-sho-spring-2026-analysis-unwx4amx5kdw3ggk/"
      data-title="2026 天皇賞春 予想分析 — 全モデルで本命 #4 が 4 着、12 人気 2 着を v5 S2 が拾うも空振り"

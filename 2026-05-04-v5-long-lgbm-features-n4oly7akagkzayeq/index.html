@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>v5_long_lgbm の特徴量と予測パイプライン (全 33 項目)</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.92em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 6px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>v5_long_lgbm の特徴量と予測パイプライン (全 33 項目)</h1>
+<div class="meta">
+<span>2026-05-04</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+
+<h2>概要</h2>
+
+<p>JRA 重賞の芝長距離 (3200m など) を対象にした 3 着内予測モデル。<strong>オッズ・人気は一切使わない (odds-free)</strong> 設計で、過去成績と馬属性のみから「3 着以内に入る確率」を出す。</p>
+
+<ul>
+  <li>アルゴリズム: <strong>LightGBM (binary classification)</strong> + <strong>isotonic calibration</strong> + <strong>race-level normalize</strong></li>
+  <li>ラベル: <code>1 if finish_position ∈ [1, 3] else 0</code></li>
+  <li>特徴量数: <strong>33 個</strong> (numeric 27 + categorical 6)</li>
+  <li>学習データ: 過去 G1/G2/G3/L/OP の芝長距離レース (170 レース弱、5000+ 行)</li>
+  <li>train cutoff: <code>2024-12-31</code> (2025 以降は test/forward test)</li>
+</ul>
+
+<h2>入力データ</h2>
+
+<p>1 サンプル = (race × horse) の組。各サンプルに以下を含める:</p>
+
+<ul>
+  <li><strong>race</strong>: distance, surface, venue, trackCondition, weather, grade, raceName, 出走頭数</li>
+  <li><strong>horse</strong>: number, name, jockey, trainer, age, sex, weightToCarry (斤量), bodyWeight, father (父), motherFather (母父)</li>
+  <li><strong>pastResults</strong>: 直近 10 戦の (date, venue, distance, surface, position, jockey, lastThreeFurlongs, cornerPositions)</li>
+  <li><strong>label</strong>: その race での finish_position (3 着以内なら 1)</li>
+</ul>
+
+<p>※ Horse.odds / Horse.popularity / pastResults[i].popularity は <strong>export 段階で物理的に除外</strong>。学習時にも predict 時にも一切渡らない。</p>
+
+<h2>特徴量一覧 (33 項目)</h2>
+
+<p><code>n_recent</code> (default 5) は「直近何戦から集計するか」。</p>
+
+<h3>Tier 1: スタミナ・距離適性 (recent N から計算, 7 項目)</h3>
+
+<table>
+  <thead><tr><th>名前</th><th>意味</th><th>計算方法</th></tr></thead>
+  <tbody>
+    <tr><td><code>distFit_2400</code></td><td>長距離適性</td><td>直近 N 戦のうち 芝 2400m 以上で <strong>3 着以内</strong> だった回数</td></tr>
+    <tr><td><code>distFit_3000</code></td><td>超長距離適性</td><td>直近 N 戦のうち 芝 3000m 以上で 3 着以内回数</td></tr>
+    <tr><td><code>courseFit_kyo_han</code></td><td>関西コース適性</td><td>直近 N 戦のうち 京都/阪神 芝で 3 着以内回数</td></tr>
+    <tr><td><code>courseFit_naka</code></td><td>中山コース適性</td><td>直近 N 戦のうち 中山 芝で 3 着以内回数</td></tr>
+    <tr><td><code>gradedStarts</code></td><td>準オープン以上経験</td><td>直近 N 戦のうち 芝 2000m 以上 (中央 10 場) の出走回数</td></tr>
+    <tr><td><code>gradedTop3</code></td><td>準オープン以上の好走</td><td>同条件で 3 着以内回数</td></tr>
+    <tr><td><code>bestPosLast</code></td><td>直近の最高着順</td><td>直近 N 戦の position の <strong>最小値</strong> (= 一番良い着順)</td></tr>
+  </tbody>
+</table>
+
+<h3>Tier 2: ローテ・前走系 (recent N から, 7 項目)</h3>
+
+<table>
+  <thead><tr><th>名前</th><th>意味</th><th>計算方法</th></tr></thead>
+  <tbody>
+    <tr><td><code>recentForm</code></td><td>前走の着順</td><td>直近 1 走の position</td></tr>
+    <tr><td><code>lastDistance</code></td><td>前走距離</td><td>直近 1 走の distance</td></tr>
+    <tr><td><code>daysSinceLast</code></td><td>休み明け or 連戦</td><td>当該 race の date − 前走 date (日数)</td></tr>
+    <tr><td><code>last3fAvg</code></td><td>末脚の鋭さ</td><td>直近 <strong>3 戦</strong> の上がり 3F の平均 (秒)</td></tr>
+    <tr><td><code>last3fStd</code></td><td>末脚の安定度</td><td>直近 N 戦の上がり 3F の標準偏差</td></tr>
+    <tr><td><code>lastCorner4Pos</code></td><td>前走 4 角通過順</td><td>"5-5-3-2" 形式の最後の値</td></tr>
+    <tr><td><code>avgCorner4Last</code></td><td>脚質傾向</td><td>直近 N 戦の 4 角通過順の平均</td></tr>
+  </tbody>
+</table>
+
+<h3>Tier 3: レース文脈 (2 numeric + 5 categorical = 7 項目)</h3>
+
+<table>
+  <thead><tr><th>名前</th><th>型</th><th>意味</th></tr></thead>
+  <tbody>
+    <tr><td><code>distance</code></td><td>numeric</td><td>当該レースの距離 (m)</td></tr>
+    <tr><td><code>numEntries</code></td><td>numeric</td><td>出走頭数</td></tr>
+    <tr><td><code>track</code></td><td>cat</td><td>競馬場名 (東京/中山/京都/阪神/中京/新潟/福島/小倉/札幌/函館)</td></tr>
+    <tr><td><code>trackCondition</code></td><td>cat</td><td>馬場状態 (良/稍重/重/不良)</td></tr>
+    <tr><td><code>weather</code></td><td>cat</td><td>天候 (晴/曇/小雨/雨/雪)</td></tr>
+    <tr><td><code>raceClass</code></td><td>cat</td><td>G1 / G2 / G3 / L / OP / OTHER</td></tr>
+    <tr><td><code>raceCategory</code></td><td>cat</td><td>raceName から推定: <code>fillies</code>(牝)/<code>3yo</code>(3歳)/<code>older</code>(古馬)</td></tr>
+  </tbody>
+</table>
+
+<h3>Tier 4: 馬の静的属性 (3 numeric + 1 categorical = 4 項目)</h3>
+
+<table>
+  <thead><tr><th>名前</th><th>型</th><th>意味</th></tr></thead>
+  <tbody>
+    <tr><td><code>age</code></td><td>numeric</td><td>馬齢</td></tr>
+    <tr><td><code>weightToCarry</code></td><td>numeric</td><td>斤量 (kg)</td></tr>
+    <tr><td><code>bodyWeight</code></td><td>numeric</td><td>馬体重 (kg)</td></tr>
+    <tr><td><code>sex</code></td><td>cat</td><td>性別 (牡/牝/セ)</td></tr>
+  </tbody>
+</table>
+
+<h3>Tier 5(a): 騎手スコア (3 項目)</h3>
+
+<p>データソース: 全 race の全 horse の <strong>pastResults を flatten</strong> して (jockey, date, distance, surface, venue, position) の long table を作る (新規スクレイプ不要)。</p>
+
+<p>各 (race, horse) について <strong>race_date より前の 3 年窓</strong>に絞って集計し、Bayesian smoothing で安定化:</p>
+
+<pre><code>smoothed_rate = (hits + α · prior) / (n + α)</code></pre>
+
+<table>
+  <thead><tr><th>名前</th><th>意味</th><th>計算詳細</th></tr></thead>
+  <tbody>
+    <tr><td><code>jockey_top3_long_2400</code></td><td>長距離での騎手力</td><td>3y 窓 × 芝 2400m+ × 該当 jockey rides の 3 着以内率 (smoothed, α=5)</td></tr>
+    <tr><td><code>jockey_top3_course</code></td><td>当該会場での騎手力</td><td>3y 窓 × 該当 venue × 該当 jockey rides。<strong>n &lt; 3 なら _long_2400 にフォールバック</strong></td></tr>
+    <tr><td><code>jockey_n_long_rides</code></td><td>長距離騎乗経験</td><td><code>log1p(3y 窓内の 芝 2400m+ 騎乗回数)</code> (経験量を圧縮)</td></tr>
+  </tbody>
+</table>
+
+<p><strong>prior</strong> は「同じ race_date における全騎手の平均」を使う (slice-matched prior)。default α = 5。</p>
+
+<h3>Tier 5(b): 厩舎スコア (3 項目)</h3>
+
+<p>データソース: <strong>scraped corpus 内の Horse.trainer × race-result</strong> から集計。pastResults には trainer 情報がないため騎手と違って一段サンプルが少ない (jockey の 1/3〜1/5)。</p>
+
+<table>
+  <thead><tr><th>名前</th><th>意味</th><th>計算詳細</th></tr></thead>
+  <tbody>
+    <tr><td><code>trainer_top3_long_2400</code></td><td>長距離での厩舎力</td><td>3y 窓 × 芝 2400m+ × 該当 trainer 出走馬の 3 着以内率 (smoothed, <strong>α=10</strong>)</td></tr>
+    <tr><td><code>trainer_top3_course</code></td><td>当該会場での厩舎力</td><td>3y 窓 × 該当 venue。n &lt; 3 で _long_2400 にフォールバック</td></tr>
+    <tr><td><code>trainer_n_long_starters</code></td><td>長距離出走馬の数</td><td><code>log1p(3y 窓内の出走馬数)</code></td></tr>
+  </tbody>
+</table>
+
+<p>α=10 (騎手より厳しめ) はサンプル不足を補うため。<code>[東]\n国枝栄</code> の prefix は normalize で除去。</p>
+
+<h3>Tier 5(c): 父系統スコア (2 項目)</h3>
+
+<p>データソース: <strong>馬の父 → 系統 lookup table → その馬の pastResults を系統に集計</strong>。8 系統 (7 系統 + OTHER) の dense bucket。</p>
+
+<table>
+  <thead><tr><th>名前</th><th>意味</th><th>計算詳細</th></tr></thead>
+  <tbody>
+    <tr><td><code>lineage_top3_long_2400</code></td><td>系統の長距離適性</td><td>5y 窓 × 芝 2400m+ × 該当系統 progeny rides の 3 着以内率 (smoothed, α=5)</td></tr>
+    <tr><td><code>lineage_top3_overall</code></td><td>系統の baseline 強さ</td><td>5y 窓 × 全距離 × 該当系統 progeny rides の 3 着以内率</td></tr>
+  </tbody>
+</table>
+
+<p>「ステイヤー特化系統」(例: ステゴ系) の signal は <code>long_2400</code> と <code>overall</code> の <strong>対比</strong>で取れる (long が overall より高ければ長距離向き)。窓は jockey/trainer (3y) より長く 5y、世代横断的な signal を取るため。</p>
+
+<h2>予測パイプライン</h2>
+
+<p>学習済みモデル + キャリブレータを使って 1 レースの予測を作る流れ:</p>
+
+<pre><code>raw 特徴量 → LightGBM → p_raw
+   ↓ isotonic
+p_cal (calibrated probability)
+   ↓ race-level normalize: p_cal × (3 / Σp_cal)
+p_norm (Σ p_norm = 3 ← 3 着分の確率質量)
+   ↓ 全 nC2 ペア生成 + R 補正
+jointP = p_norm_a × p_norm_b × R   (Σ jointP = 3)
+   ↓ wide odds と組み合わせ
+EV = jointP × wideOdds</code></pre>
+
+<h3>step ごとの意味</h3>
+
+<ol>
+  <li><strong>p_raw (LightGBM 生確率)</strong>: 木のリーフを足し算したスコアを sigmoid したもの。3 着内入りの確率の <em>近似</em>だが、絶対値はキャリブレーションされていない。</li>
+  <li><strong>p_cal (isotonic キャリブレーション)</strong>: train の OOF (cross-validation の hold-out) で <code>p_raw → 実際の 3 着内率</code> の単調変換を学習し、予測時にこれを適用。例えば「p_raw=0.4 のサンプル群が実は 0.55 で 3 着内に入っている」なら、p_raw=0.4 を 0.55 にズラす。生 LGBM の絶対値の歪みを単調関数で補正する古典的手法。</li>
+  <li><strong>p_norm (race normalize)</strong>: 各レース内で <code>p_cal × (3 / Σp_cal)</code> をかけて合計を 3 にする。「3 着以内の枠が 3 つあるので確率の合計は 3」という制約を強制。レース間の難易度差を打ち消す効果もある。</li>
+  <li><strong>jointP (ペア確率)</strong>: 2 頭が <strong>同時に</strong> 3 着以内に入る確率の推定値。素朴に <code>p_norm_a × p_norm_b</code> とすると合計が 3 にならないので、<code>R = 3 / Σ(p_a × p_b)</code> で再正規化する (Σ jointP = 3 → 全ペアの 3 着内同時発生の合計 = 3)。</li>
+  <li><strong>EV (期待値)</strong>: <code>jointP × wideOdds</code>。ワイド配当 (両方 3 着内なら払戻し) との掛け算で、買えば理論上どれだけ戻るかの期待値。<strong>S2 戦略では使わない</strong> (確率で並べる)。S1 戦略はこれの降順。</li>
+</ol>
+
+<h2>学習設定 (LightGBM パラメータ)</h2>
+
+<pre><code>objective:        binary
+metric:           binary_logloss
+learning_rate:    0.03
+num_leaves:       15
+max_depth:        4
+min_data_in_leaf: 20
+feature_fraction: 0.85
+bagging_fraction: 0.85
+bagging_freq:     5
+lambda_l1:        0.1
+lambda_l2:        0.1
+seed:             42
+
+num_boost_round:  1500
+early_stopping:   100</code></pre>
+
+<p>少ないデータ (positive 211 / 5000+ rows) に対して <strong>強めの正則化</strong> (浅い木 + leaf-min + L1/L2)。バイアスを少し許容して分散を抑える方針。</p>
+
+<h2>設計上の特徴 (なぜこの作りか)</h2>
+
+<ul>
+  <li><strong>odds-free を貫く</strong>: 「市場価格に引っ張られず純粋なスキル評価を出す」が目的。S2 戦略 (jointP 順) と組み合わせて初めて意味を持つ (前回の検証では「乖離順 = EV 順」は test 期間で全敗)。</li>
+  <li><strong>3 階層 (raw/cal/norm) の確率</strong>: モデル出力をそのまま使わず、calibration → normalize の 2 段階で「現実の頻度」と「制約」に合わせる。これが pair の jointP を解釈可能 (Σ=3) にする鍵。</li>
+  <li><strong>Bayesian smoothing をあちこちで使う</strong>: 騎手・厩舎・系統のいずれもサンプルが少ないと過学習しやすいので、prior にシュリンクする (n=0 なら prior 値、n→∞ なら経験率)。α は信頼度 (擬似観測数)。</li>
+  <li><strong>slice-matched prior</strong>: 「全馬の平均」ではなく「同じ race_date 時点での平均」を prior にする。time-leak を防ぐため。</li>
+  <li><strong>fallback hierarchy</strong>: course 別 (n&lt;3) → long_2400 にフォールバック。ローカル signal が薄ければグローバルに退く。</li>
+  <li><strong>過去 N 戦の rolling window</strong>: 直近の調子を反映。N=5 がデフォルトだが <code>--n-recent</code> で可変。pastResults は最大 10 戦保存しているので 10 まで広げられる。</li>
+  <li><strong>4 角通過順を採用</strong>: 脚質 (逃げ/差し) の代理変数。"5-5-3-2" という文字列の最後を取る。</li>
+  <li><strong>系統 lookup は手動 table</strong>: 父名から 8 系統に bucketize する <code>lineage.py</code> がある。父名そのものを categorical にすると cardinality が爆発するので bucket 化必須。</li>
+</ul>
+
+<h2>限界 / 弱点</h2>
+
+<ul>
+  <li><strong>サンプルが小さい</strong>: 170 レース弱、3 着内 positive 211 件。 statistical power が低く、test 期間 19 レース → bootstrap CI 下限が 0.3〜0.5 と弱い。</li>
+  <li><strong>「3 着内」binary</strong>: 1-2-3 着の重み付けがない。複勝・ワイドに最適化されているが単勝には弱い (順位を直接推定していない)。</li>
+  <li><strong>馬場バイアスを取り込んでいない</strong>: <code>DailyTrackBias</code> テーブルは別にあるが、特徴量には未統合。</li>
+  <li><strong>レースのペース・展開を直接表現していない</strong>: 過去の上がり 3F 平均はあるが、「前残りレース」「ハイペース」のような race-level コンテキストは categorical にしか入っていない。</li>
+  <li><strong>raceClass の grade 情報が pastResults にない</strong>: 当初予定していた <code>jockey_top3_graded</code> / <code>lineage_top3_graded</code> は実装不可で、distance ベースの <code>_long_2400</code> で代替。</li>
+</ul>
+
+<h2>関連</h2>
+
+<ul>
+  <li>コード: <code>backend/models/v5_long_lgbm/features.py</code> / <code>train.py</code> / <code>predict.py</code></li>
+  <li>系統 lookup: <code>backend/models/v5_long_lgbm/lineage.py</code></li>
+  <li>backtest: <code>backend/models/v5_long_lgbm/backtest.py</code></li>
+  <li>関連 PR: #85〜#115 (Tier 1〜5 + bet selection sweep + isotonic + jpMin 緩和)</li>
+  <li>進捗ドキュメント: <code>docs/research/2026-05-02-v5-tier5-progress.md</code></li>
+</ul>
+
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
