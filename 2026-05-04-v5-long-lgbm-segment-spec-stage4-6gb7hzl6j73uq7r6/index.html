@@ -1,0 +1,349 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>v5_long_lgbm SegmentSpec リファクタ Stage 4 — calibrator metadata 拡張 + predict.py spec 伝搬</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>v5_long_lgbm SegmentSpec リファクタ Stage 4 — calibrator metadata 拡張 + predict.py spec 伝搬</h1>
+<div class="meta">
+<span>2026-05-04</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>サマリ</h2>
+<ul>
+  <li><strong>議論の目的</strong>: hima-yosou (JRA 競馬予想) リポジトリで進めている v5_long_lgbm 横展開リファクタの Phase 3 Stage 4 を完了させる。Stage 5 で SEG_MID 等を追加した瞬間に predict.py が segment ごとに正しく動くよう、calibrator.json の metadata 拡張と predict.py のハードコード解消を行う。挙動は完全不変 (Stage 3 baseline と bit-exact 一致) を要件とする。</li>
+  <li><strong>主な決定事項</strong>:
+    <ul>
+      <li>train.py の <code>serialize_isotonic</code> に <code>*, spec: SegmentSpec = SEG_LONG</code> を追加し、<code>_metadata</code> に <code>segment_id</code> / <code>spec_version="v1"</code> / <code>trained_at</code> (UTC ISO 8601) を書き込む。<code>n_recent</code> は維持。</li>
+      <li>predict.py の <code>_load_stats_table</code> の bool キャスト対象 <code>"is_long_2400"</code> を <code>spec.is_primary_flag</code> で動的化。<code>predict_race</code> シグネチャに <code>*, spec: SegmentSpec = SEG_LONG</code> を kwarg-only 追加し、features.py 呼び出し全箇所に <code>spec=spec</code> 伝搬。</li>
+      <li>起動時 calibrator metadata check を拡張: segment_id 不一致 → <code>RuntimeError("calibrator segment mismatch: ...")</code>、metadata 無し → <code>warnings.warn</code> で graceful fallback。</li>
+      <li>同値性テスト 3 件 (round-trip / graceful fallback / mismatch raises) を <code>test_seg_long_equivalence.py</code> に追加。Stage 3 既存 8 件 + Stage 4 新規 3 件 = 11 件すべて pass。backend/tests 全 44 件 pass。</li>
+      <li>commit を 3 件に分割 (train metadata / predict spec / test) し、PR #128 を base=feat/segment-spec-stage3 でスタックして作成。<code>superpowers:code-reviewer</code> による self-review で致命的問題なしを確認。</li>
+    </ul>
+  </li>
+  <li><strong>未解決事項 / Stage 5 への申し送り</strong>:
+    <ul>
+      <li>設計書 H.1 / H.3 の <code>feature_names</code> / <code>feature_names_categorical</code> metadata 化は未実装 (Stage 4 プロンプトの 3 フィールド指定を優先)。Stage 5 で SEG_MID 追加時に再検討。</li>
+      <li>設計書 H.5 の <code>_load_stats_table</code> 列存在チェック (defense-in-depth) も未実装。calibrator segment_id check で先に止まる線が太いため次回。</li>
+      <li>エラー型の混在: <code>n_recent</code> mismatch は <code>ValueError</code>、<code>segment_id</code> mismatch は <code>RuntimeError</code>。プロンプトと設計書 H.3 (ValueError 例示) で齟齬していたが、規律 3 (停止して報告) を発火させずプロンプトを採用した点は反省。改善 issue 候補。</li>
+      <li>K.5 deprecated alias 削除整理 PR は Stage 5 完了後の予定通り未着手。</li>
+      <li>PR #126 (Stage 1-2) / #127 (Stage 3) はプロンプトの「merge 済の前提」と異なり実際は OPEN 中。本 PR #128 は base=feat/segment-spec-stage3 でスタックさせる形を採用。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>会話ログ</h2>
+
+<div class="turn user">
+<div class="role">User</div>
+<p>あなたは hima-yosou (JRA 競馬予想) リポジトリで作業するシニアエンジニアです。v5_long_lgbm 横展開リファクタの Phase 3 Stage 4 を担当します。</p>
+<p><strong>前提</strong></p>
+<ul>
+  <li>リポジトリ: /home/h_yokota/projects/hima-yosou</li>
+  <li>PR #126 (Stage 1-2) と PR #127 (Stage 3) は既に main に merge 済の前提</li>
+  <li>最新 main から <code>feat/segment-spec-stage4</code> ブランチを切って作業</li>
+  <li>Stage 4 は small サイズ。Stage 5 (v5_mid_lgbm スケルトン) には進まず、Stage 4 完了で停止</li>
+</ul>
+<p><strong>Stage 4 のゴール</strong>: Stage 5 で SEG_MID 等を追加した瞬間に predict.py が segment ごと正しく動く準備を完了させる。</p>
+<ol>
+  <li><strong>calibrator.json metadata 拡張</strong>: train.py 側で <code>_metadata.segment_id</code> / <code>spec_version</code> / <code>trained_at</code> を書き込み。predict.py 起動時に segment 不整合を check し、不一致なら明確なエラーで停止。旧 calibrator.json は graceful fallback で <code>segment_id="long"</code> 扱い + warning ログ。</li>
+  <li><strong>predict.py 内のハードコード解消</strong>: <code>_load_stats_table</code> 内の <code>is_long_2400</code> 列名 hardcode → <code>spec.is_primary_flag</code> で動的化。<code>compute_*_priors</code> 呼び出しに <code>spec=spec</code> 伝搬。その他 features.py 関数を呼ぶ箇所すべてに spec= 伝搬。</li>
+  <li><strong>predict.py に spec パラメータを通す</strong>: module-level で SEG_LONG を import。<code>predict_race(...)</code> シグネチャに <code>*, spec: SegmentSpec = SEG_LONG</code> を kwarg-only で追加。</li>
+</ol>
+<p><strong>規律</strong></p>
+<ol>
+  <li>挙動不変が最優先: Stage 3 baseline fixture で predict 結果が bit-exact 一致 (atol=1e-12)</li>
+  <li>後方互換: 旧 calibrator.json (metadata なし) を新 predict.py で読んで graceful fallback</li>
+  <li>設計書 H セクション優先: 設計書とプロンプトに齟齬があれば設計書優先、齟齬を最終報告に記載</li>
+  <li>K.5 deprecated alias は触らない</li>
+  <li>features.py / lineage.py / backtest.py は変更しない見込み</li>
+  <li>新 segment 関連ファイル (v5_mid_lgbm 等) は作成しない (Stage 5)</li>
+</ol>
+<p>(以下、calibrator.json のスキーマ仕様、commit 構成、完了条件、PR + self-review 手順、完了報告フォーマットの詳細指示が続く)</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>Stage 4 の作業を開始します。まず <code>superpowers:test-driven-development</code> スキルを起動し、現状確認しました。</p>
+<p>git status を確認したところ、現在のブランチは <code>feat/segment-spec-stage3</code> で、<code>origin/main</code> と比較すると Stage 1-3 のすべての commit がブランチ上にだけ存在することが分かりました。</p>
+<blockquote>
+<p>PR #126/#127 が実は未 merge の状態 (Stage 1-3 は <code>feat/segment-spec-stage3</code> ブランチにのみ存在) です。プロンプトの前提と齟齬がありますが、Stage 4 作業のためには Stage 1-3 のコードが必要なので、現在のブランチから <code>feat/segment-spec-stage4</code> を切ります。</p>
+</blockquote>
+<p>続いて入力前提ドキュメント (設計書 H セクション、segment_spec.py、train.py、predict.py、Stage 3 同値性テスト) を並列で読み、改修ポイントを把握しました。</p>
+<p>設計書 H.1 では <code>feature_names</code> / <code>feature_names_categorical</code> も metadata に追加する方針でしたが、プロンプトでは segment_id / spec_version / trained_at の 3 フィールドのみ指定。プロンプト側を優先し、Stage 4 では feature_names は入れない方針 (設計書からの逸脱として最終報告で明記する) と判断しました。</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>TDD の RED フェーズを開始。Stage 4 専用テスト 3 件を <code>backend/tests/test_seg_long_equivalence.py</code> 末尾に追加しました。</p>
+<ol>
+  <li><code>test_calibrator_metadata_round_trip</code>: <code>serialize_isotonic(spec=SEG_LONG)</code> で書き出した calibrator.json を <code>predict_race</code> が読み込み segment_id check を pass することを確認。新規 metadata field (segment_id / spec_version / trained_at) も検証。</li>
+  <li><code>test_calibrator_legacy_no_metadata_graceful_fallback</code>: Stage 3 baseline calibrator.json (segment_id 無し) で <code>predict_race</code> を呼び、warning が出つつ正常動作することを確認。booster.predict / calibrated 値が baseline npy と bit-exact 一致 (atol=1e-12) する。</li>
+  <li><code>test_calibrator_segment_mismatch_raises</code>: <code>_metadata.segment_id="mid"</code> の calibrator.json で v5_long の predict_race を呼ぶと <code>RuntimeError("calibrator segment mismatch")</code> で停止する。</li>
+</ol>
+<p>RED フェーズ確認: 3 件全てが期待通りの理由で失敗、既存 8 件は引き続き pass。</p>
+<pre><code class="language-text">FAILED tests/test_seg_long_equivalence.py::test_calibrator_metadata_round_trip
+FAILED tests/test_seg_long_equivalence.py::test_calibrator_legacy_no_metadata_graceful_fallback
+FAILED tests/test_seg_long_equivalence.py::test_calibrator_segment_mismatch_raises
+========================= 3 failed, 8 passed in 2.49s ==========================</code></pre>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>GREEN フェーズ。まず train.py を改修し、<code>serialize_isotonic</code> に <code>spec</code> kwarg を追加して metadata 3 フィールドを書き込みます。</p>
+<pre><code class="language-python">def serialize_isotonic(
+    iso: IsotonicRegression,
+    n_recent: int,
+    *,
+    spec: SegmentSpec = SEG_LONG,
+) -&gt; dict:
+    return {
+        "type": "isotonic",
+        "x_thresholds": iso.X_thresholds_.tolist(),
+        "y_thresholds": iso.y_thresholds_.tolist(),
+        "_metadata": {
+            "n_recent": int(n_recent),
+            "segment_id": spec.segment_id,
+            "spec_version": CALIBRATOR_SPEC_VERSION,
+            "trained_at": datetime.now(timezone.utc).isoformat(),
+        },
+    }</code></pre>
+<p>続いて predict.py: <code>warnings</code> import を追加、<code>_load_stats_table</code> を <code>spec=</code> 受け取りにして bool キャスト対象を <code>spec.is_primary_flag</code> で動的化、<code>predict_race</code> に spec 引数追加、起動時 segment_id check を実装。</p>
+<pre><code class="language-python">meta_segment_id = meta.get("segment_id")
+if meta_segment_id is None:
+    warnings.warn(
+        f"calibrator.json _metadata.segment_id が無い (Stage 4 以前形式)。"
+        f"segment_id={spec.segment_id!r} を仮定して続行。",
+        stacklevel=2,
+    )
+    meta_segment_id = spec.segment_id
+if meta_segment_id != spec.segment_id:
+    raise RuntimeError(
+        f"calibrator segment mismatch: expected {spec.segment_id!r}, "
+        f"got {meta_segment_id!r}. train 時の spec と predict 時の spec を揃えること。"
+    )</code></pre>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>テスト実行で 1 件失敗:</p>
+<pre><code class="language-text">FAILED tests/test_seg_long_equivalence.py::test_calibrator_legacy_no_metadata_graceful_fallback
+Mismatched elements: 16 / 16 (100%)
+ACTUAL: array([0.092843, 0.129919, 0.123718, ...])
+DESIRED: array([0.065631, 0.138835, 0.1232, ...])</code></pre>
+<p>原因判明: baseline npy は <code>build_dataset(baseline_races, ...)</code> で内部 stats を使って計算されているが、<code>predict_race</code> は <code>DATA_DIR</code> の CSV stats (学習全データから作成) を読む。サンプルが違うので prior 値が大きく異なります。</p>
+<p>修正: テストを書き換えて、baseline_races から build した stats を tmp_path に CSV 化して <code>predict_race</code> に渡す方式に変更しました。</p>
+<pre><code class="language-python">build_jockey_stats_table(all_races).to_csv(jockey_csv, index=False)
+build_trainer_stats_table(all_races).to_csv(trainer_csv, index=False)
+build_lineage_stats_table(all_races).to_csv(lineage_csv, index=False)
+
+with warnings.catch_warnings(record=True) as caught:
+    warnings.simplefilter("always")
+    df = predict_race(
+        str(DATA_DIR / "model.txt"),
+        str(DATA_DIR / "calibrator.json"),
+        race,
+        jockey_table_path=str(jockey_csv),
+        trainer_table_path=str(trainer_csv),
+        lineage_table_path=str(lineage_csv),
+        n_recent=N_RECENT,
+    )</code></pre>
+<p>結果: 11 件全 pass、backend/tests 全 44 件 pass。</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>実 CLI smoke test: 旧 calibrator.json (segment_id なし) で <code>python -m models.v5_long_lgbm.predict --race tests/fixtures/seg_long_baseline_races.json --race-id 002945b4-...</code> を実行。</p>
+<pre><code class="language-text">UserWarning: calibrator.json _metadata.segment_id が無い (Stage 4 以前形式)。segment_id='long' を仮定して続行。次回学習時に新 metadata が書き込まれる。
+=== v5_long_lgbm 予想 ===
+レース: 第135回目黒記念(GII)  (2021-05-30  東京  芝2500m  G2)
+出走頭数: 16  馬場: 良  天候: 晴
+...</code></pre>
+<p>warning が出つつ正常動作することを確認。</p>
+<p>commit を 3 件に分けて作成 (train metadata 拡張 / predict spec 伝搬 / テスト追加)、ブランチを push、<code>gh pr create --base feat/segment-spec-stage3</code> で PR #128 を作成。</p>
+</div>
+
+<div class="turn assistant">
+<div class="role">Assistant</div>
+<p>self-review を <code>superpowers:code-reviewer</code> サブエージェント (model: opus) に委譲。レビュー結果は「致命的問題なし → merge 推奨」。気になる点 7 件を改善 issue 候補として列挙:</p>
+<ul>
+  <li><strong>G-1</strong>: 設計書 H.3 の <code>feature_names</code> strict check / H.5 の <code>_load_stats_table</code> 列存在チェック未実装 (PR 本文の逸脱明記に追加すべき)</li>
+  <li><strong>G-2</strong>: エラー型の不整合 (<code>n_recent</code> ValueError vs <code>segment_id</code> RuntimeError)。プロンプト・設計書の齟齬で規律 3 が発火すべきだったが停止せずプロンプトを採用したことを明記</li>
+  <li><strong>G-3</strong>: テスト assertion の strictness 不足 (<code>trained_at</code> の ISO 8601 parse 検証、mismatch error の expected/got 値検証)</li>
+  <li><strong>G-4</strong>: dead-store <code>_ = meta.get("spec_version")</code> の存在</li>
+  <li><strong>G-5</strong>: warnings vs logging の選定 (現状の warnings.warn は妥当)</li>
+  <li><strong>G-6</strong>: <code>CALIBRATOR_SPEC_VERSION</code> の置き場所 (Stage 5 で SegmentSpec フィールド化を再検討する余地)</li>
+  <li><strong>G-7</strong>: import 順序 (些細、問題なし)</li>
+</ul>
+<p>確認実施項目: pytest backend/tests/ 44 passed、Stage 3 同値性 8 件 pass (atol=1e-12 維持)、実 CLI 起動成功、3 ファイルのみ変更 (規律 4-6 違反なし)、警告 stacklevel=2 が CLI 経路で正しく attribute される。</p>
+<p>結論: <strong>merge 推奨</strong>。PR #128: <a href="https://github.com/himaji/hima-yosou/pull/128">https://github.com/himaji/hima-yosou/pull/128</a> (base=feat/segment-spec-stage3, head=feat/segment-spec-stage4)。Stage 5 には進まず、ここで停止。merge 判断はユーザーに委ねる。</p>
+</div>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
