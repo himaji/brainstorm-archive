@@ -1,0 +1,399 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>v5_long_lgbm 特徴量ブレスト — ランドスケープ棚卸し + 候補 grid + 優先順位 Tier 分け</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>v5_long_lgbm 特徴量ブレスト — ランドスケープ棚卸し + 候補 grid + 優先順位 Tier 分け</h1>
+<div class="meta">
+<span>2026-05-04</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+
+<h2>サマリ</h2>
+<ul>
+  <li><strong>議論の目的</strong>: hima-yosou (JRA 芝長距離ワイド予想) の現行モデル v5_long_lgbm に対し、(1) 現状の判断要素 (2) 既存資産で増やせる特徴量 (3) 検証済みの結果 (4) 新規取得価値のある情報、を棚卸しし、優先順位を組み立てる。</li>
+  <li><strong>主な決定事項</strong>:
+    <ul>
+      <li>v5_long_lgbm は odds-free / 非市場視点で約 25 特徴量を 5 Tier で運用している。Tier1 距離コース適性 / Tier2 ローテ前走 / Tier3 レース文脈 / Tier4 馬の静的属性 / Tier5 騎手・調教師・血統の集計スコア。</li>
+      <li>検証済み失敗カテゴリ (本番未投入) は LambdaRank、上り3F race-内偏差、bodyWeightDelta、N=10 戦、B-2 LR overlay の 5 件。共通の教訓は「市場視点の機械化は overlay を弱体化」「綺麗な物語ほど artifact」。</li>
+      <li>17 候補を grid 化し、overlay 親和性 × 実装コスト × 期待 lift × artifact リスクで評価。</li>
+      <li>Tier S 即着手枠 (実装コスト極小、artifact リスク低): #3 nkHorseId export、#1 過去走 trackCondition、#2 margin、#4 休養週数 bin + 叩き2走目。</li>
+      <li>Tier A: #6 cornerPositions 1〜3角 + 脚質ラベル、#5 前走 race 名 / ステップレース identity、#7 母父 lineage、#9 過去走 grade ラベル。</li>
+      <li>Tier A+: #8 finishTime × DailyTrackBias 馬場差補正、#10 脚質×距離×馬場 クロス。</li>
+      <li>Tier B: #11 調教情報、#13 BW delta 再戦、#12 母系深掘り。</li>
+      <li>却下: #16 OddsSnapshot (市場視点)、#14 frameNumber、#15 騎手当日成績、#17 reviewJson。</li>
+      <li>各 ablation で必ず確認すべき規律: AUC 単独で判断しない / 市場視点との混合を避ける / 「綺麗な物語+単一突出+トレードオフ」は artifact 疑い / 本物は地味に現れる。</li>
+    </ul>
+  </li>
+  <li><strong>未解決事項</strong>:
+    <ul>
+      <li>Tier S をひとまとめにした実装計画 (writing-plans) に進むか、個別候補の設計深掘りに進むか、grid を spec 化して打ち止めるかの選択は次セッションへ持ち越し。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>会話ログ</h2>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>特徴量ブレストしたい。現状の判断要素と既存の資産で出来る他の特徴量、検証済みの要素、新たに取得して検証する価値のある情報について教えて</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>棚卸しが終わりました。先に landscape を整理して、その後どこを深掘りするか質問します。</p>
+
+  <h3>A. 現状の判断要素 — v5_long_lgbm 本番投入済み</h3>
+  <p>全て <strong>odds-free / 非市場視点</strong> (オッズ・人気・支持率は学習段階で物理除外、<code>features.py:3-4</code>)。約 25 特徴量を 5 Tier に整理:</p>
+  <table>
+    <thead>
+      <tr><th>Tier</th><th>群</th><th>主な特徴</th><th>出所</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>距離・コース適性</td><td>distFit_2400/3000, courseFit_kyo_han/naka, gradedStarts/Top3, bestPosLast</td><td>pastResults 集計</td></tr>
+      <tr><td>2</td><td>ローテ・前走</td><td>recentForm, lastDistance, daysSinceLast, last3fAvg/Std, lastCorner4Pos, avgCorner4Last</td><td>pastResults</td></tr>
+      <tr><td>3</td><td>レース文脈</td><td>distance, numEntries, track, trackCondition, weather, raceClass, raceCategory</td><td>Race table</td></tr>
+      <tr><td>4</td><td>馬の静的属性</td><td>age, weightToCarry (斤量), bodyWeight, sex</td><td>Horse table</td></tr>
+      <tr><td>5</td><td>集計スコア</td><td>jockey_top3_long_2400/course/n_long, trainer_top3_*, lineage_top3_long_2400/overall</td><td>corpus + lineage.py の手動 lookup</td></tr>
+    </tbody>
+  </table>
+  <p><strong>戦略側 (S2 主戦)</strong>: jointP 降順 topK + jpMin/maxHorseOdds/minSumPop でフィルタ。EV は filter のみで sort には使わない (PR #109、CI 下限 表面 0.76 / 実質 0.4–0.5)。</p>
+
+  <h3>B. 検証済みで本番未投入 (失敗の墓場)</h3>
+  <table>
+    <thead>
+      <tr><th>候補</th><th>結論</th><th>失敗モード</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>LambdaRank objective</td><td>不採用</td><td>AUC -0.048、CI 下限 0.757→0.662</td></tr>
+      <tr><td><code>last3fDevAvg/Std</code> (上り3F race-内z)</td><td>不採用</td><td>AUC +0.020 だが picks が本命寄り、配当中央値 -63%（<strong>市場視点と同化</strong>）</td></tr>
+      <tr><td><code>bodyWeightDelta</code></td><td>不採用</td><td>F variant +0.165 は <code>bw_default=0.0</code> の bimodal artifact、NaN 化で 0.700 に崩壊</td></tr>
+      <tr><td>pastResults 5→10 戦</td><td>不採用</td><td>N=10 で AUC -0.015、hit 5→0</td></tr>
+      <tr><td>B-2 LR overlay (multifeature/allpairs)</td><td>side artifact 化</td><td>v5 路線とは別系列、本流から切り離し</td></tr>
+    </tbody>
+  </table>
+  <p><strong>学習されたメタ規律</strong>: ①AUC↑でも overlay は弱体化しうる ②「市場視点 × 非市場視点」混合は同調効果で乖離検出を相殺 ③単一 variant 突出 + 綺麗な物語 + トレードオフは artifact ④CI 下限の表面値だけで飛びつかない。</p>
+
+  <h3>C. 既存資産で追加検討できる特徴量 (実装コストほぼゼロ〜小)</h3>
+  <p>DB / scrape 済みだが特徴量化されていないもの。</p>
+  <h4>C-1. DB に列はあるが未使用</h4>
+  <ul>
+    <li><code>Horse.frameNumber</code> (枠順) — export 済、未使用</li>
+    <li><code>Horse.motherFather</code> (母父) — export 済、未使用 (lineage は父系のみ)</li>
+    <li><code>RaceResult.finishTime</code> (走破タイム) — 持ち時計・SI 系の素材</li>
+    <li><code>RaceResult.horseWeight</code> / <code>weightDiff</code> (確定後馬体重・増減) — pastResults に未流入</li>
+    <li><code>RaceResult.margin</code> (着差) — 強さ尺度</li>
+    <li><code>Odds.oddsHigh</code> (オッズ高) — <code>oddsLow</code> だけ使用 (ペイアウト下限見積もり用)</li>
+    <li><code>OddsSnapshot.*</code> (オッズ推移) — 直前変動 = 支持率動意 ⚠️ 市場視点</li>
+    <li><code>DailyTrackBias.biasSeconds</code> — 馬場差、特徴量化されていない</li>
+    <li><code>Race.reviewJson</code> — 振り返りログ未活用</li>
+  </ul>
+  <h4>C-2. scrape 済みだが parser 取りこぼし</h4>
+  <ul>
+    <li><code>pastResults[*].cornerPositions</code> — 4角のみ抽出、1〜3角と「逃/先/差/追」ラベル未使用</li>
+    <li><code>pastResults[*].trackCondition</code> — 過去走馬場 (取得済) を読んでいない</li>
+    <li><code>pastResults[*].time</code> (走破時計) — 未使用、SI/持ち時計の素材</li>
+    <li><code>Horse.nkHorseId</code> — DB にあるが export されない (同名異馬 dedup に欲しい)</li>
+  </ul>
+
+  <h3>D. 未取得で取得価値がある情報</h3>
+  <ul>
+    <li><strong>過去走の grade ラベル (G1/G2/G3)</strong> — parser 拡張 + 全馬再 scrape で <code>jockey_top3_graded</code> / <code>lineage_top3_graded</code> が解禁 (設計図に存在、データ待ち)</li>
+    <li><strong>過去走の馬体重 (full coverage)</strong> — 現状 corpus 内補完で coverage 55%、95% 達成で BW delta が真値化</li>
+    <li><strong>前走 race 名 / ステップレース identity</strong> — 距離だけでは弥生賞 (2000m) と共同通信杯 (1800m) を区別できない。皐月賞研究で前走 race 名が 3 着内率と強相関 (共同通信杯 40.9%, ホープフルS 37.5%)</li>
+    <li><strong>休養週数の bin / 中N週 / 連闘 / 叩き2走目</strong> — <code>daysSinceLast</code> raw のみ</li>
+    <li><strong>母父系統スコア</strong> (A-4 設計図にあるが未着手)</li>
+    <li><strong>脚質 × 距離 × 馬場 のクロス</strong> — <code>cornerPositions</code> 1〜3角 + trackCondition の組合せ</li>
+    <li><strong>調教情報 (追切時計・最終追切評価)</strong> — 現状ゼロ。netkeiba には掲載あり、scrape 未実装</li>
+    <li><strong>騎手の当日成績・馬場慣れ</strong> — 当日の他レースでの当該騎手の通過順傾向</li>
+    <li><strong>血統の母系深掘り</strong> (近親、ブルードメアサイヤー、5代血統指数) — lineage は父のみ</li>
+  </ul>
+
+  <h3>戦略的観点 (memory からの強い制約)</h3>
+  <ol>
+    <li><strong>overlay 戦略が本質</strong> — 控除率 25% を越えるには「市場が見落としているもの」を入れる必要がある</li>
+    <li><strong>市場視点の機械化は罠</strong> — 上がり3F race-内偏差のように手動指標を綺麗に再現すると AUC は上がるが picks が本命寄りに収束して overlay が死ぬ</li>
+    <li><strong>混合も壊れる</strong> — 市場視点 (dev3F) と非市場視点 (BW) を同時投入すると市場同調効果が overlay 検出を相殺</li>
+    <li><strong>本物は地味に現れる</strong> — クリーンに +0.165 出る変更ほど artifact</li>
+  </ol>
+  <p>→ 探すべきは「<strong>市場が処理しきれていない / 手間で人間が落としている / 馬券者の集合知に乗りにくい</strong>」情報。当日の馬体重 (騎乗前にしか見れない) / 母父 / parent stallion の長距離信頼性 / 脚質 × 馬場のクロスなどはこの方向に近い。逆に「上がり3F偏差」「直前オッズ推移」は市場と同じ穴を覗く方向で危険。</p>
+
+  <h3>質問</h3>
+  <p><strong>Q1: どの方向を深掘りしたい？</strong></p>
+  <ul>
+    <li><strong>(a)</strong> C-1/C-2 の実装コスト軽い未使用列を順に ablation する</li>
+    <li><strong>(b)</strong> D の新規取得情報で「市場が処理しきれない」候補を狙う</li>
+    <li><strong>(c)</strong> 戦略側 (backtest) のロジック改修で既存特徴の活用を変える</li>
+    <li><strong>(d)</strong> 全部俯瞰したまま、優先順位を一緒に組み立てたい (各候補の overlay-friendliness × 実装コスト × 期待 lift で grid 化)</li>
+  </ul>
+</div>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>dで</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>了解。grid 化して overlay-friendliness × コスト × lift で整理します。</p>
+
+  <h3>特徴量候補 grid (2026-05-04)</h3>
+  <p>凡例: <strong>Overlay</strong> ◎=市場が処理しきれない情報 / ○=中立 / △=一部重複 / ×=市場視点の機械化  <br>
+  <strong>コスト</strong> S=計算のみ / M=parser・補正ロジック / L=新規 scrape・大規模作業  <br>
+  <strong>Lift</strong> S=小 / M=中 / L=大期待  <br>
+  <strong>Artifact</strong> = default 値 / coverage 不足 / sparse データ等の罠リスク</p>
+
+  <table>
+    <thead>
+      <tr><th>#</th><th>候補</th><th>カテゴリ</th><th>Overlay</th><th>コスト</th><th>Lift</th><th>Artifact</th><th>備考</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>過去走 trackCondition (馬の道悪/良馬場適性)</td><td>C-2</td><td>◎</td><td>S</td><td>M</td><td>低</td><td>scrape 済を features.py で読むだけ</td></tr>
+      <tr><td>2</td><td>margin (着差)</td><td>C-1</td><td>○</td><td>S</td><td>M</td><td>低</td><td>着順の "強さ" 定量化、recentForm の補完</td></tr>
+      <tr><td>3</td><td>nkHorseId export 追加</td><td>C-2</td><td>–</td><td>S</td><td>–</td><td>–</td><td><strong>前提作業</strong>: 同名異馬 dedup、将来の BW delta 真値化に必要</td></tr>
+      <tr><td>4</td><td>休養週数 bin + 中N週 + 叩き2走目</td><td>D</td><td>○〜◎</td><td>S</td><td>M</td><td>低</td><td><code>daysSinceLast</code> 派生のみ。叩き数は pastResults スキャン</td></tr>
+      <tr><td>5</td><td>前走 race 名 / ステップレース identity</td><td>D</td><td>◎</td><td>M</td><td>M〜L</td><td>低</td><td>弥生賞 vs 共同通信杯のような微差。皐月賞研究で前例あり</td></tr>
+      <tr><td>6</td><td>cornerPositions 1〜3 角 + 脚質ラベル (逃/先/差/追)</td><td>C-2</td><td>◎</td><td>M</td><td>M〜L</td><td>低</td><td>parser 拡張 + 分類ロジック</td></tr>
+      <tr><td>7</td><td>母父 (motherFather) lineage 拡張</td><td>C-1</td><td>○〜◎</td><td>M</td><td>M</td><td>中</td><td>DB 列あり、lineage.py に母父テーブル追加</td></tr>
+      <tr><td>8</td><td>finishTime + DailyTrackBias 馬場差補正</td><td>C-1</td><td>◎</td><td>M</td><td>L</td><td>中</td><td>時計指標。補正ロジック設計が肝</td></tr>
+      <tr><td>9</td><td>過去走 grade ラベル (G1/G2/G3)</td><td>D</td><td>◎</td><td>M</td><td>M</td><td>低</td><td>parser 拡張 + 全馬再 scrape。jockey/lineage の graded サブ集計が解禁</td></tr>
+      <tr><td>10</td><td>脚質 × 距離 × 馬場 クロス</td><td>D (派生)</td><td>◎</td><td>M</td><td>L</td><td>中</td><td>#1 + #6 の組合せ。明示クロスか LGBM に任せるか</td></tr>
+      <tr><td>11</td><td>調教情報 (追切時計・評価)</td><td>D</td><td>◎◎</td><td>L</td><td>L</td><td>中</td><td>古典的に強いが新 scraper 実装が大仕事</td></tr>
+      <tr><td>12</td><td>母系深掘り (5代血統・近親)</td><td>D</td><td>◎</td><td>L</td><td>?</td><td>高</td><td>sparse すぎて検証困難の可能性</td></tr>
+      <tr><td>13</td><td>過去走 BW (full coverage 95%) → BW delta 再戦</td><td>D</td><td>△</td><td>L</td><td>?</td><td>高</td><td>LR ablation で既に artifact 確定。coverage 達成後に再評価</td></tr>
+      <tr><td>14</td><td>frameNumber (枠順)</td><td>C-1</td><td>△</td><td>S</td><td>S</td><td>低</td><td>市場が織り込みやすい、優先度低</td></tr>
+      <tr><td>15</td><td>騎手の当日成績</td><td>D</td><td>△</td><td>S</td><td>S</td><td>低</td><td>市場も見ている、lift 限定的</td></tr>
+      <tr><td>16</td><td>OddsSnapshot (オッズ推移)</td><td>C-1</td><td>×</td><td>M</td><td>–</td><td>–</td><td><strong>却下</strong>: 市場視点そのもの、overlay の自殺</td></tr>
+      <tr><td>17</td><td>reviewJson 解析</td><td>C-1</td><td>○</td><td>L</td><td>?</td><td>–</td><td>LLM 抽出が必要、後回し</td></tr>
+    </tbody>
+  </table>
+
+  <h3>優先順位 (3 段)</h3>
+
+  <h4>Tier S — 即着手枠 (1-2 PR で回せる、artifact リスク低)</h4>
+  <p>これを順に積めば、overlay 戦略を壊さず情報量を増やせる。各 PR ごとに既存 ablation framework (<code>v5_long_lgbm_lr/</code>) で 4-cell 検証 → S2 CI 下限がベースラインを下げないか確認。</p>
+  <ol>
+    <li><strong>#3 nkHorseId export</strong> — 5 分作業。後続の bw 系・horse-level dedup の前提</li>
+    <li><strong>#1 過去走 trackCondition</strong> — features.py で読むだけ。道悪適性の signal、market が雑にしか織り込まない</li>
+    <li><strong>#2 margin</strong> — 着差を recentForm の補強として</li>
+    <li><strong>#4 休養週数 bin + 叩き2走目</strong> — <code>daysSinceLast</code> raw → 連闘 / 中2-3 / 中5-8 / 中9-12 / 半年以上 + 叩き回数</li>
+  </ol>
+
+  <h4>Tier A — 中コストだが overlay-friendly (順次 1 件ずつ ablation)</h4>
+  <ol start="5">
+    <li><strong>#6 cornerPositions 1〜3角 + 脚質ラベル</strong></li>
+    <li><strong>#5 前走 race 名 / ステップレース identity</strong> (G1 別の race-name lookup table)</li>
+    <li><strong>#7 母父 lineage</strong></li>
+    <li><strong>#9 過去走 grade ラベル</strong> (parser 拡張から)</li>
+  </ol>
+
+  <h4>Tier A+ — 単独で大きな lift 候補だが補正設計が肝</h4>
+  <ol start="9">
+    <li><strong>#8 finishTime × DailyTrackBias</strong> — 馬場差補正済み持ち時計。補正方式 (raw-bias / standardized / SI 系) を 3-4 通り ablation</li>
+    <li><strong>#10 脚質 × 距離 × 馬場 クロス</strong> — まず LGBM の交差項に任せて #1+#6 投入後に評価、効かなければ明示クロス特徴</li>
+  </ol>
+
+  <h4>Tier B — 大コスト、別ブランチで並行探索</h4>
+  <ol start="11">
+    <li><strong>#11 調教情報</strong> (新規 scraper)</li>
+    <li><strong>#13 BW delta 再戦</strong> (coverage 95% 達成後)</li>
+    <li><strong>#12 母系深掘り</strong></li>
+  </ol>
+
+  <h4>却下 / 後回し</h4>
+  <ul>
+    <li>#16 OddsSnapshot (市場視点)</li>
+    <li>#14 frameNumber (織り込み済み)</li>
+    <li>#15 騎手当日成績 (lift 限定)</li>
+    <li>#17 reviewJson (コスト割に合わない)</li>
+  </ul>
+
+  <h3>実行ガイドライン (memory の規律から)</h3>
+  <p>各候補の ablation で必ず確認:</p>
+  <ol>
+    <li><strong>AUC 単独で判断しない</strong> — S2 best CI 下限と picks の中央値配当を必ず見る</li>
+    <li><strong>市場視点との混合を避ける</strong> — Tier S/A 内では 1 件ずつ単独で投入、効いた特徴は次の base に積む</li>
+    <li><strong>「綺麗な物語 + 単一突出 + トレードオフ」は artifact 疑い</strong> — default 値 / coverage / sparse カテゴリは bimodal artifact の温床</li>
+    <li><strong>本物は地味に現れる</strong> — +0.05 程度の控えめな改善で picks 配当中央値を保てれば本物寄り</li>
+  </ol>
+
+  <h3>次の一手 (推奨)</h3>
+  <p>Tier S を上から順に PR 化していくのが最速。<strong>まず #3 (nkHorseId export) → #1 (過去走 trackCondition) を 1 PR で同梱、ablation 走らせる</strong>ところから始めるのが軽い。</p>
+  <p>この優先順位で進めますか？それとも:</p>
+  <ul>
+    <li><strong>(α)</strong> Tier S をひとまとめにした実装計画 (writing-plans skill) に進む</li>
+    <li><strong>(β)</strong> 個別候補の設計を深掘り (どれか指定 — 例: #5 ステップレース identity の race-name lookup 設計、#8 馬場差補正の数式選定など)</li>
+    <li><strong>(γ)</strong> この grid をそのまま <code>docs/superpowers/specs/2026-05-04-feature-brainstorm.md</code> に保存して打ち止め (実装は別セッション)</li>
+  </ul>
+</div>
+
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
