@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>AI生成UIへの所感 — ZDNet「使い捨てUI」記事への反応</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>AI生成UIへの所感 — ZDNet「使い捨てUI」記事への反応</h1>
+<div class="meta">
+<span>2026-05-04</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>サマリ</h2>
+<ul>
+  <li><strong>議論の目的</strong>: ZDNet Japan の <a href="https://japan.zdnet.com/article/35247011/">「従来のユーザーインターフェースが消えていく--『使い捨て』UIの到来」</a>（Joe McKendrick／WorkOS Michael Grinich の TypeScript AI Demo Day 2026 講演を引用）を題材に、AI 生成 UI の行く末を擦り合わせる。</li>
+  <li><strong>主な決定事項（共通認識として確認できたもの）</strong>:
+    <ul>
+      <li>「製品＝能力＋モデル＋データ、UI は投影レイヤ」という再定義は概ね正しく、設計の重心は <em>画面</em> から <em>データモデル＋ツール（API/MCP）カタログ＋コンポーネント語彙</em> に上がる。</li>
+      <li>カスタムコンポーネントとデザインシステムは「残る」どころか主戦場になる。LLM 可読な意図を持つコンポーネント集合（slot/props がデータ形に対応する）の設計が一級の仕事になる。</li>
+      <li>ただし「固定 UI が消える」は過剰評価。<strong>固定シェル＋動的に組み立てる領域のハイブリッド</strong>が現実解。</li>
+      <li>レイテンシ・決定性・コストの観点から、編集系・共同編集系・学習可能性が価値の中心の道具では、リクエスト毎再生成は乗らない。</li>
+      <li>「データモデルからUIを生成」は理屈は通るが、エンタープライズの実データモデルの整備度はそれに耐えない。<strong>スキーマを first-class product として扱う</strong>仕事の難易度が想定の3倍ある。</li>
+      <li>API 派 vs computer-use 派は二極化したまま並存する。high-value 動詞は MCP 化、ロングテールは画面駆動という分岐が10年単位で続く。</li>
+      <li>金融・医療・政府系では監査ログとアクセシビリティ認証が画面に紐づくため、規制が UI 再生成の床を作る領域がある。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>会話ログ</h2>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p>以下、どう思う？</p>
+  <p>自分もこの路線だとおもってる。よくドキュメントされたデータモデルを入力に、その場でコンテキストに応じたUIを生成して、UI自体を作るわけではなくなる。ただAIがカスタムコンポーネントやデザインシステムを作るのは多少残ると思う</p>
+  <p><a href="https://japan.zdnet.com/article/35247011/">https://japan.zdnet.com/article/35247011/</a></p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>記事ざっと読みました。Grinich（WorkOS）の4点と Salesforce Headless 360 の話ですね。方向性は同意ですが、いくつか強く留保つけたい点があります。</p>
+
+  <p><strong>同意する側：</strong></p>
+  <ul>
+    <li>「製品＝能力+モデル+データ、UI は投影レイヤ」という再定義は正しい。MCP / Apps SDK / generative UI の流れと整合する</li>
+    <li>設計の重心が「画面」から <strong>データモデル＋ツール（API/MCP）カタログ＋コンポーネント語彙</strong> に移る、というのは確実に来ている</li>
+    <li>ユーザーの言う「カスタムコンポーネントとデザインシステムは残る」は残るどころか <strong>そこが主戦場になる</strong>。LLM に無制約に HTML を吐かせるとブランドも一貫性も崩れるので、LLM 可読な意図を持ったコンポーネント集合（slot/props がデータ形に対応する）を整える仕事は増える</li>
+  </ul>
+
+  <p><strong>そこは言い過ぎでは、と思う側：</strong></p>
+
+  <ol>
+    <li><strong>「固定UIが消える」は過剰</strong>。一回限りの問い合わせや遷移型ワークフローには disposable UI が刺さるが、Figma/Notion/スプレッドシートのような <strong>持続する成果物・共同編集・学習可能性</strong> が価値の中心の道具では、毎回再生成は逆効果。1年かけて覚えたショートカットが揮発する道具は使われない</li>
+
+    <li><strong>レイテンシと決定性のコスト</strong>。5秒で答えが出ればよい質問には合うが、200ms フィードバックの編集体験には乗らない。現実解は「固定シェル + 動的に組み立てる領域」のハイブリッドで、AI SDK の generative UI も実際そうなっている</li>
+
+    <li><strong>スキーマがダメだとこの話は全部成立しない</strong>。「ドキュメント化されたデータモデルからUI生成」はユーザーの指摘通りだが、ここのハードルは語られているより遥かに高い。エンタープライズの実データモデルは大抵 first-class product として整備されてない。スキーマ整備が一級の設計タスクに昇格するという話で、これは「UI設計の消失」ではなく <strong>設計対象の上流移動</strong> に近い</li>
+
+    <li><strong>API派 vs computer-use派の二極化</strong>。Grinich は「エージェントは API を好む」と言うけど、computer-use 系は逆方向に振っていて、長尾のソフトに型のついた API は結局来ない、という前提で画面操作する。<strong>high-value 動詞は MCP 化、ロングテールは画面駆動</strong> という分岐が10年は続く</li>
+
+    <li><strong>規制／監査がUI再生成の床を作る</strong>。金融・医療・政府系は監査ログとアクセシビリティ認証が特定の画面に紐づいているので、リクエスト毎再生成は構造上できない領域がある</li>
+  </ol>
+
+  <p>なので路線は同意で、「UI が消える」より <strong>設計の重心がスキーマ/ツール/コンポーネント語彙へ上がり、固定UIと生成UIのハイブリッドが定着する</strong> という解像度のほうが扱いやすいと思います。ユーザーの読みはほぼそのラインなので、追加の論点は <strong>データモデル整備が想定の3倍ハード</strong> という現場感くらい。</p>
+</div>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
