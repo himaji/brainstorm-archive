@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>rtk-ai/rtk コードレビュー — 41k stars の Rust 製 LLM プロキシをメリット/デメリットで切る</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>rtk-ai/rtk コードレビュー — 41k stars の Rust 製 LLM プロキシをメリット/デメリットで切る</h1>
+<div class="meta">
+<span>2026-05-05</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>サマリ</h2>
+<ul>
+  <li><strong>議論の目的</strong>: rtk-ai/rtk（&quot;CLI proxy that reduces LLM token consumption by 60-90%&quot; を謳う Rust 製ツール）を実装レベルでレビューし、メリット/デメリットを評価する。</li>
+  <li><strong>主な決定事項</strong>:
+    <ul>
+      <li>本番採用は非推奨。実験的試用に留めるべき。</li>
+      <li>「zero dependencies」「Homebrew tap」「60-90% 削減根拠」など、README の主張と実装の整合性に複数の高深刻度問題あり。</li>
+      <li>3.5ヶ月で 41,894 stars は organic ではない可能性が濃厚。星数で採用判断してはいけない。</li>
+    </ul>
+  </li>
+</ul>
+
+<h2>会話ログ</h2>
+
+<div class="turn user">
+  <div class="role">User</div>
+  <p><a href="https://github.com/rtk-ai/rtk">https://github.com/rtk-ai/rtk</a></p>
+  <p>これ、ソースコードレビューしてみて。メリットとデメリットを教えて</p>
+</div>
+
+<div class="turn assistant">
+  <div class="role">Assistant</div>
+  <p>サブエージェント（opus）に委譲したコードレビュー結果です。要旨をそのまま転記します。</p>
+
+  <h3>結論</h3>
+  <p><strong>本番採用は非推奨。</strong> 設計の方向性は妥当だが、誇張・矛盾・実装の詰めの甘さが多数あり、実験的に試す程度に留めるのが安全。</p>
+
+  <h3>ツール概要</h3>
+  <p>LLM コーディングエージェント（Claude Code / Cursor / Copilot 等 9 種）の <code>PreToolUse</code> に hook を挿し、<code>git status</code> などを <code>rtk git status</code> に書き換えて RTK バイナリを噛ませる。内部は (1) コマンド毎の手書き Rust フィルタ (<code>src/cmds/**</code>)、(2) TOML 宣言の 8 段パイプライン (<code>src/core/toml_filter.rs:16-24</code>：ANSI除去 / regex 置換 / 行フィルタ / truncate 等) を適用して LLM に渡す出力を圧縮。要は「コマンド毎のサマライザ／truncator」で、新規アルゴリズムは無し。</p>
+
+  <h3>メリット</h3>
+  <ul>
+    <li><strong>書き換え判定の真実源が一箇所</strong>: <code>src/discover/registry.rs</code> 単独で完結、9 hook はただの delegate。</li>
+    <li><strong>Compound command の allow 判定が厳格</strong>: <code>src/hooks/permissions.rs:31-90</code> で <code>&amp;&amp;</code>/<code>;</code> 連結の全セグメントが allow にマッチしないと Allow にしない。default は exit 3 = ask。</li>
+    <li><strong>Telemetry はデフォルト OFF / 完全 opt-in</strong>: <code>src/core/config.rs:91-98</code>、<code>rtk telemetry forget</code> でローカル DB 削除＋サーバ erasure (<code>src/core/telemetry_cmd.rs:109-159</code>)。</li>
+    <li><strong><code>.semgrep.yml</code> で危険パターン</strong> (<code>Command::new($var)</code>, <code>unsafe</code>, <code>LD_PRELOAD</code> 等) を ERROR 指定。意識自体は高い。</li>
+    <li><strong>フィルタが TOML 化</strong>されており project-local <code>.rtk/filters.toml</code> でカスタマイズ可能。</li>
+  </ul>
+
+  <h3>デメリット／懸念点</h3>
+
+  <h4>高（採用判断に効く）</h4>
+  <ul>
+    <li><strong>「zero dependencies」が虚偽</strong>: 公式説明と矛盾し <code>Cargo.lock</code> の transitive crates は 203 個、直接依存だけで 22 個 (<code>Cargo.toml:14-38</code>)。「Single Rust binary」までは正しいが zero deps は誤誘導。</li>
+    <li><strong>ライセンス不整合</strong>: <code>LICENSE</code> は Apache-2.0、<code>Cargo.toml:7</code> / <code>Formula/rtk.rb:10</code> / <code>openclaw/openclaw.plugin.json:7</code> / README badge は MIT。SPDX が分裂。<strong>企業利用 fatal</strong>。</li>
+    <li><strong><code>install.sh</code> にチェックサム検証ゼロ</strong> (<code>install.sh:97-107</code>): SHA256/署名なしで <code>~/.local/bin</code> へ配置。GitHub Release 改竄や中間者攻撃でバイナリ差し替え可能。<code>Formula/rtk.rb:15-32</code> も <code>PLACEHOLDER_SHA256_INTEL</code> のまま <code>version &quot;0.1.0&quot;</code> で <strong>Homebrew tap は実体のない宣伝</strong>（README は brew install を推奨）。</li>
+    <li><strong>自分で禁じた unsafe を自分で違反</strong>: <code>.semgrep.yml:13-17</code> で禁止しているのに <code>src/main.rs:2218-2233</code> で <code>#[allow(unsafe_code)]</code> を付けて signal handler 内で <code>libc::waitpid</code> を呼ぶ。<strong><code>waitpid</code> は async-signal-safe ではなく UB</strong>。</li>
+    <li><strong><code>ureq</code> の自己ルール違反</strong>: <code>.semgrep.yml:67-75</code> で telemetry 外利用禁止だが <code>src/core/telemetry_cmd.rs:173</code> で違反。CI が通っているのは lint を緩めている証拠。</li>
+  </ul>
+
+  <h4>中</h4>
+  <ul>
+    <li><strong>「60-90% トークン削減」の根拠が脆弱</strong>: 削減量計算は <code>text.len() / 4</code> の固定係数 (<code>src/core/tracking.rs:1283-1286</code>)。実際の Claude/GPT トークナイザを通していないので tiktoken と数十%単位でズレる可能性。README の表は自社推定。</li>
+    <li><strong>統合テストが 0 件</strong>: <code>tests/</code> は fixtures のみ。<code>#[test]</code> 1669 件はすべて単体。「フィルタ通したら本当に削減されるか／重要情報を落としていないか」の回帰保証なし。</li>
+    <li><strong>Claude hook が <code>permissionDecision: &quot;allow&quot;</code> を発行</strong> (<code>hooks/claude/rtk-rewrite.sh:92-100</code>)。ユーザが <code>&quot;git *&quot;</code> のような広い allow を書いていると、エージェント確認なしに <code>rtk</code> 別バイナリが走る。<strong>信頼境界が静かに広がる</strong>。</li>
+    <li><strong>openclaw に shell injection のグレーゾーン</strong>: <code>openclaw/index.ts:29</code> の <code>execSync(`rtk rewrite ${JSON.stringify(command)}`)</code> は double-quote 内の <code>$(...)</code> / バッククォートが評価される。<code>spawn</code>/<code>execFile</code> でリスト渡しすべき。</li>
+    <li><strong><code>unwrap</code>/<code>expect</code>/<code>panic!</code> が src/ に 828 件</strong>。<code>SECURITY.md:113</code> で自認している DoS リスクを守れていない。<code>panic = &quot;abort&quot;</code> (<code>Cargo.toml:49</code>) と相まって proxy 経由で本来動くべきコマンドが死ぬ可能性。</li>
+    <li><strong>DISCLAIMER.md と実装が逆</strong>: DISCLAIMER は「デフォルト収集・無効化可」と書くが実装は「デフォルト OFF・opt-in」。コンプラ部門が混乱する類の不整合。</li>
+  </ul>
+
+  <h4>低</h4>
+  <ul>
+    <li><strong>9 種エージェント hook の保守負荷</strong>: codex / cline / windsurf は &quot;rules file&quot; 由来の prompt 注入のみで実質フィルタしていない (<code>hooks/README.md:53-55</code>)。</li>
+  </ul>
+
+  <h3>メタ情報の所感</h3>
+  <ul>
+    <li><strong>3.5ヶ月で 41,894 stars は organic ではあり得ない</strong>。ripgrep / fd / bat 等の同等規模 CLI は数年で到達する数字。多言語 README、<code>update-readme-metrics.sh</code>、Discord、homepage 等のマーケ装備からして <strong>Product Hunt 系・X キャンペーン・インセンティブ star・bot star のいずれかが濃厚</strong>。コード自体は 28k 行で実体はあるが、星数は信用しない方がよい。</li>
+    <li><strong><code>openclaw/</code></strong> は claw ≒ Claude を意識した命名。Anthropic から指摘される余地のあるトレードマーク的グレー。</li>
+  </ul>
+
+  <h3>採用判断</h3>
+  <ul>
+    <li><strong>試してもよい</strong>: 個人開発で、(1) Claude Code の広い auto-allow を書かない、(2) install.sh を使わず <code>cargo install --git</code> で自前ビルド、(3) telemetry を opt-in しない、(4) &quot;削減量&quot; 表示を額面通り信じない、(5) フィルタ後出力に重要情報が落ちていないか毎回確認、ができる人。</li>
+    <li><strong>触らない方がいい</strong>: 企業環境（ライセンス分裂で SBOM が割れる）、curl|sh を CI に入れる運用、エージェントの permission gate を信頼している現場、セキュリティ監査が入る開発。星数だけで採用すると「README の約束の半分しか実体がない」と気付くまで時間を溶かします。</li>
+  </ul>
+</div>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
