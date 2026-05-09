@@ -1,0 +1,546 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ハーネスエンジニアリングの自己学習 — シンプルで有用な3つの設定</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>ハーネスエンジニアリングの自己学習 — シンプルで有用な3つの設定</h1>
+<div class="meta">
+<span>2026-05-10</span>
+<span class="source">from 2026-05-10-harness-self-learning.md</span>
+</div>
+</header>
+<main>
+<h1 id="3">ハーネスエンジニアリングにおける自己学習 — シンプルで有用な設定3例</h1>
+<ul>
+<li><strong>調査日</strong>: 2026-05-10</li>
+<li><strong>対象</strong>: コーディングエージェント（特に Claude Code）の <strong>outer harness</strong> において、セッションを跨いで知識を蓄積し挙動を改善する仕組み</li>
+<li><strong>読者</strong>: すでに Claude Code を日常的に使い、CLAUDE.md / skills / hooks の概念は把握している開発者</li>
+</ul>
+<hr>
+<h2 id="1">1. なぜ「ハーネスの自己学習」なのか</h2>
+<p>ハーネス工学（harness engineering）は <strong>Agent = Model + Harness</strong> という枠組みで、モデル本体ではなく「モデルを取り囲むツール・コンテキスト・フィードバックループ」を設計する営みを指す（Birgitta Böckeler / Martin Fowler, 2026-04）。</p>
+<p>Böckeler は <strong>outer harness</strong> が果たすべき役割を 2 つに整理している:</p>
+<ol>
+<li><strong>Guides（feedforward control）</strong> — 行動前に方向付ける（AGENTS.md, skills, code mods 等）</li>
+<li><strong>Sensors（feedback control）</strong> — 行動後に観測して自己修正させる（lint メッセージ、構造テスト、AI レビュー等）</li>
+</ol>
+<blockquote>
+<p>片方しかないと、フィードバックなしで同じミスを繰り返すか、ガイドを書いただけで効果検証ができないかのどちらかになる（Fowler 記事の主張）。</p>
+</blockquote>
+<p>「自己学習」とは要するに <strong>Sensor で観測した失敗を蓄積し、次の Guide に転化する steering loop</strong> を回し続けること。Anthropic 自身も長期実行アプリ向けのハーネス設計記事で、<strong>generator と evaluator を分離</strong>し、評価結果をフィードバックすることがブレークスルーになったと報告している（Anthropic Engineering, 2026-03）。</p>
+<p>ところが、3 段ロケットの自己改善基盤（30+ skills、40+ hooks スクリプト、claude-flow MCP の <code>pattern-consolidator.sh</code> 的な仕組み, dev.to 事例）はオーバーキルになりがち。<strong>最小構成で steering loop を閉じる</strong> には、実は 3 つの設定で足りる、というのが本レポートの主張。</p>
+<hr>
+<h2 id="2-3">2. 自己学習サイクルを 3 つの設定で閉じる</h2>
+<pre><code>   ┌──────────────────────────────────┐
+   │                                  │
+   │   ① Sensor → 蓄積                │
+   │   （Stop hook + auto memory）    │
+   │                                  │
+   ▼                                  │
+[ 蓄積された知識 ]                    │
+（memory/*.md, CLAUDE.md, rules/）    │
+   │                                  │
+   │                                  │
+   │   ② 蓄積 → Guide                 │
+   │   （UserPromptSubmit hook で     │
+   │    プロンプト時に自動注入）      │
+   │                                  │
+   ▼                                  │
+[ より良いセッション ]                │
+   │                                  │
+   │                                  │
+   │   ③ 評価分離                     │
+   │   （subagent によるレビュー）    │
+   │                                  │
+   └──────────────────────────────────┘
+</code></pre>
+<p>各設定は単独でも価値があるが、<strong>3 つ揃って初めてサイクルが閉じる</strong>。以下、それぞれを最小コードで示す。</p>
+<hr>
+<h2 id="3-1-stop-hook-memory-append">3. 例1: Stop hook で「セッションの教訓」を memory に append する</h2>
+<h3 id="_1">何を解決するか</h3>
+<p>Sensor 側の最弱点は <strong>「学んだことが揮発する」</strong> 点。会話を /clear した瞬間、せっかくユーザーから受けた訂正・ベストプラクティスは消える。Claude Code の <strong>auto memory</strong> 機能（<code>~/.claude/projects/&lt;project&gt;/memory/MEMORY.md</code> に index、配下の <code>*.md</code> に個別エントリ）を使えば、セッション横断で永続化できる。</p>
+<p>ただし auto memory は「重要な情報があったら自動保存」がベース。<strong>Stop hook を使って「セッション終了時に必ず棚卸しする」契機を強制</strong>すると取りこぼしが激減する。</p>
+<h3 id="claudesettingsjson">設定（<code>~/.claude/settings.json</code>）</h3>
+<pre><code class="language-jsonc">{
+  &quot;hooks&quot;: {
+    &quot;Stop&quot;: [
+      {
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;~/.claude/hooks/end-of-session-memory.sh&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<h3 id="claudehooksend-of-session-memorysh">スクリプト（<code>~/.claude/hooks/end-of-session-memory.sh</code>）</h3>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# Stop イベントで stdout に出力したものは Claude にコンテキストとして渡される。
+# ここで「棚卸し用プロンプト」を流し込み、memory への保存を促す。
+
+cat &lt;&lt;'EOF'
+[hook: end-of-session-memory]
+このターンが本セッションの最終ターンなら、以下を点検してから終了せよ:
+
+1. ユーザーから受けた訂正・好み・前提知識のうち、まだ memory に書いていないものはあるか？
+   - あれば feedback / user / project / reference のいずれかとして memory ファイルを作成し
+     MEMORY.md に 1 行 index を追加する。
+2. このプロジェクト固有の事実（締切、関係者、外部システム参照先）で
+   会話履歴にしか残っていないものはないか？
+   - あれば project / reference 型として保存する。
+3. 既存メモリと矛盾する情報を観測したか？
+   - あれば該当ファイルを update / 削除する。
+
+判断は厳しめに。「保存するほどでもない」と思ったらスキップして良いが、
+「次回これを覚えていなければ同じ修正を受ける」と感じたものは必ず保存する。
+EOF
+</code></pre>
+<h3 id="_2">なぜシンプルか</h3>
+<ul>
+<li><strong>既存機能を起動するだけ</strong> — auto memory システム自体は Claude Code に組み込み済み。書いていないのはトリガーだけ</li>
+<li><strong>shell 5 行</strong> — メンテ対象が事実上ない</li>
+<li><strong>失敗しても無害</strong> — hook が落ちてもセッションは継続する</li>
+</ul>
+<h3 id="_3">自己学習効果</h3>
+<p>毎セッション末に「今回のフィードバックを未来に残すか？」を自問させるので、<strong>1 回受けた指摘を 2 回受けない</strong> が原則として成立しやすくなる。Böckeler 流に言えば「Sensor で観測した失敗が蓄積層にコミットされる」段階の自動化。</p>
+<hr>
+<h2 id="4-2-userpromptsubmit-hook">4. 例2: UserPromptSubmit hook で「危険ワード検知 → 注意書き注入」</h2>
+<h3 id="_4">何を解決するか</h3>
+<p>蓄積された知識（CLAUDE.md, memory, rules）はセッション開始時にロードされるが、<strong>人間でもいつもの注意書きをスクロールせず読み飛ばす</strong> のと同じで、コンテキスト中盤以降は薄れがち。</p>
+<p>特に「main ブランチへの force push」「<code>rm -rf</code>」「本番 DB の DELETE」のような <strong>不可逆操作</strong> は、ユーザー側のうっかりプロンプトをトリガーにして暴発する。プロンプト送信の瞬間に <strong>その文脈に最も関連するルールだけ</strong> を inject すれば、薄れを抑えられる。</p>
+<p>これは Böckeler の <strong>Guide（feedforward control）</strong> に該当し、 dev.to 記事の <code>SkillActivationHook</code> パターン（キーワード→skill コンテキスト注入）を最小化したもの。</p>
+<h3 id="claudesettingsjson_1">設定（<code>~/.claude/settings.json</code>）</h3>
+<pre><code class="language-jsonc">{
+  &quot;hooks&quot;: {
+    &quot;UserPromptSubmit&quot;: [
+      {
+        &quot;hooks&quot;: [
+          {
+            &quot;type&quot;: &quot;command&quot;,
+            &quot;command&quot;: &quot;~/.claude/hooks/inject-guards.sh&quot;
+          }
+        ]
+      }
+    ]
+  }
+}
+</code></pre>
+<h3 id="claudehooksinject-guardssh">スクリプト（<code>~/.claude/hooks/inject-guards.sh</code>）</h3>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# UserPromptSubmit hook の stdout は Claude のコンテキストに追加される。
+# stdin からプロンプト本文を読み、危険ワードにマッチしたら該当ルールを inject する。
+
+prompt=&quot;$(cat)&quot;
+rules_dir=&quot;$HOME/.claude/guards&quot;
+
+emit() {
+  local rule_file=&quot;$1&quot;
+  [[ -f &quot;$rules_dir/$rule_file&quot; ]] || return
+  echo &quot;[guard: $rule_file]&quot;
+  cat &quot;$rules_dir/$rule_file&quot;
+  echo
+}
+
+# 危険ワード → ルールファイルのマップ（最小構成）
+echo &quot;$prompt&quot; | grep -qiE 'force[-_ ]?push|push --force|push -f'  &amp;&amp; emit force-push.md
+echo &quot;$prompt&quot; | grep -qiE 'rm[[:space:]]+-[rRf]+|rmdir[[:space:]]+/'  &amp;&amp; emit destructive-rm.md
+echo &quot;$prompt&quot; | grep -qiE 'drop[[:space:]]+(table|database)|truncate '  &amp;&amp; emit destructive-sql.md
+echo &quot;$prompt&quot; | grep -qiE 'reset --hard|checkout \. *$|clean -[fdx]+'   &amp;&amp; emit destructive-git.md
+echo &quot;$prompt&quot; | grep -qiE '本番|production|prod-|prod\b'                &amp;&amp; emit production-touch.md
+</code></pre>
+<h3 id="claudeguardsforce-pushmd">ルールファイル例（<code>~/.claude/guards/force-push.md</code>）</h3>
+<pre><code class="language-markdown">[force-push 検知]
+- main / master への force push は事前に明示確認を取る
+- 必要性を分解: rebase 結果の上書きなら branch.&lt;name&gt;.rebase 設定で代替できないか？
+- どうしても必要な場合は --force-with-lease を提案する
+</code></pre>
+<h3 id="_5">なぜシンプルか</h3>
+<ul>
+<li><strong>shell 一発</strong> — grep で十分。LLM 呼び出しすら要らない</li>
+<li><strong>ルールが増えても 1 行追加で済む</strong></li>
+<li><strong>ガード文字列は人間が増やしていけば良い</strong> — レビューで「またそれかい」と言われたパターンを追加していくだけ</li>
+</ul>
+<h3 id="_6">自己学習効果</h3>
+<p>例 1 の memory 蓄積で「やりがちなミス」が観測されたら、対応するガードファイルを <code>~/.claude/guards/</code> に 1 枚足す。<strong>Sensor → Guide の橋渡し</strong> がここで起こる。dev.to 事例の 40+ スクリプトはこの発展形。</p>
+<hr>
+<h2 id="5-3-generator-vs-evaluator">5. 例3: 実装と評価のエージェント分離（generator vs evaluator）</h2>
+<h3 id="_7">何を解決するか</h3>
+<p>Anthropic 自身がフロントエンドデザインの長期実行ハーネス開発で報告した最大の発見は、</p>
+<blockquote>
+<p><strong>「自己評価させると LLM は自分の作った成果物を例外なく褒める」</strong></p>
+</blockquote>
+<p>ということ。これは subjective なタスクだけでなく、テストが通る通らないが明確なタスクでも生じる。解決策は単純で、<strong>生成者と評価者を別エージェントに分離</strong>し、評価者にはあえて懐疑的な rubric を持たせる。</p>
+<p>これは Claude Code では <strong>subagent（Agent ツール）</strong> で素直に実装できる。CLAUDE.md に「自分は実装、評価は別のエージェント」と書くだけ。本レポートの読者である横田氏の global CLAUDE.md には既にこの方針が書かれているが（「計画と評価は subagent に委譲、実装は自分」）、効果を最大化するには <strong>rubric を skill / 別ファイルに切り出して評価エージェント専用化する</strong> のが鍵。</p>
+<h3 id="claudeclaudemd">設定（<code>~/.claude/CLAUDE.md</code> の該当節）</h3>
+<pre><code class="language-markdown">## 開発タスクのエージェント分担
+- 計画フェーズ（要件定義・仕様設計）はサブエージェントに委譲する
+- 評価フェーズ（QA・コードレビュー）はサブエージェントに委譲する
+- 実装フェーズは自分で行う
+- 理由: 自己評価は甘くなる傾向があるため、生成と評価を分離する
+
+## コードレビュー時の心構え
+- LLM は自分（または他LLM）のコードを甘く評価しがち。判断に迷ったら厳しい側に倒す
+- バグを見つけたらどれほど小さく見えても報告する
+- 「動いているからOK」ではなく「仕様通りに動いているか」で判断する
+- 詳細な観点は `~/.claude/code-review-rubric.md` を参照
+</code></pre>
+<h3 id="rubric-claudecode-review-rubricmd">rubric の最小例（<code>~/.claude/code-review-rubric.md</code>）</h3>
+<pre><code class="language-markdown"># Code Review Rubric
+
+評価エージェントは以下を厳しめに採点する。**「概ね良い」は禁句**。
+
+## 機能性
+- [ ] 仕様書（または会話で合意された要件）と実装の対応が 1:1 で確認できるか
+- [ ] エッジケース（空入力 / null / 上限超過 / 並行アクセス）の扱いが明示されているか
+- [ ] エラー時のユーザー観測動作が定義通りか
+
+## 不変条件
+- [ ] 関数の事前条件・事後条件・例外を破る入力で挙動が破綻していないか
+- [ ] 副作用の発生順序が依存性に対して正しいか
+
+## 退行
+- [ ] 修正対象以外の挙動が変わっていないか
+- [ ] 削除されたコードの呼び出し元が網羅的に追えているか
+
+## 採点ルール
+- 1 つでもチェックが付かなければ「修正必要」を返す
+- 「実害は小さい」「後で直せる」は判断材料にしない（実装側の責務）
+</code></pre>
+<h3 id="subagent">subagent への投げ方（運用パターン）</h3>
+<p>実装完了時に必ず:</p>
+<pre><code>Agent ツールで code-reviewer subagent を起動 →
+prompt: &quot;以下の差分を ~/.claude/code-review-rubric.md に従って厳しめに採点。
+        実装意図は &lt;こうこう&gt;。&quot; → 差分本文
+</code></pre>
+<h3 id="_8">なぜシンプルか</h3>
+<ul>
+<li><strong>追加インフラなし</strong> — Agent ツールと markdown 2 枚だけ</li>
+<li><strong>rubric が学習対象になる</strong> — レビューで見落とした観点を rubric に追記する steering loop を、人間が回す</li>
+</ul>
+<h3 id="_9">自己学習効果</h3>
+<p>評価で挙がった指摘のうち「次回以降も再発しそうなもの」は、</p>
+<ul>
+<li><strong>ルールレベル</strong>: rubric の項目を追加</li>
+<li><strong>コードレベル</strong>: lint / 構造テストに昇格させる（Böckeler 言う Computational sensor 化）</li>
+<li><strong>プロンプトレベル</strong>: 例 2 のガードファイルを追加</li>
+</ul>
+<p>の 3 経路で蓄積層に還流する。<strong>評価結果を「批評で終わらせない」のがポイント</strong>。</p>
+<hr>
+<h2 id="6">6. 比較表</h2>
+<table>
+<thead>
+<tr>
+<th>観点</th>
+<th>例1: Stop hook + memory</th>
+<th>例2: UserPromptSubmit guards</th>
+<th>例3: Generator/Evaluator 分離</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Böckeler の分類</td>
+<td>Sensor（feedback）</td>
+<td>Guide（feedforward）</td>
+<td>Sensor（inferential）</td>
+</tr>
+<tr>
+<td>制御タイミング</td>
+<td>セッション終了時</td>
+<td>プロンプト送信時</td>
+<td>実装完了時</td>
+</tr>
+<tr>
+<td>実行コスト</td>
+<td>ほぼ 0（shell 5行）</td>
+<td>ほぼ 0（grep のみ）</td>
+<td>サブエージェント 1 回（数秒〜数十秒）</td>
+</tr>
+<tr>
+<td>学習対象</td>
+<td>memory / MEMORY.md</td>
+<td>guards/*.md</td>
+<td>rubric.md / lint ルール</td>
+</tr>
+<tr>
+<td>単独でも価値</td>
+<td>◎</td>
+<td>○</td>
+<td>◎</td>
+</tr>
+<tr>
+<td>他例との連動</td>
+<td>→例2の guards 追加に直結</td>
+<td>←例1, 例3 の知見の出力先</td>
+<td>→例1, 例2 への入力</td>
+</tr>
+<tr>
+<td>失敗時の影響</td>
+<td>小（hook失敗してもセッション継続）</td>
+<td>小（grep 失敗で素通し）</td>
+<td>中（評価が甘くなるとバグ通過）</td>
+</tr>
+<tr>
+<td>導入時間</td>
+<td>5 分</td>
+<td>10 分 + ルール育成</td>
+<td>設定 5 分 + rubric 育成</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="7">7. 段階的に導入する順序</h2>
+<p>優先順は <strong>例1 → 例3 → 例2</strong>:</p>
+<ol>
+<li><strong>まず例1</strong>: Sensor の蓄積基盤がないと、何を Guide に書くか決められない</li>
+<li><strong>次に例3</strong>: 評価が甘いままだと、例1 で蓄積する内容が「実は間違いだった memory」で汚染される</li>
+<li><strong>最後に例2</strong>: 例1, 例3 で「またこれか」のパターンが 3 つ以上見えてきてから初めて意味を持つ</li>
+</ol>
+<p>dev.to 記事の 30 skills セットアップは「全部入りで始めるな、3 つから」と明言している。本レポートの 3 例は <strong>その「最初の 3 つ」のテンプレート</strong> として読める。</p>
+<hr>
+<h2 id="8">8. 落とし穴</h2>
+<ul>
+<li><strong>例1 の memory 肥大化</strong>: MEMORY.md は本レポートのコンテキスト規約上 200 行で truncate される。蓄積が進んだら定期的に統合 / 削除する pattern-consolidator 的な作業が必要（最初は手作業で OK）</li>
+<li><strong>例2 の grep 偽陰性</strong>: 「rmdir」と「mkdir」のように似た文字列を弾きすぎると邪魔になる。<strong>通知だけ</strong>に留め、ブロック（exit 1）は最後の手段に</li>
+<li><strong>例3 の reviewer-LLM bias</strong>: 評価エージェントも結局 LLM。Anthropic の知見通り「skeptical 寄りに calibrate する」rubric が必要。同じモデル同士だと特に甘くなるので、評価役には別モデル / 別 system prompt を充てる</li>
+<li><strong>3 つすべてに共通</strong>: ハーネスのコードは production コードと同じ規律で扱う。バグった hook はバグったセッションを量産する</li>
+</ul>
+<hr>
+<h2 id="9">9. 調査ソース</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>出典</th>
+<th>種別</th>
+<th>日付</th>
+<th>主な引用箇所</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><a href="https://martinfowler.com/articles/harness-engineering.html">Harness engineering for coding agent users</a> (Birgitta Böckeler / martinfowler.com)</td>
+<td>Architecture article</td>
+<td>2026-04-02</td>
+<td>Guide/Sensor 二分法、Computational/Inferential 軸、steering loop</td>
+</tr>
+<tr>
+<td>2</td>
+<td><a href="https://www.anthropic.com/engineering/harness-design-long-running-apps">Harness design for long-running application development</a> (Prithvi Rajasekaran / Anthropic)</td>
+<td>公式 engineering blog</td>
+<td>2026-03-24</td>
+<td>自己評価バイアス、generator/evaluator 分離、context reset &gt; compaction</td>
+</tr>
+<tr>
+<td>3</td>
+<td><a href="https://dev.to/axitslab/our-claude-code-setup-30-skills-mcps-and-self-learning-hooks-5gje">Our Claude Code Setup: 30 Skills, MCPs, and Self-Learning Hooks</a> (Axit / dev.to)</td>
+<td>実装事例</td>
+<td>2026-03-25</td>
+<td>hooks による pattern 蓄積、skill-builder メタ skill、3 skills から始めよ</td>
+</tr>
+<tr>
+<td>4</td>
+<td><a href="https://code.claude.com/docs/en/hooks">Hooks reference</a> (Claude Code Docs)</td>
+<td>公式 reference</td>
+<td>2026</td>
+<td>Stop / UserPromptSubmit / SessionStart の挙動、stdout がコンテキストに入る仕様</td>
+</tr>
+<tr>
+<td>5</td>
+<td><a href="https://claudefa.st/blog/tools/hooks/hooks-guide">Claude Code Hooks: Complete Guide to All 12 Lifecycle Events</a></td>
+<td>解説記事</td>
+<td>2026</td>
+<td>ライフサイクル全体像、once-per-session / once-per-turn / per-tool 区分</td>
+</tr>
+<tr>
+<td>6</td>
+<td><a href="https://www.mindstudio.ai/blog/self-evolving-claude-code-memory-obsidian-hooks">How to Build a Self-Evolving Claude Code Memory System With Obsidian and Claude Code Hooks</a> (MindStudio)</td>
+<td>実装事例</td>
+<td>2026</td>
+<td>hook によるセッション末抽出 → 永続ストアへの書き出し</td>
+</tr>
+<tr>
+<td>7</td>
+<td><a href="https://www.eesel.ai/blog/hooks-in-claude-code">Claude Code hooks: A practical guide with examples</a> (eesel AI)</td>
+<td>実装事例</td>
+<td>2026</td>
+<td>UserPromptSubmit でのスキル活性化、SessionStart での git status 注入</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="10">10. 一言まとめ</h2>
+<blockquote>
+<p>自己学習ハーネスは「<strong>観測（Sensor）→ 蓄積 → 注入（Guide）</strong>」の 3 工程。それぞれに 1 つずつ最小設定を置けば、ハーネスは静かに賢くなり続ける。</p>
+</blockquote>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
