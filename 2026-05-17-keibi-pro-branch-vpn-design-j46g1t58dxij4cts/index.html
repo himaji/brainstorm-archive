@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>新拠点（5〜10台）から本社「警備PRO」サーバへ接続する最適構成の検討レポート</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>新拠点（5〜10台）から本社「警備PRO」サーバへ接続する最適構成の検討レポート</h1>
+<div class="meta">
+<span>2026-05-17</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>TL;DR</h2>
+<ul>
+<li><strong>結論：本社既設のYAMAHA RTX／Fortigateを「VPNハブ」とし、新拠点に小型VPNルータ1台（推奨：YAMAHA RTX830）を設置するIPsecサイト間VPNが、警備PRO（クライアント・サーバ型）との相性・コスト・運用性のバランスで最良</strong>。これにより、ベンダー提案150万円／5年を、5年TCOで概ね40〜70万円（機器・回線追加分・最低限の保守込み）に圧縮可能と試算される。</li>
+<li><strong>AnyDeskでの「常時業務利用」は強く非推奨</strong>。同時5〜10接続を満たすStandard以上のライセンスは年額30〜60万円規模に達し、加えて2024年2月のAnyDesk本番システム侵害事件（ダークウェブで18,317件の顧客認証情報がExploit[.]inで15,000ドル販売された事案） <a href="https://layerlogix.com/blog/anydesk-connectwise-breach-2024-what-happened">Layerlogix</a> を踏まえると、基幹業務（請求・給与データ）の常時アクセス手段としてはリスクが高い。</li>
+<li><strong>機密ファイルのUSB持ち出し運用は廃止すべき</strong>。VPN経由のファイルサーバ直接アクセス＋アクセスログ取得・USBデバイス制御に切り替え、警備業法および全国警備業協会「警備業における個人情報の保護に関するガイドライン」への適合性を担保するのが望ましい。</li>
+</ul>
+<h2>Key Findings</h2>
+<h3>1. 警備PRO（ビジコン・ジャパン「JBCA警備Pro」）の技術要件</h3>
+<ul>
+<li>公式サイト（jbca.co.jp/pro/security 等）のFAQ上、警備PROは「クラウド版」と「オンプレミス（PCインストール）版」を選択可能と明記。<strong>ベンダー自身が「テレワーク対応や複数拠点管理にはクラウド版、社内ネットワーク内での運用ならオンプレミス版」と案内しており</strong>、オンプレ版のクライアント・サーバ構成をWAN越しに直接利用することは積極推奨されていない可能性が高い。</li>
+<li><strong>オンプレ版クライアントがWAN越えで動作するか、推奨接続方式、同時接続ライセンスの考え方、推奨OS／DB、通信プロトコル、追加クライアントPCの費用は、公式公開情報では一切確認できない</strong>。価格・ライセンス・動作環境はすべて販売店経由・問い合わせベース。<strong>ベンダー確認が必要</strong>。</li>
+<li>既存導入企業のユーザーボイス（Bセキュリティー様、jbca-keibipro.com掲載）に「テレワーク環境を構築していただいた」 <a href="https://jbca-keibipro.com/">jbca-keibipro</a>  <a href="https://jbca.co.jp/pro/security/">Jbca</a> との記述があるが、 <a href="https://jbca.co.jp/pro/security/">Jbca</a> その実体（リモートデスクトップ／VPN／クラウド版移行）は非公開。ベンダーの保守支援には公式サイトのフッターからリンクされているTeamViewer（get.teamviewer.com/65sde55）が使われているが、これは保守用途であり業務利用のリモートアクセス手段ではない。</li>
+<li>なお、IT導入補助金の説明ページ（jbca.co.jp/keibi-lp）には補助対象としての「最大150万円」 <a href="https://jbca.co.jp/keibi-lp/">jbca</a> 言及があるが、これは補助金上限であって製品価格ではない。</li>
+<li><strong>実務上の推定</strong>：クライアント・サーバ型業務システムは一般にDB通信（SQL系）が前提のため、レイテンシ・パケットロスに敏感。WAN直結（インターネット越しのSQL通信）はトラブル切り分けが難しく、ベンダーサポート対象外になりやすい。<strong>サイト間VPNで「同一LANに見せる」構成が現実的に最も安全</strong>。</li>
+</ul>
+<h3>2. AnyDesk常時業務利用の現実性</h3>
+<ul>
+<li><strong>公式ライセンス体系（2026年5月時点公式価格）</strong>：Solo $14.90/月、Standard $49.90/月、Advanced $111.90/月、Ultimate要問合せ（ <a href="https://costbench.com/software/remote-desktop/anydesk/">CostBench</a> 2025年10月の価格改定後。それ以前のSoloは$28.90だった）。 <a href="https://www.splashtop.com/blog/anydesk-pricing-comparison">Splashtop</a> 日本代理店経由ではSolo年額12,800円（個人事業主向け）から。</li>
+<li><strong>同時接続の考え方</strong>：AnyDeskヘルプセンター（support.anydesk.com/docs/anydesk-licenses）によれば、Standardプランの同時発信接続はデフォルト1で、アドオン購入で最大19まで増設可能。<strong> <a href="https://support.anydesk.com/docs/anydesk-licenses">AnyDesk</a> 5〜10名が同時に本社PCへリモートする想定では、Standardライセンス＋4〜9アドオン</strong>が必要で、年額換算30〜60万円規模に達する。</li>
+<li><strong>踏み台PC問題</strong>：AnyDeskはWindows ServerのRDS（マルチセッション）方式を正式サポートしないため、5〜10人を捌くには <strong>本社側に踏み台PCを5〜10台用意する必要がある</strong>。調達・電源・OSライセンス・運用負荷が増す。</li>
+<li><strong>セキュリティリスク</strong>：2024年2月、AnyDesk Softwareの本番システムが侵害され、コード署名証明書を全失効・my.anydesk.comの全パスワードを失効させる事態となった（ <a href="https://layerlogix.com/blog/anydesk-connectwise-breach-2024-what-happened">Layerlogix</a> AnyDesk公式 "AnyDesk Incident Response 2-2-2024"）。直後にResecurityがダークウェブフォーラムExploit[.]inにて脅威アクター「Jobaaaaa」が18,317件のAnyDesk顧客認証情報を15,000ドルで販売しているのを確認、 <a href="https://sobrii.io/blog/anydesk-security-breach">sobrii</a> Resecurityのレポートでは「販売対象アカウントの大半は二要素認証が未設定であった（the majority of exposed accounts on the Dark Web didn't have 2FA enabled）」 <a href="https://securityaffairs.com/158595/cyber-crime/anydesk-credentials-leaked-dark-web.html">Security Affairs</a> と指摘されている。また2024年12月にはWindows版で特権昇格脆弱性（CVE-2024-12754）も発見されている。<strong>業務常時利用には、二要素認証必須化、許可リスト、最新版維持、ホスト側の利用検知などの追加対策が前提</strong>。</li>
+<li><strong>代替</strong>：法人向けで最もコスト優位なのは<strong>Splashtop Business 年額15,000円/ID（Pro版18,000円/ID）</strong>。 <a href="https://it-trend.jp/remote_access/13173/price">ITトレンド</a>  <a href="https://www.splashtop.co.jp/products-service/business.html">Splashtop</a> ライセンス＝同時利用人数として扱われ、 <a href="https://www.splashtop.co.jp/license/">Splashtop</a> AnyDeskの「同時接続アドオン課金」よりシンプル。10IDで年額15万円程度。TeamViewerは法人ライセンス価格が高め。Chrome Remote Desktopは法人ガバナンス機能が弱く非推奨、Parsecはクリエイティブ用途向け。</li>
+</ul>
+<h3>3. 既存YAMAHA RTX／Fortigateを活用した低コストVPN構成</h3>
+<ul>
+<li><strong>構成案</strong>：本社側は既設RTX（RTX1210/RTX1220等想定）またはFortigateをVPNハブとして流用、新拠点にYAMAHA RTX830を1台設置してIPsecサイト間VPNを構築。RTX830はIPsecトンネル20本、 <a href="https://www.itproduct.jp/info_RTX830">Itproduct</a> IPsecスループット1Gbpsに対応 <a href="https://www.itproduct.jp/info_RTX830">Itproduct</a> し、メーカーに豊富な設定例（YMHRT-3757「IPsecを使用したVPN拠点間接続(2拠点) : コマンド設定」 <a href="https://network.yamaha.com/setting/router_firewall/vpn/connect/two_point">Yamaha</a> 等）が公開されている。</li>
+<li><strong>機器費用</strong>：RTX830新品は価格.comで最安55,980円（2025年5月時点）、 <a href="https://kakaku.com/item/K0001010343/auction/">Kakaku</a> 中古はヤフオク180日平均落札27,099円。 <a href="https://auctions.yahoo.co.jp/closedsearch/closedsearch/rtx830/0">Yahoo! Auctions</a> Fortigate 40Fは本体8〜12万円、 <a href="https://aisecurity.co.jp/article/2640">Aisecurity</a> 5年UTMバンドルで50〜70万円（ <a href="https://aisecurity.co.jp/article/2640">Aisecurity</a> aisecurity.co.jp解説等）と桁が異なる。RTX830は2017年発売 <a href="https://kakaku.com/item/K0001010343/auction/">Kakaku</a> の枯れた機種で情報も豊富、IT専任不在の運用に向く。</li>
+<li><strong>5年TCO試算</strong>（新拠点側のみ追加負担分）：</li>
+<li>機器（RTX830新品）：約6万円</li>
+<li>初期設定費用（ベンダー外注）：5〜10万円程度</li>
+<li>新拠点インターネット回線：法人光・フレッツ等、月5,000〜8,000円×60か月＝30〜48万円</li>
+<li>簡易保守（年1回コンフィグ点検）：年1〜3万円程度</li>
+<li><strong>合計：約45〜70万円／5年</strong>（回線含む）。回線費を除けば10〜20万円台。</li>
+<li><strong>IPsec vs SSL-VPN</strong>：警備PROのようなクライアント・サーバ型業務アプリは<strong>IPsecサイト間VPN</strong>が最適。新拠点全PCが恒常的に本社LANと同一セグメント感覚で通信でき、クライアント側にVPNソフト不要、業務アプリの挙動が安定する。SSL-VPN（リモートアクセスVPN）はユーザー単位向けで、常時5〜10台のクライアントを捌くには非効率。</li>
+<li><strong>ベンダー提案150万円／5年の典型的内訳と削減余地</strong>：通常は「本社側ルータ／UTMの新規リプレース＋拠点側ルータ＋IT会社による設定・初期構築費＋月額のリモート監視・障害対応・コンフィグ変更代行込」のセット。月額換算2.5万円のうち、機器リース1.0〜1.2万円／保守・運用1.0〜1.3万円程度の構成と推測。<strong>削減手段</strong>：(a) 既設機器流用で本社側機器費を回避、(b) 機器買い切り（リース回避）、(c) 運用保守をスポット対応＋年1回点検に限定、(d) 拠点側は中古ルータ＋自社初期設定——で半額以下が現実的に可能。</li>
+</ul>
+<h3>4. その他の選択肢</h3>
+<table>
+<thead>
+<tr>
+<th>選択肢</th>
+<th>概要</th>
+<th>コスト</th>
+<th>メリット</th>
+<th>デメリット</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Windows Server RDS+RDゲートウェイ</td>
+<td>本社にRDS構築、新拠点はRDPで本社サーバ上の警備PROを利用</td>
+<td>サーバ追加・RDS CAL（Windows Server 2022 RDS Per User CAL 約13,000円／本×10、Windows Server CAL別途）、構築費30〜80万円。5年TCO 80〜150万円</td>
+<td>クライアント・サーバ間通信が本社内で完結、警備PROのレスポンスが最良。USB持ち出し抑制にも貢献</td>
+<td>初期コスト大、サーバ運用負荷増、RDゲートウェイのインターネット公開でセキュリティ設計必要</td>
+</tr>
+<tr>
+<td>クラウド型ZTNA（Tailscale）</td>
+<td>WireGuardベース、ユーザー単位</td>
+<td>Standard $8/user/月、Premium $18/user/月（2026年5月時点。旧Starter名称は廃止・改称済み）。10名でStandard $80/月≒年約12万円</td>
+<td>設定が極めて簡単、機器追加不要、デバイス単位アクセス制御、ID統合</td>
+<td>クライアント・サーバ型アプリの日本国内中小企業向け運用実績は少ない。海外サービス・データ統制を要確認</td>
+</tr>
+<tr>
+<td>Cloudflare Access (ZTNA)</td>
+<td>Webアプリ／非Webリソース両対応</td>
+<td>50ユーザーまで無料、以降$3〜/user/月</td>
+<td>コスト極小、SSO・条件付きアクセス可能</td>
+<td>Webアプリ向きの設計。SQLベースのクライアント・サーバ通信を載せるにはWARPクライアント運用が必要で、業務アプリの動作検証が必須</td>
+</tr>
+<tr>
+<td>フレッツ・VPNワイド／キャリアVPN</td>
+<td>閉域IP-VPN</td>
+<td>旧プラン月額2,530円〜／拠点（ <a href="https://business.ntt-west.co.jp/service/network/vpn_wide/">NTT West Japan</a> NTT東西。ただし<strong>NTT西2025年12月利用分・NTT東2026年2月利用分から料金改定済み</strong>のため、最新単価は要見積）＋アクセス回線費</td>
+<td>閉域網で安定性高、 <a href="https://business.ntt-east.co.jp/service/vpnwide/">NTT East</a> 運用簡素、24×365保守オプション可 <a href="https://www.next-hikari.jp/vpn.php">Next-hikari</a></td>
+<td>NTT東西エリアまたぎ拠点では東西接続オプション要、 <a href="https://business.ntt-west.co.jp/service/network/vpn_wide/">NTT West Japan</a> フレッツ光クロスでは利用不可、最新料金は問い合わせベース</td>
+</tr>
+<tr>
+<td>AnyDesk Standard常時利用</td>
+<td>本社PCへリモート</td>
+<td>Standardライセンス＋同時接続アドオンで10名年30〜60万円</td>
+<td>機器投資不要</td>
+<td>踏み台PC5〜10台が必要。セキュリティリスク高、ベンダーサポート対象外運用</td>
+</tr>
+<tr>
+<td>Splashtop Business</td>
+<td>同・代替リモート</td>
+<td>年額15,000円/ID×10＝15万円、5年75万円</td>
+<td>設定簡単、VPN不要、 <a href="https://www.splashtop.co.jp/products-service/business.html">Splashtop</a> コスト安定</td>
+<td>リモートデスクトップ前提のため本社側PC（または共有RDS）が必要</td>
+</tr>
+</tbody>
+</table>
+<h3>5. ファイル共有とUSB持ち出し運用について</h3>
+<ul>
+<li><strong>リスク</strong>：紛失・盗難による情報漏洩、 <a href="https://www.runexy-dlp.com/rundx/rundx_special/usb-security-measures.html">Runexy-dlp</a> ウイルス感染、内部不正による持ち出し。総務省「国民のためのサイバーセキュリティサイト」も持ち運び可能メディアの外部持ち出しリスクを警告。実例として、自治体で全市民約46万人分の個人情報入りUSBを紛失した事件（ <a href="https://www.runexy-dlp.com/rundx/rundx_special/usb-security-measures.html">Runexy-dlp</a> 2022年）、企業で約928万件の顧客情報をUSBに持ち出して名簿業者へ売却した内部不正 <a href="https://www.runexy-dlp.com/rundx/rundx_special/usb-security-measures.html">Runexy-dlp</a> など、深刻な漏洩事例が多数公表されている。</li>
+<li><strong>警備業特有の論点</strong>：警備業者は警備業法および全国警備業協会「警備業における個人情報の保護に関するガイドライン」（ajssa.or.jp に PDF 掲載）に沿った個人情報管理が求められる。顧客現場情報・隊員個人情報・勤務記録は要配慮性が高い。漏洩時は個人情報保護委員会への報告義務（1,000人超／不正目的等） <a href="https://www.digitalsales.alsok.co.jp/col_storage">Alsok</a> も発生し得る。</li>
+<li><strong>改善策（推奨）</strong>：
+  1. <strong>VPN経由のファイルサーバ直接アクセス</strong>に切替、NTFS権限で部門別・機密度別に分離。
+  2. <strong>アクセスログ取得</strong>：ファイルサーバの監査ログ有効化、FortigateのVPNセッションログ収集、Syslogサーバまたは FortiAnalyzer等で集中管理。
+  3. <strong>USBデバイス制御</strong>：Windows GPOまたはエンドポイント管理製品（LANSCOPE、秘文等）でUSBを既定ブロックし、業務上必要な場合のみ会社管理の暗号化USBを許可。
+  4. <strong>クラウドストレージ併用</strong>：Box、Microsoft 365のOneDrive/SharePoint、Google Workspace等。「警備PRO関連は本社ファイルサーバ＋VPN」「資料共有や写真はクラウド」のハイブリッドが現実的。</li>
+</ul>
+<h2>Details</h2>
+<h3>推奨構成・5年TCO比較表</h3>
+<table>
+<thead>
+<tr>
+<th>案</th>
+<th>初期費用</th>
+<th>5年TCO（追加分）</th>
+<th>運用負荷</th>
+<th>セキュリティ</th>
+<th>警備PRO相性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. IPsecサイト間VPN（既設RTX/Fortigateハブ＋拠点RTX830）★推奨</strong></td>
+<td>機器6万＋設定5〜10万＝<strong>11〜16万円</strong></td>
+<td><strong>45〜70万円</strong>（回線込）／<strong>15〜25万円</strong>（回線除く）</td>
+<td>低〜中</td>
+<td>高（IPsec、ログ取得可）</td>
+<td>◎（同一LANに見える）</td>
+</tr>
+<tr>
+<td>B. ベンダー提案フル保守付VPN</td>
+<td>初年度に集中</td>
+<td><strong>150万円</strong></td>
+<td>低（外部委託）</td>
+<td>高</td>
+<td>◎</td>
+</tr>
+<tr>
+<td>C. フレッツVPNワイド</td>
+<td>機器・工事 10〜15万円</td>
+<td><strong>30〜50万円</strong>（VPN分のみ、アクセス回線別、料金改定後の最新単価は要見積）</td>
+<td>低</td>
+<td>高（閉域IP-VPN）</td>
+<td>◎</td>
+</tr>
+<tr>
+<td>D. RDS+RDゲートウェイ</td>
+<td>サーバ＋CAL＋構築 <strong>50〜100万円</strong></td>
+<td><strong>80〜150万円</strong></td>
+<td>中〜高</td>
+<td>高（設計次第）</td>
+<td>◎（本社内通信）</td>
+</tr>
+<tr>
+<td>E. AnyDesk Standard常時利用</td>
+<td>踏み台PC10台 約60万円＋ライセンス初期</td>
+<td><strong>150〜350万円</strong>（PC込）／ライセンスのみで150〜300万円</td>
+<td>中（同時接続管理）</td>
+<td>△（過去侵害事件あり、対策必須）</td>
+<td>△（直接通信でない）</td>
+</tr>
+<tr>
+<td>F. Splashtop Business 10ID</td>
+<td>約0〜数万円</td>
+<td><strong>約75万円</strong></td>
+<td>低</td>
+<td>中〜高</td>
+<td>△（要踏み台PC運用）</td>
+</tr>
+<tr>
+<td>G. Tailscale Standard</td>
+<td>約0円</td>
+<td><strong>約60万円</strong>（10名×$8/月×60か月）</td>
+<td>低</td>
+<td>高（WireGuard、ID統合）</td>
+<td>○（要動作検証）</td>
+</tr>
+<tr>
+<td>H. Cloudflare Access</td>
+<td>0円</td>
+<td><strong>0〜10万円</strong>（50名以下無料）</td>
+<td>中（設計負荷）</td>
+<td>高</td>
+<td>△（要動作検証）</td>
+</tr>
+</tbody>
+</table>
+<h3>推奨案：A（メイン）／ C（保守を外注したい場合の代替）</h3>
+<p><strong>A案 詳細構成</strong>：
+- 本社側：既設YAMAHA RTX系をVPN集約に流用（RTX1210系ならIPsecトンネル30本、RTX830系でも20本で新拠点1拠点は余裕）。Fortigateが既にUTMとして稼働しているなら、Fortigate側を集約点にしてポリシーで警備PROサーバへの通信のみ許可する設計も可。
+- 新拠点側：RTX830 1台、PPPoEまたはIPoE（v6プラス）でインターネット接続。IPsecサイト間VPN（事前共有鍵方式）でメインルータ宛トンネル1本。固定IPでなくてもネットボランチDNSで動的アドレス対応可能。
+- クライアント側：警備PROクライアントを新拠点PC（5〜10台）に直接インストール。本社サーバへのアクセスはVPN経由でLAN同等。
+- セキュリティ強化：(a) IPsec暗号方式はAES-256/SHA-256以上、(b) FortigateでVPNセッションのログ収集、(c) クライアントPCはMicrosoft Defenderの集中管理またはEDR、(d) USBデバイス制御をGPOで実装、(e) ファイルサーバの監査ログ有効化。
+- スケーラビリティ：5→10台に増えてもVPN設定は不変。追加拠点はハブ＆スポーク型で容易に拡張可能。
+- BCP：拠点側回線が落ちた場合、RTX830はUSB LTEドングルによるモバイル回線バックアップ設定が可能。</p>
+<p><strong>C案（フレッツVPNワイド）が向くケース</strong>：自社でVPN設定運用したくない／東西エリア内で完結する／回線とVPNを一括契約したい場合。月額数千円／拠点と安価（ただし料金改定後の最新単価はNTT東西へ要見積）で、24×365保守オプションも追加可能。</p>
+<h2>Recommendations</h2>
+<h3>段階的アクションプラン</h3>
+<ol>
+<li><strong>第1ステップ（最優先・1〜2週間）</strong>：ビジコン・ジャパン公式販売窓口に以下を確認。
+   - オンプレ版警備PROのクライアントがWAN（IPsec VPN経由）で接続する構成のサポート可否。
+   - 同時接続ライセンスの単位（ユーザー／PC／セッション）と、新拠点5〜10台分の追加ライセンス費用。
+   - 推奨OS／DB、ネットワーク要件（推奨レイテンシ・帯域）。
+   - <strong>クラウド版警備PROへの移行見積</strong>（クラウド版なら本件の論点自体が大幅に解消する可能性）。</li>
+<li><strong>第2ステップ（2〜4週間）</strong>：ベンダー提案150万円の内訳を文書で取得し、機器費／初期設定／月額保守の三項目に分解。月額保守の中身が「定期点検＋障害時オンサイト」を含むのか「コンフィグ変更代行のみ」なのかで自社で巻き取れる範囲が決まる。</li>
+<li><strong>第3ステップ（4〜8週間）</strong>：A案（既設RTX/Fortigate＋RTX830）で2〜3社から相見積を取る（ネットワーク構築系SI、ヤマハ販社、地元IT会社）。初期工事込み15〜25万円・年1回点検2〜3万円の構成を狙う。</li>
+<li><strong>第4ステップ（並行）</strong>：USB持ち出し運用を見直し、(a) ファイルサーバの権限再設計、(b) アクセスログ有効化、(c) USBデバイスのGPO制御、を実施。Microsoft 365 Business Standard（月額約1,500円/ユーザー）等のクラウドストレージ併用も検討。</li>
+<li><strong>第5ステップ（運用後3か月）</strong>：実際の警備PROレスポンスを計測。WAN越えのDB通信レスポンスに問題があれば、本社にRDSサーバを追加してWAN越え通信を回避するD案へ部分移行。</li>
+</ol>
+<h3>判断を変えるベンチマーク</h3>
+<ul>
+<li>ベンダーが「オンプレ版のWAN越え運用は非サポート、クラウド版必須」と回答 → クラウド版に全面移行、VPN投資は不要に近づき月数千〜数万円のSaaS費用で運用可能。</li>
+<li>同時接続ライセンスが「PC単位（ノードロック）」で1ライセンス10万円以上なら → 新拠点5〜10台で50〜100万円の追加。RDS（D案）でライセンス本数を抑える設計が経済的になる場合あり。</li>
+<li>拠点が今後3拠点以上に拡張する見込みなら → A案のハブ＆スポーク継続が有利、同時にクラウド版警備PRO検討も推奨。</li>
+</ul>
+<h3>完了確認チェック</h3>
+<table>
+<thead>
+<tr>
+<th>調査項目</th>
+<th>対応箇所</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>警備PRO技術要件（WAN対応・接続方式・ライセンス・多拠点ベストプラクティス）</td>
+<td>Key Findings 1（公式情報は限定的、ベンダー確認必須と明記）</td>
+</tr>
+<tr>
+<td>AnyDesk法人ライセンス料金体系</td>
+<td>Key Findings 2（2026年公式価格）</td>
+</tr>
+<tr>
+<td>5〜10人同時接続時の必要ライセンス・踏み台PC・RDS可否</td>
+<td>Key Findings 2</td>
+</tr>
+<tr>
+<td>AnyDeskセキュリティリスク・代替比較</td>
+<td>Key Findings 2</td>
+</tr>
+<tr>
+<td>RTX/Fortigateハブ＋拠点VPN構成のコスト</td>
+<td>Key Findings 3</td>
+</tr>
+<tr>
+<td>IPsec vs SSL-VPNと警備PRO相性</td>
+<td>Key Findings 3</td>
+</tr>
+<tr>
+<td>ベンダー150万円の典型内訳と削減余地</td>
+<td>Key Findings 3</td>
+</tr>
+<tr>
+<td>Windows RDS+RDG構成</td>
+<td>Key Findings 4／表</td>
+</tr>
+<tr>
+<td>ZTNA（Tailscale/Cloudflare）</td>
+<td>Key Findings 4／表</td>
+</tr>
+<tr>
+<td>キャリアVPN（フレッツVPNワイド等）</td>
+<td>Key Findings 4／表</td>
+</tr>
+<tr>
+<td>各案メリット・デメリット・概算コスト</td>
+<td>Details 比較表</td>
+</tr>
+<tr>
+<td>USB持ち出しリスクと改善策、VPN経由ファイルサーバ設計</td>
+<td>Key Findings 5</td>
+</tr>
+<tr>
+<td>比較表（初期費＋5年TCO、運用負荷、セキュリティ、警備PRO相性）</td>
+<td>Details 比較表</td>
+</tr>
+<tr>
+<td>推奨構成1〜2案</td>
+<td>Details 推奨案A／C</td>
+</tr>
+<tr>
+<td>警備業法・個人情報ガイドライン適合</td>
+<td>Key Findings 5</td>
+</tr>
+<tr>
+<td>スケーラビリティ・BCP</td>
+<td>Details A案</td>
+</tr>
+</tbody>
+</table>
+<h2>Caveats</h2>
+<ul>
+<li>警備PROの技術仕様（WAN対応可否、ライセンス体系、推奨環境、通信プロトコル）は公式に非開示であり、本レポートの「IPsec VPNでLAN同等に見せれば動作する見込み」は一般論からの推定。<strong>ベンダー確認なしに最終構成を確定しないこと</strong>。</li>
+<li>AnyDeskの公式価格はSolo $14.90/月、Standard $49.90/月、Advanced $111.90/月（2026年5月時点、2025年10月の改定後）。日本代理店経由・為替・キャンペーンで変動する。なお2024年2月のインシデントについてはAnyDesk側がCrowdStrikeと協力して対策完了済み <a href="https://sobrii.io/blog/anydesk-security-breach">sobrii</a> と公表しているが、Resecurity等の指摘するアフターリスク（漏洩アカウントのリスト型攻撃悪用）は残る前提で運用すべき。</li>
+<li>フレッツ・VPNワイドはNTT東日本／西日本で2025年12月（西）・2026年2月（東）利用分から料金改定済み。2,530円／拠点は旧価格であり、最新単価はNTT東西への問い合わせベース。フレッツ光クロスでは利用不可。</li>
+<li>Tailscaleの料金プランは2025年に大幅再編されており、旧「Starter」は「Standard」に改称、 <a href="https://tailscale.com/blog/pricing-v4">Tailscale</a> $8/user/月（年払い）が現行価格。 <a href="https://costbench.com/software/business-vpn/tailscale/">CostBench</a> 新規導入時は必ず公式ページの最新情報を確認すること。</li>
+<li>Fortigate 40Fの「5年UTMバンドル50〜70万円」はサードパーティ解説（aisecurity.co.jp等）の市場相場感であり、販社により幅がある。RTX830の中古価格・新品価格も為替・需給で変動する。</li>
+<li>ベンダー提案150万円／5年（月2.5万円）の内訳は本レポート時点では推測。実際の見積書での内訳開示を求めること。</li>
+<li>警備業法・個人情報保護法・全国警備業協会ガイドラインへの実際の適合判定は本レポートの範囲外。社内規程整備と法務／専門家確認を推奨。</li>
+<li>RDS CAL価格は為替・購入経路（Volume Licensing加入の有無等）で大きく変動する。</li>
+</ul>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
