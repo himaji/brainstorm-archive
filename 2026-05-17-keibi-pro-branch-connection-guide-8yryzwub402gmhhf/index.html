@@ -1,0 +1,491 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>新拠点（5〜10名）から本社「警備PRO」サーバへ接続する方法 — わかりやすい選び方ガイド</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>新拠点（5〜10名）から本社「警備PRO」サーバへ接続する方法 — わかりやすい選び方ガイド</h1>
+<div class="meta">
+<span>2026-05-17</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>このレポートのねらい</h2>
+<p>新しい拠点で警備PROというシステムを使うために、本社のサーバへどうつなぐかを決めたい。ベンダーから150万円（5年分）の提案が出ているが、これが妥当か。もっと安く、安全に、運用できる方法はないか。この資料では、いくつかの選択肢を <strong>コスト・運用負荷・安全性・警備PROとの相性</strong> の4つの観点で比べ、おすすめのプランを提示する。</p>
+<h2>結論（先に答え）</h2>
+<ul>
+<li><strong>推奨：既存の本社ルータ／ファイアウォール（YAMAHA RTX または Fortigate）を活用し、新拠点に小型のVPNルータ（YAMAHA RTX830）を1台置く構成</strong>。これでベンダー提案150万円／5年を、おおむね <strong>40〜70万円／5年</strong> に圧縮できる見込み。</li>
+<li><strong>AnyDeskを毎日の業務で常用するのはおすすめしない</strong>。理由は (1) 同時5〜10名のライセンスが年30〜60万円規模、(2) 接続先となるPCを5〜10台も本社に用意することになる、(3) 2024年に大規模な情報漏洩事件があり、業務での常時利用にはリスクが残る。</li>
+<li><strong>USBメモリで機密ファイルを持ち運ぶ運用はやめるべき</strong>。代わりに、VPN経由で本社のファイルサーバへ直接アクセスする運用に切り替え、誰がいつ何を見たかのログを取れるようにする。警備業法と全国警備業協会のガイドラインの観点でも望ましい。</li>
+</ul>
+<hr />
+<h2>用語の整理（最低限）</h2>
+<table>
+<thead>
+<tr>
+<th>用語</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>警備PRO</strong></td>
+<td>ビジコン・ジャパン社の警備業務管理システム。本社にサーバを置き、各PCにクライアントソフトを入れて使う「クライアント・サーバ型」</td>
+</tr>
+<tr>
+<td><strong>VPN</strong></td>
+<td>インターネット上に「専用の通路」を作り、離れた拠点同士をあたかも同じ社内ネットワークのようにつなぐ仕組み</td>
+</tr>
+<tr>
+<td><strong>IPsec サイト間VPN</strong></td>
+<td>拠点の出入口にあるルータ同士を常時接続する方式のVPN。利用者が毎回ログインする必要はなく、PCはふつうに使うだけで自動的に本社につながる</td>
+</tr>
+<tr>
+<td><strong>ルータ／ファイアウォール／UTM</strong></td>
+<td>拠点の出入口に置く通信機器。インターネット接続と、外からの不正アクセス遮断を担う</td>
+</tr>
+<tr>
+<td><strong>RDS（リモートデスクトップ）</strong></td>
+<td>自分のPCから、別の場所にあるPCの画面を遠隔操作する仕組み</td>
+</tr>
+<tr>
+<td><strong>ZTNA</strong></td>
+<td>クラウド経由で社内リソースに安全にアクセスする新しい方式。Tailscale や Cloudflare Access が代表例</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2>詳しい検討</h2>
+<h3>1. そもそも警備PROはどんなシステムか</h3>
+<p>警備PROはビジコン・ジャパン社（以下、ベンダー）の警備業務管理システム。公式サイトによれば、利用方法が2種類ある。</p>
+<ul>
+<li><strong>クラウド版</strong>：本社にサーバを置かず、ベンダーのクラウドを使う。テレワークや複数拠点に向いている、とベンダー自身が案内している。</li>
+<li><strong>オンプレミス版</strong>：自社内にサーバを設置し、各PCにクライアントソフトを入れて使う。社内ネットワーク内での運用を想定。</li>
+</ul>
+<p>今回の前提は「本社にサーバがあるオンプレミス版を、新拠点5〜10台のPCからも使いたい」。ところが、<strong>オンプレミス版を離れた拠点から使えるか、ライセンスはどういう数え方なのか、推奨される接続方法は何か</strong> といった肝心の情報が、ベンダーの公開資料には載っていない。価格・ライセンス・動作環境はすべて「販売店に問い合わせ」になる仕組み。</p>
+<p>そのため、<strong>最終的なネットワーク構成を決める前に、必ずベンダーに次の点を確認すべき</strong>。</p>
+<ol>
+<li>新拠点のPCから本社サーバへ、インターネット経由（VPN利用）で接続する構成はサポートされるか</li>
+<li>同時に何人接続するならライセンスは何本必要か（人単位／PC単位／同時接続単位など）</li>
+<li>推奨されるOSやデータベースのバージョン、ネットワーク条件（応答速度や帯域の目安）</li>
+<li>クラウド版に切り替えた場合の月額・初期費用の見積</li>
+</ol>
+<p>「実はクラウド版に切り替えた方が安いし手間も少ない」という結論になる可能性もあるため、<strong>4. のクラウド版見積は必ず取る</strong>ことを強く推奨する。</p>
+<h3>2. ベンダー提案150万円／5年の中身を分解する</h3>
+<p>月額換算で約2.5万円／月。一般的にこの種の提案の内訳は次のような構成が多い。</p>
+<ul>
+<li>本社側ルータ／UTMの新規入れ替え：月1.0〜1.2万円相当（5年リース）</li>
+<li>新拠点側ルータ：含む</li>
+<li>設定・初期構築費：初期費用または月額に分散</li>
+<li>月額の保守（リモート監視・障害対応・設定変更代行）：月1.0〜1.3万円相当</li>
+</ul>
+<p><strong>自社で巻き取れる余地は大きい</strong>。</p>
+<ul>
+<li>(a) 本社に既設のYAMAHA RTXやFortigateがあるなら、それを活用すれば「本社ルータ入れ替え」の費用は不要</li>
+<li>(b) リースではなく機器を買い切りにすれば、5年で見た総額は安くなりがち</li>
+<li>(c) 保守は「24時間監視」ではなく「年1回点検＋障害時のスポット対応」に絞れば月額は大幅に下げられる</li>
+<li>(d) 拠点側のルータも、ヤマハRTX830など実績のある定番機種なら新品6万円程度</li>
+</ul>
+<p>→ これらを組み合わせると、<strong>5年TCOは40〜70万円に収まる見込み</strong>（後述）。</p>
+<h3>3. AnyDeskを毎日の業務に使うのが向かない理由</h3>
+<p>AnyDeskは「自宅から会社のPCを遠隔操作する」用途では便利だが、新拠点の5〜10名が毎日業務で常用する用途には次のような問題がある。</p>
+<p><strong>ライセンス費用が見た目より高い</strong></p>
+<ul>
+<li>個人向けプラン（Solo）は月14.90ドル前後だが、これは1ユーザー・同時接続1のみ</li>
+<li>5〜10名が同時に使うには上位プラン（Standard 月49.90ドル）＋同時接続アドオン（4〜9本）が必要</li>
+<li>合計 <strong>年30〜60万円</strong> 規模になる</li>
+</ul>
+<p><strong>接続先PCを物理的に用意する必要がある</strong></p>
+<ul>
+<li>AnyDeskは「あるPCを別のPCから操作する」仕組み。1つのPCに同時に複数人ログインする方式（Windows ServerのRDS方式）は正式サポートされない</li>
+<li>つまり、5〜10名が同時に本社PCを操作するには、本社に <strong>PCを5〜10台用意</strong> する必要がある（電気代・場所・OSライセンス・故障対応も別途）</li>
+</ul>
+<p><strong>セキュリティ事件が発生している</strong></p>
+<ul>
+<li>2024年2月、AnyDesk社の本番システムが侵入され、コード署名証明書を全失効する事態になった</li>
+<li>直後、ダークウェブで AnyDesk顧客アカウント18,317件が15,000ドルで販売された</li>
+<li>漏洩アカウントの多くは二要素認証が未設定だったと報告されている</li>
+<li>業務で使うなら、二要素認証必須化、最新版維持、利用ログ監視など追加対策が前提</li>
+</ul>
+<p><strong>代替候補</strong></p>
+<ul>
+<li>リモートデスクトップ系で見るなら <strong>Splashtop Business</strong>（年15,000円/ID）が割安。10IDで年15万円程度</li>
+<li>ただしどちらにせよ「接続先のPCを本社に置く」前提なので、根本的な構成上の課題は残る</li>
+</ul>
+<h3>4. おすすめ構成：既存ルータ＋拠点に小型VPNルータ1台（A案）</h3>
+<p><strong>全体イメージ</strong></p>
+<pre><code>[新拠点PC × 5〜10台]
+       │
+   [RTX830] ──── インターネット ──── [本社の既設RTX or Fortigate]
+                                                 │
+                                       [本社サーバ（警備PRO）]
+                                       [本社ファイルサーバ]
+</code></pre>
+<p>新拠点のPCは、いつもどおり起動して使うだけ。背後でルータ同士が自動的にVPN接続を維持しているので、本社サーバが新拠点の隣にあるかのように扱える。</p>
+<p><strong>機器の選定理由</strong></p>
+<ul>
+<li><strong>YAMAHA RTX830</strong>：2017年発売の定番機種。情報が豊富で、IT専任者がいない拠点でも扱いやすい</li>
+<li>新品 約6万円（価格.com 最安）／中古 約2.7万円（ヤフオク平均）</li>
+<li>同時VPN接続20本まで、VPN速度1Gbps対応</li>
+<li>メーカー公式に詳細な設定例が公開されている</li>
+<li>本社側はすでに RTX または Fortigate があるならそのまま流用可能</li>
+</ul>
+<p><strong>5年の総コスト試算（新拠点側のみの追加分）</strong></p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>金額</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>機器（RTX830新品）</td>
+<td>約 6 万円</td>
+</tr>
+<tr>
+<td>初期設定（業者外注）</td>
+<td>5〜10 万円</td>
+</tr>
+<tr>
+<td>インターネット回線（法人光・月5,000〜8,000円×60か月）</td>
+<td>30〜48 万円</td>
+</tr>
+<tr>
+<td>簡易保守（年1回コンフィグ点検）</td>
+<td>5〜15 万円</td>
+</tr>
+<tr>
+<td><strong>合計</strong></td>
+<td><strong>約 45〜70 万円／5年</strong></td>
+</tr>
+</tbody>
+</table>
+<p>回線費を除けば追加負担は10〜25万円程度。ベンダー提案150万円と比べて大幅に圧縮できる。</p>
+<p><strong>セキュリティ強化策（同時に実施したい）</strong></p>
+<ol>
+<li>VPNの暗号化方式は AES-256 など強度の高いものを選ぶ</li>
+<li>通信ログを取得し、社内のサーバに集めて見られるようにする</li>
+<li>PCにはウイルス対策ソフトを集中管理で導入</li>
+<li>USBメモリは原則使えないように設定し、必要なときだけ会社管理の暗号化USBを許可</li>
+<li>ファイルサーバの「誰が何を見たか」のログを記録する</li>
+</ol>
+<p><strong>回線が止まったときの備え（BCP）</strong></p>
+<ul>
+<li>RTX830 は USB に LTEモバイル回線のドングルを挿してバックアップ回線にする運用が可能</li>
+<li>拠点回線が一時的に落ちても、モバイル経由で最低限の業務を継続できる</li>
+</ul>
+<h3>5. 他の選択肢との比較</h3>
+<table>
+<thead>
+<tr>
+<th>プラン</th>
+<th>5年の追加コスト</th>
+<th>運用のしやすさ</th>
+<th>安全性</th>
+<th>警備PROとの相性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>A. 既存ルータ＋RTX830（おすすめ）</strong></td>
+<td><strong>45〜70万円</strong>（回線込）／15〜25万円（回線除く）</td>
+<td>低〜中</td>
+<td>高</td>
+<td>◎</td>
+</tr>
+<tr>
+<td>B. ベンダー提案（フル保守つき）</td>
+<td>150万円</td>
+<td>低（外部委託）</td>
+<td>高</td>
+<td>◎</td>
+</tr>
+<tr>
+<td>C. NTTの閉域VPNサービス（フレッツ・VPNワイド）</td>
+<td>30〜50万円（VPN分のみ）</td>
+<td>低</td>
+<td>高</td>
+<td>◎</td>
+</tr>
+<tr>
+<td>D. 本社にリモートデスクトップサーバを新設</td>
+<td>80〜150万円</td>
+<td>中〜高</td>
+<td>高</td>
+<td>◎（本社内通信）</td>
+</tr>
+<tr>
+<td>E. AnyDesk常時利用</td>
+<td>150〜350万円</td>
+<td>中</td>
+<td>△（要追加対策）</td>
+<td>△</td>
+</tr>
+<tr>
+<td>F. Splashtop Business 10名</td>
+<td>約75万円</td>
+<td>低</td>
+<td>中〜高</td>
+<td>△</td>
+</tr>
+<tr>
+<td>G. Tailscale（クラウドVPN）</td>
+<td>約60万円</td>
+<td>低</td>
+<td>高</td>
+<td>○（要動作検証）</td>
+</tr>
+<tr>
+<td>H. Cloudflare Access</td>
+<td>0〜10万円</td>
+<td>中（設計負荷）</td>
+<td>高</td>
+<td>△（要動作検証）</td>
+</tr>
+</tbody>
+</table>
+<p><strong>簡単な解説</strong></p>
+<ul>
+<li><strong>B（ベンダー提案）</strong>：丸投げできるのが利点だが、コストが高い。月額の中身が「定期点検＋障害対応」なのか「設定変更代行のみ」なのかで自社で巻き取れる範囲が決まるので、まず内訳の文書化を求めるべき。</li>
+<li><strong>C（NTT閉域VPN）</strong>：インターネット経由でなく専用の閉じたネットワークを使う。安定性は最高クラスで、24時間保守も付けられる。自社で機器設定したくない／回線とまとめて契約したい場合は有力。ただし2025〜2026年に料金改定があり、最新価格はNTTに見積を取る必要がある。</li>
+<li><strong>D（リモートデスクトップ）</strong>：本社にWindowsサーバを新設し、新拠点PCはその画面を遠隔操作する形。警備PROの動作は最も安定するが、初期投資が大きい（50〜100万円）。</li>
+<li><strong>G（Tailscale）／H（Cloudflare Access）</strong>：新しい方式のクラウド型VPN。コストは低めだが、警備PROのような「PCにインストールするタイプの業務システム」での日本国内中小企業の実績は少なめ。試験的に導入して動作確認するのが前提。</li>
+</ul>
+<h3>6. USBメモリ運用は今のうちに見直す</h3>
+<p>「機密ファイルをUSBメモリで持ち運んでいる」運用は、近年の事故事例を見ても看過できないリスクがある。</p>
+<p><strong>過去の実際の事故例</strong></p>
+<ul>
+<li>自治体で全市民約46万人分の個人情報入りUSBを紛失（2022年）</li>
+<li>企業で約928万件の顧客情報をUSBに持ち出し、名簿業者へ売却（内部不正）</li>
+</ul>
+<p><strong>警備業ならではの観点</strong></p>
+<ul>
+<li>警備業は警備業法と全国警備業協会の「警備業における個人情報の保護に関するガイドライン」に沿った個人情報管理が求められる</li>
+<li>顧客現場の情報、隊員の個人情報、勤務記録などはとくに保護の必要性が高い</li>
+<li>1,000人を超える個人情報が漏洩した場合、個人情報保護委員会への報告義務もあり得る</li>
+</ul>
+<p><strong>改善のステップ</strong></p>
+<ol>
+<li><strong>VPN経由で本社のファイルサーバに直接アクセスする運用に切り替える</strong></li>
+<li><strong>ファイルサーバの権限を整理する</strong>：誰がどのフォルダを見られるかを部門別・機密度別に分ける</li>
+<li><strong>ログを取る</strong>：誰がいつどのファイルを開いたかを記録できるようにする</li>
+<li><strong>USBメモリは原則禁止に設定する</strong>：必要なときだけ会社管理の暗号化USBを許可する</li>
+<li><strong>クラウドストレージとの併用も検討</strong>：写真や資料の共有は Microsoft 365 や Google Workspace、警備PRO関連の機密データは本社ファイルサーバ＋VPN、というように使い分ける</li>
+</ol>
+<hr />
+<h2>進め方（推奨ステップ）</h2>
+<h3>ステップ1（最優先・1〜2週間以内）：ベンダーに4つの質問</h3>
+<p>ビジコン・ジャパンの販売窓口に、次の4点を文書で確認する。</p>
+<ol>
+<li>オンプレミス版警備PROを、新拠点からVPN経由で利用する構成はサポート対象か</li>
+<li>新拠点5〜10台分のライセンス追加費用</li>
+<li>推奨される動作環境（OS、ネットワーク条件）</li>
+<li><strong>クラウド版に切り替えた場合の見積（重要）</strong></li>
+</ol>
+<p>→ もしベンダーが「オンプレ版のVPN越え利用はサポート外、クラウド版を使ってほしい」と回答した場合、本件はクラウド版移行が最有力解になる。VPN投資自体が大きく不要になる可能性がある。</p>
+<h3>ステップ2（並行・2〜4週間）：ベンダー提案150万円の内訳開示を求める</h3>
+<p>「機器費」「初期設定費」「月額保守の中身」の3項目に分けた書面を要求する。月額保守が何を含むかで、自社で巻き取れる範囲が決まる。</p>
+<h3>ステップ3（4〜8週間）：A案で複数社から相見積</h3>
+<p>ネットワーク構築系の業者、ヤマハ販売店、地元のIT会社など2〜3社に、A案（既設ルータ＋RTX830）の構成で見積を依頼。狙いの水準：</p>
+<ul>
+<li>初期工事込み 15〜25万円</li>
+<li>年1回点検 2〜3万円</li>
+</ul>
+<h3>ステップ4（並行）：USB運用の見直しを始める</h3>
+<ul>
+<li>部門ごとのファイルサーバ権限を整理</li>
+<li>ファイルアクセスのログ取得を有効化</li>
+<li>USBデバイスを既定でブロックする設定を Windows のグループポリシーで適用</li>
+<li>必要に応じてクラウドストレージ（Microsoft 365 Business Standard 月1,500円/人など）を導入</li>
+</ul>
+<h3>ステップ5（運用開始後3か月）：実際の使い心地を測る</h3>
+<p>警備PROの操作が遅くないか、メニュー切替や検索が引っかからないかを確認。もしVPN経由での応答が遅くて業務に支障が出るようなら、本社にリモートデスクトップサーバを置くD案へ部分的に切り替える判断材料になる。</p>
+<hr />
+<h2>判断を変える「もしも」のシナリオ</h2>
+<ul>
+<li><strong>ベンダーが「クラウド版必須」と回答した場合</strong>：VPN投資はほぼ不要。月数千〜数万円のクラウド利用料で完結する可能性が高い</li>
+<li><strong>ライセンスが「PC単位」で1本10万円以上だった場合</strong>：5〜10台分で50〜100万円の追加。ライセンス本数を抑えるためにリモートデスクトップ方式（D案）の方が安くなることもある</li>
+<li><strong>今後3拠点以上に増える予定がある場合</strong>：A案のVPNハブ構成は拡張しやすいので有利。同時にクラウド版の検討も継続したい</li>
+</ul>
+<hr />
+<h2>注意点・前提</h2>
+<ul>
+<li>警備PROの技術的な動作要件（VPN越え可否、ライセンス、推奨環境）はベンダーが公式に公開していない情報が多く、本資料の「VPNで同じ社内ネットワークに見せれば動くはず」という見立ては一般論からの推定。<strong>ベンダー確認なしに最終決定しないこと</strong></li>
+<li>AnyDeskの公式価格は2026年5月時点。為替・代理店・キャンペーンで変動する</li>
+<li>フレッツ・VPNワイドはNTT東西ともに2025〜2026年に料金改定があり、本資料の価格は旧プランの参考値。最新価格はNTTへ要見積</li>
+<li>Tailscaleの料金プランは2025年に再編済み。導入前に公式の最新情報を確認すべき</li>
+<li>ベンダー提案150万円／5年の内訳は本資料時点で推測。実際の見積書での内訳開示が必要</li>
+<li>警備業法・個人情報保護法・全国警備業協会ガイドラインへの適合判定は本資料の範囲外。社内規程整備と専門家確認を推奨</li>
+</ul>
+<hr />
+<h2>一行まとめ</h2>
+<p><strong>ベンダー提案150万円／5年は、既設機器を活用すれば40〜70万円／5年に圧縮可能。AnyDesk常用はコスト・安全性の両面で不利。USBの持ち出し運用はこの機会にやめて、VPN経由のファイルサーバ運用に切り替えるのが望ましい。まずベンダーに、クラウド版への切り替え見積を含む4つの質問を投げるのが最初の一歩。</strong></p>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
