@@ -21,8 +21,18 @@
   .filters input:focus { outline: 2px solid var(--link); outline-offset: -1px; }
   .filters .clear { padding: 8px 12px; font-size: 0.85rem; border: 1px solid var(--border); background: var(--bg-soft); color: var(--fg-muted); border-radius: 8px; cursor: pointer; }
   .filters .clear:active { background: var(--card-hover); }
-  .tag-filter { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag-toggle { background: var(--bg-soft); border: 1px solid var(--border); color: var(--fg); border-radius: 999px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; font: inherit; line-height: 1.2; }
+  .tag-section { border: 1px solid var(--border); border-radius: 8px; background: var(--bg-soft); }
+  .tag-section-toggle { list-style: none; cursor: pointer; padding: 8px 12px; font-size: 0.85rem; color: var(--fg); display: flex; align-items: center; gap: 8px; user-select: none; min-height: 40px; }
+  .tag-section-toggle::-webkit-details-marker { display: none; }
+  .tag-section-toggle::marker { display: none; }
+  .tag-section-toggle .caret { display: inline-block; width: 0; height: 0; border-left: 5px solid var(--fg-muted); border-top: 4px solid transparent; border-bottom: 4px solid transparent; transition: transform 0.15s ease; }
+  .tag-section[open] > .tag-section-toggle .caret { transform: rotate(90deg); }
+  .tag-section-toggle .label { font-weight: 500; }
+  .tag-section-toggle .hint { color: var(--fg-muted); font-size: 0.78rem; }
+  .tag-section-toggle .active-count { display: none; margin-left: auto; background: var(--tag-bg); color: var(--tag-fg); border-radius: 999px; padding: 1px 8px; font-size: 0.72rem; font-weight: 500; }
+  .tag-section-toggle .active-count.show { display: inline-block; }
+  .tag-filter { display: flex; flex-wrap: wrap; gap: 6px; padding: 0 12px 12px; }
+  .tag-toggle { background: var(--bg); border: 1px solid var(--border); color: var(--fg); border-radius: 999px; padding: 5px 12px; font-size: 0.8rem; cursor: pointer; font: inherit; line-height: 1.2; }
   .tag-toggle.active { background: var(--tag-bg); color: var(--tag-fg); border-color: var(--tag-fg); }
   .tag-toggle .count { color: var(--fg-muted); margin-left: 4px; font-size: 0.72rem; }
   .tag-toggle.active .count { color: var(--tag-fg); }
@@ -52,41 +62,44 @@
     <input type="search" id="q" placeholder="タイトルで絞り込み" autocomplete="off">
     <button class="clear" id="clear" type="button">クリア</button>
   </div>
-  <div class="tag-filter" id="tag-filter">
-    <button class="tag-toggle" type="button" data-tag="horse-racing">horse-racing<span class="count">8</span></button>
-    <button class="tag-toggle" type="button" data-tag="v5">v5<span class="count">4</span></button>
-    <button class="tag-toggle" type="button" data-tag="ml">ml<span class="count">4</span></button>
-    <button class="tag-toggle" type="button" data-tag="betting">betting<span class="count">3</span></button>
-    <button class="tag-toggle" type="button" data-tag="wide-bet">wide-bet<span class="count">3</span></button>
-    <button class="tag-toggle" type="button" data-tag="反論材料なし">反論材料なし<span class="count">3</span></button>
-    <button class="tag-toggle" type="button" data-tag="グルメ">グルメ<span class="count">2</span></button>
-    <button class="tag-toggle" type="button" data-tag="油そば">油そば<span class="count">2</span></button>
-    <button class="tag-toggle" type="button" data-tag="ラーメン">ラーメン<span class="count">2</span></button>
-    <button class="tag-toggle" type="button" data-tag="食べログ">食べログ<span class="count">2</span></button>
-    <button class="tag-toggle" type="button" data-tag="features">features<span class="count">2</span></button>
-    <button class="tag-toggle" type="button" data-tag="victoria-mile">victoria-mile<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="prediction">prediction<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="harness">harness<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="claude-code">claude-code<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="hooks">hooks<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="memory">memory<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="ai-engineering">ai-engineering<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="王子">王子<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="駒込">駒込<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="refactor">refactor<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="lgbm">lgbm<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="brainstorm">brainstorm<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="easy">easy<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="market-analysis">market-analysis<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="AI">AI<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="UI">UI<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="生成UI">生成UI<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="デザインシステム">デザインシステム<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="backtest">backtest<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="競馬予想">競馬予想<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="バックテスト">バックテスト<span class="count">1</span></button>
-    <button class="tag-toggle" type="button" data-tag="モデル評価">モデル評価<span class="count">1</span></button>
-  </div>
+  <details class="tag-section" id="tag-section">
+    <summary class="tag-section-toggle"><span class="caret"></span><span class="label">タグで絞り込み</span><span class="hint">（33件）</span><span class="active-count" id="tag-active-count"></span></summary>
+    <div class="tag-filter" id="tag-filter">
+      <button class="tag-toggle" type="button" data-tag="horse-racing">horse-racing<span class="count">8</span></button>
+      <button class="tag-toggle" type="button" data-tag="v5">v5<span class="count">4</span></button>
+      <button class="tag-toggle" type="button" data-tag="ml">ml<span class="count">4</span></button>
+      <button class="tag-toggle" type="button" data-tag="betting">betting<span class="count">3</span></button>
+      <button class="tag-toggle" type="button" data-tag="wide-bet">wide-bet<span class="count">3</span></button>
+      <button class="tag-toggle" type="button" data-tag="反論材料なし">反論材料なし<span class="count">3</span></button>
+      <button class="tag-toggle" type="button" data-tag="グルメ">グルメ<span class="count">2</span></button>
+      <button class="tag-toggle" type="button" data-tag="油そば">油そば<span class="count">2</span></button>
+      <button class="tag-toggle" type="button" data-tag="ラーメン">ラーメン<span class="count">2</span></button>
+      <button class="tag-toggle" type="button" data-tag="食べログ">食べログ<span class="count">2</span></button>
+      <button class="tag-toggle" type="button" data-tag="features">features<span class="count">2</span></button>
+      <button class="tag-toggle" type="button" data-tag="victoria-mile">victoria-mile<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="prediction">prediction<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="harness">harness<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="claude-code">claude-code<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="hooks">hooks<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="memory">memory<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="ai-engineering">ai-engineering<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="王子">王子<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="駒込">駒込<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="refactor">refactor<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="lgbm">lgbm<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="brainstorm">brainstorm<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="easy">easy<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="market-analysis">market-analysis<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="AI">AI<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="UI">UI<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="生成UI">生成UI<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="デザインシステム">デザインシステム<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="backtest">backtest<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="競馬予想">競馬予想<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="バックテスト">バックテスト<span class="count">1</span></button>
+      <button class="tag-toggle" type="button" data-tag="モデル評価">モデル評価<span class="count">1</span></button>
+    </div>
+  </details>
 </div>
 
 <main class="list" id="list">
@@ -499,6 +512,7 @@
   var counts = document.getElementById('counts');
   var clearBtn = document.getElementById('clear');
   var tagFilter = document.getElementById('tag-filter');
+  var tagActiveCount = document.getElementById('tag-active-count');
   var empty = document.getElementById('empty');
   var total = cards.length;
   var selected = new Set();
@@ -518,32 +532,44 @@
     });
     counts.textContent = 'himaji / brainstorm-archive · ' + visible + ' / ' + total + ' 件';
     empty.classList.toggle('show', visible === 0);
+    if (tagActiveCount) {
+      if (selected.size > 0) {
+        tagActiveCount.textContent = selected.size + ' 選択中';
+        tagActiveCount.classList.add('show');
+      } else {
+        tagActiveCount.classList.remove('show');
+      }
+    }
   }
 
   q.addEventListener('input', apply);
   clearBtn.addEventListener('click', function () {
     q.value = '';
     selected.clear();
-    Array.prototype.forEach.call(
-      tagFilter.querySelectorAll('.tag-toggle.active'),
-      function (b) { b.classList.remove('active'); }
-    );
+    if (tagFilter) {
+      Array.prototype.forEach.call(
+        tagFilter.querySelectorAll('.tag-toggle.active'),
+        function (b) { b.classList.remove('active'); }
+      );
+    }
     apply();
     q.focus();
   });
-  tagFilter.addEventListener('click', function (e) {
-    var btn = e.target.closest('.tag-toggle');
-    if (!btn) return;
-    var tag = btn.dataset.tag;
-    if (selected.has(tag)) {
-      selected.delete(tag);
-      btn.classList.remove('active');
-    } else {
-      selected.add(tag);
-      btn.classList.add('active');
-    }
-    apply();
-  });
+  if (tagFilter) {
+    tagFilter.addEventListener('click', function (e) {
+      var btn = e.target.closest('.tag-toggle');
+      if (!btn) return;
+      var tag = btn.dataset.tag;
+      if (selected.has(tag)) {
+        selected.delete(tag);
+        btn.classList.remove('active');
+      } else {
+        selected.add(tag);
+        btn.classList.add('active');
+      }
+      apply();
+    });
+  }
 })();
 </script>
 </body>
