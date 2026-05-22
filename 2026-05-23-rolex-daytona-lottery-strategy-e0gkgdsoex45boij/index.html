@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ロレックス デイトナ 抽選攻略マニュアル</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1em 0;
+    font-size: 0.95em;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>ロレックス デイトナ 抽選攻略マニュアル</h1>
+<div class="meta">
+<span>2026-05-23</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<blockquote><p>最終更新: 2026年5月 目標: コスモグラフ デイトナ（特に126500LN）を正規店で定価購入</p></blockquote>
+<hr>
+<h2>1. 現状の難易度</h2>
+<ul>
+<li>ステンレスデイトナ（126500LN）の定価: 約198万円</li>
+<li>二次流通価格: 500万円後半〜600万円台</li>
+<li>抽選当選率: 1〜5%（店舗による）</li>
+<li>当選後にデイトナが提案される確率: さらに低い</li>
+<li><strong>長期戦（半年〜2年）前提</strong>で取り組むこと</li>
+</ul>
+<hr>
+<h2>2. 抽選予約 実施店舗リスト（2026年5月時点）</h2>
+<h3>🎯 デイトナ専用枠あり（最優先で応募）</h3>
+<p>これら3店舗は<strong>デイトナ&amp;GMTマスターⅡの専用時間枠</strong>を設定。デイトナ狙いなら必ず専用枠で応募。</p>
+<table>
+<thead><tr>
+<th>店舗</th>
+<th>リクエスト期間</th>
+<th>公式予約ページ</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>LEXIA 銀座本店</td>
+<td>毎週月曜11:00〜日曜23:59</td>
+<td><a href="https://www.lexia-ginza.com/">https://www.lexia-ginza.com/</a></td>
+</tr>
+<tr>
+<td>ロレックスブティック 表参道</td>
+<td>毎週金曜10:00〜日曜23:59</td>
+<td><a href="https://www.rolexboutique-omotesando-tokyo.jp/">https://www.rolexboutique-omotesando-tokyo.jp/</a></td>
+</tr>
+<tr>
+<td>ロレックスブティック ヒルトンプラザ 大阪</td>
+<td>毎週月曜11:00〜日曜23:59</td>
+<td><a href="https://reservation.rolexboutique-hiltonplaza-osaka.jp/osaka-umeda/reservation">https://reservation.rolexboutique-hiltonplaza-osaka.jp/osaka-umeda/reservation</a></td>
+</tr>
+</tbody>
+</table>
+<h3>⭕ 抽選予約あり（デイトナ専用枠なし、一般枠で応募）</h3>
+<table>
+<thead><tr>
+<th>店舗</th>
+<th>リクエスト期間</th>
+<th>公式予約ページ</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>LEXIA 新宿店</td>
+<td>毎週月曜11:00〜日曜23:59</td>
+<td><a href="https://www.lexia-ginza.com/">https://www.lexia-ginza.com/</a></td>
+</tr>
+<tr>
+<td>LEXIA 名古屋栄店</td>
+<td>毎週月曜11:00〜日曜23:59</td>
+<td><a href="https://www.lexia-ginza.com/">https://www.lexia-ginza.com/</a></td>
+</tr>
+</tbody>
+</table>
+<h3>⚠️ 予約制を終了した店舗（先着順=フリー来店、マラソン対象）</h3>
+<p>以下は2024〜2025年に予約制を廃止。当日来店の先着順対応:</p>
+<ul>
+<li>ロレックスブティック 大丸京都（2025年3月終了）</li>
+<li>ロレックスブティック 大丸神戸（2024年4月終了）</li>
+<li>ロレックスブティック 大丸梅田、大丸心斎橋、大丸名古屋、大丸東京</li>
+<li>ロレックスブティック 広島下村並木通り（2025年1月終了）</li>
+<li>ロレックスブティック いよてつ高島屋</li>
+<li>レキシア 金沢香林坊店</li>
+<li>高島屋新宿 ウオッチメゾン（先着順も終了）</li>
+<li>ジェイアール名古屋タカシマヤ ウオッチメゾン（先着順も終了）</li>
+</ul>
+<p>→ これらは<strong>ロレックスマラソン（直接来店）</strong>で攻める対象</p>
+<h3>📝 まとめ</h3>
+<p><strong>抽選予約に応募できるのは現在この5店舗のみ</strong>:</p>
+<ol>
+<li>LEXIA 銀座本店（デイトナ枠○）</li>
+<li>LEXIA 新宿店</li>
+<li>LEXIA 名古屋栄店</li>
+<li>ロレックスブティック 表参道（デイトナ枠○）</li>
+<li>ロレックスブティック ヒルトンプラザ 大阪（デイトナ枠○）</li>
+</ol>
+<hr>
+<h2>3. 会員登録・応募の手順</h2>
+<h3>共通フロー</h3>
+<ol>
+<li>各店舗の公式予約ページにアクセス</li>
+<li><strong>携帯電話番号でSMS認証</strong>（固定電話・メールのみ不可）</li>
+<li>氏名・住所・連絡先を入力</li>
+<li>リクエスト期間中に希望日時を選択</li>
+<li>デイトナ枠がある店舗は<strong>デイトナ枠を明示的に選択</strong></li>
+<li>申込完了後、結果メールを待つ</li>
+</ol>
+<h3>結果通知タイミング</h3>
+<ul>
+<li>LEXIA系: リクエスト締切後、当落メール送付</li>
+<li>ヒルトンプラザ大阪: 同上</li>
+<li>表参道: 同上</li>
+</ul>
+<h3>注意点</h3>
+<ul>
+<li>申込情報は<strong>本人確認書類と完全一致</strong>させる（運転免許証・パスポート・マイナンバーカード）</li>
+<li>1組2名まで来店可、ただし<strong>予約の譲渡不可</strong></li>
+<li>同一名義での複数枠重複応募は無効になる場合あり</li>
+<li>携帯1台で全店応募可能（SMS認証はその都度受信）</li>
+</ul>
+<hr>
+<h2>4. 当選率を最大化する応募戦略</h2>
+<h3>🕐 時間帯の選び方</h3>
+<ul>
+<li><strong>平日昼（10:00〜14:00）を最優先</strong>で選択</li>
+<li>土日・夕方は会社員が殺到するため倍率激増</li>
+<li>平日午後（14:00〜17:00）も穴場</li>
+</ul>
+<h3>🎲 抽選枠の選び方</h3>
+<ul>
+<li><strong>デイトナ専用枠がある店舗では必ず専用枠を選ぶ</strong>（一般枠で当選してもデイトナは案内されない）</li>
+<li>専用枠がない店舗（新宿・名古屋）は一般枠</li>
+</ul>
+<h3>📅 週次ルーチン</h3>
+<table>
+<thead><tr>
+<th>曜日・時刻</th>
+<th>アクション</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>月曜 11:00以降</td>
+<td>LEXIA 4店舗（銀座・新宿・名古屋・ヒルトン大阪）に応募</td>
+</tr>
+<tr>
+<td>金曜 10:00以降</td>
+<td>表参道に応募</td>
+</tr>
+<tr>
+<td>日曜 23:59まで</td>
+<td>応募漏れがないか全店再チェック</td>
+</tr>
+</tbody>
+</table>
+<p>→ これを<strong>毎週欠かさず</strong>繰り返す</p>
+<h3>🔁 継続のコツ</h3>
+<ul>
+<li>カレンダーに「ロレックス応募」リマインダー登録</li>
+<li>各店舗のページをスマホのホーム画面に追加</li>
+<li>応募ログをスプレッドシートで管理（応募日/店舗/枠/結果）</li>
+</ul>
+<hr>
+<h2>5. 当選後の振る舞い</h2>
+<h3>持参するもの</h3>
+<ul>
+<li>顔写真付き本人確認書類（必須）</li>
+<li>当選確認メール（スマホ画面でOK）</li>
+<li>現金 or 高ステータスのクレカ（アメックスプラチナ等）</li>
+</ul>
+<h3>服装・身なり</h3>
+<ul>
+<li>スマートカジュアル以上（スーツ不要だがジャージ・サンダルNG）</li>
+<li>ロレックス以外でも時計を着用していくと愛好家アピールに</li>
+</ul>
+<h3>会話のNGワード</h3>
+<ul>
+<li>❌「投資」「資産」「リセールバリュー」</li>
+<li>❌「定価との差額」「転売」</li>
+<li>❌ ライバル店舗を悪く言う</li>
+</ul>
+<h3>推奨スタンス</h3>
+<ul>
+<li>✅「以前から憧れていた」「一生大切にしたい」</li>
+<li>✅ 具体的なモデル知識を自然に披露</li>
+<li>✅ 在庫がなくても丁寧に礼を述べて再訪を匂わせる</li>
+</ul>
+<hr>
+<h2>6. 並行戦略: ロレックスマラソン</h2>
+<p>抽選5店舗だけでなく、<strong>先着順（フリー来店）の店舗も並行して回る</strong>。デイトナ取扱いの正規店全国:</p>
+<h3>関東</h3>
+<ul>
+<li>日本橋三越本店</li>
+<li>そごう横浜、そごう千葉、そごう大宮</li>
+<li>京王新宿</li>
+<li>六本木ヒルズ</li>
+<li>大丸東京</li>
+</ul>
+<h3>中部・関西</h3>
+<ul>
+<li>大丸名古屋</li>
+<li>ジェイアール名古屋タカシマヤ</li>
+<li>大丸京都、大丸神戸、大丸梅田、大丸心斎橋</li>
+<li>阪急うめだ本店</li>
+<li>近鉄あべのハルカス</li>
+</ul>
+<h3>その他</h3>
+<ul>
+<li>丸井今井札幌本店</li>
+<li>新潟伊勢丹</li>
+<li>高松三越</li>
+</ul>
+<p>→ 出張ついでに立ち寄るなど、機会を最大化</p>
+<hr>
+<h2>7. 購入制限ルール</h2>
+<p>ロレックス購入時に注意。正規店データベースで顧客管理されており、以下の制限あり:</p>
+<ul>
+<li><strong>同一モデル</strong>: 購入後5年間は同じモデル不可</li>
+<li><strong>スポーツモデル間</strong>: 1年間は他のスポーツモデル不可（デイトナ・サブマリーナ・GMT・エクスプローラー等）</li>
+<li><strong>プロフェッショナルモデル全般</strong>: 半年〜1年の制限</li>
+</ul>
+<p>→ <strong>デイトナ一本に絞り、他モデルへの浮気は禁物</strong></p>
+<hr>
+<h2>8. リスク・代替案</h2>
+<h3>ステンレスが厳しい場合の選択肢</h3>
+<table>
+<thead><tr>
+<th>モデル</th>
+<th>定価（参考）</th>
+<th>抽選通過後の入手難度</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>126500LN（ステンレス）</td>
+<td>約198万円</td>
+<td>極難</td>
+</tr>
+<tr>
+<td>126503（ロレゾール）</td>
+<td>約230万円</td>
+<td>難</td>
+</tr>
+<tr>
+<td>126508（YG）</td>
+<td>約645万円</td>
+<td>中</td>
+</tr>
+<tr>
+<td>126519LN（WG）</td>
+<td>約705万円</td>
+<td>中</td>
+</tr>
+<tr>
+<td>126515LN（エバーローズ）</td>
+<td>約700万円</td>
+<td>中</td>
+</tr>
+</tbody>
+</table>
+<p>→ 予算が許せば<strong>金無垢デイトナ</strong>の方が現実的</p>
+<hr>
+<h2>9. チェックリスト</h2>
+<p>応募開始前:</p>
+<ul>
+<li>☐ 携帯電話番号の準備</li>
+<li>☐ 本人確認書類の確認（有効期限）</li>
+<li>☐ LEXIA予約ページのブックマーク</li>
+<li>☐ 表参道予約ページのブックマーク</li>
+<li>☐ ヒルトンプラザ大阪予約ページのブックマーク</li>
+<li>☐ カレンダーリマインダー設定（月曜11時、金曜10時）</li>
+<li>☐ 応募管理スプレッドシート作成</li>
+</ul>
+<p>当選後:</p>
+<ul>
+<li>☐ 本人確認書類持参</li>
+<li>☐ 適切な服装</li>
+<li>☐ スマートな決済手段</li>
+<li>☐ モデル知識の予習</li>
+<li>☐ NGワード回避の意識</li>
+</ul>
+<hr>
+<h2>10. 重要なマインドセット</h2>
+<ul>
+<li>抽選は無料・何度でも挑戦可。継続が最大の武器</li>
+<li>当選≠購入。来店時の信頼構築が勝負</li>
+<li>半年〜2年スパンの長期戦と覚悟</li>
+<li>焦らず、淡々と、ルーチン化する</li>
+<li>抽選＋マラソンの<strong>両輪戦略</strong>で機会を最大化</li>
+</ul>
+<hr>
+<h2>参考情報</h2>
+<ul>
+<li>ロレックス公式: <a href="https://www.rolex.com/ja/">https://www.rolex.com/ja/</a></li>
+<li>日本全国の正規店リスト: ロレックス公式サイトより確認可能</li>
+<li>各店舗の最新情報は公式SNSもチェック</li>
+</ul>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
