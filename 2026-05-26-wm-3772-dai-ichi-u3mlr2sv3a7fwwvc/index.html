@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>ウェルス・マネジメント (3772) 第一生命提携と借入急増の状況分析</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 1em 0;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+    font-size: 0.95em;
+    table-layout: auto;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>ウェルス・マネジメント (3772) 第一生命提携と借入急増の状況分析</h1>
+<div class="meta">
+<span>2026-05-26</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<h2>サマリ</h2>
+<ul>
+<li><strong>議論の目的</strong>: 「最近、第一生命と提携してから借入を大幅に増やしているホテル招致系・スタンダード市場・業績不振の企業」をEDINET取得済みデータから特定し、状況分析と3年後株価予想までを行う。</li>
+<li><strong>主な決定事項</strong>:
+<ul>
+<li>対象は <strong>ウェルス・マネジメント (3772、EDINETコード E03801)</strong>。京都を中心にラグジュアリーホテルを誘致開発する不動産業。</li>
+<li>FY2026 (2026/3期) 通期で <strong>営業利益▲1.07億・経常▲20.6億・純損失▲11.8億</strong> と赤字転落。</li>
+<li>有利子負債が <strong>1年で 303億→576億 (+90%)</strong>。長期借入で 252億を新規調達し、販売用不動産を +237億 仕入。</li>
+<li>2025-10-24に第一生命HDが<strong>サムティ保有株を譲受で議決権28.47%取得・持分法適用関連会社化</strong>。提携後すでに WM物件を第一生命系SPCに譲渡開始。</li>
+<li>現在株価 <strong>1,066円</strong> (2026-05-26 大引け)、最低投資額 <strong>106,600円</strong>。</li>
+<li>3年後株価のシナリオ別レンジは <strong>200円〜4,200円</strong>、期待値ベースで <strong>約1,430円</strong>。ボラ極大。</li>
+</ul>
+</li>
+<li><strong>未解決事項</strong>:
+<ul>
+<li>サムティが WM 株を手放した経緯（事業重複の整理か、資本効率上の判断か）</li>
+<li>FY2027 から営業利益・経常利益のガイダンスを外した影響</li>
+<li>1年内返済長期借入 207億の借換動向</li>
+</ul>
+</li>
+</ul>
+
+<h2>会話ログ</h2>
+<div class="turn user"><div class="role">User</div><p>最近、第一生命と提携したかなんかで、借入を大幅に増やしてるホテルを招致するような事業をしているスタンダードの企業があるらしいんだけど、取得済みのデータにあるかな？</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p>取得済み2,571社の<code>data/index.json</code>から探索。ホテル系の社名キーワードでは5社しかヒットせず、<code>businessTags</code>もホテル系タグが存在しない（粗いタグ）。EDINETの<code>search_companies</code>に「ホテル招致」「ホテル誘致」をqueryで投げたが両方とも0件 — このAPIのqueryは事業内容テキストではなく社名検索のみと判明。</p>
+
+<p>そこで心当たり候補（霞ヶ関キャピタル、サンセイランディック、いちご、リアルゲイト、サムティ系、TKP、ロードスター…）を一気に <code>secCode</code> 突合。霞ヶ関キャピタル(3498)が、不動産業・健全度70・eqRatio 31%・売上965億→通期予想1,500億(+55%)・ROE 31% と財務シグナル的に最も濃い候補。ただし市場区分はおそらくプライムで、ユーザーの「スタンダード」という条件と合わない可能性あり。</p>
+
+<p>スタンダード相当・借入比率高・中小不動産系の候補リスト:</p>
+<table>
+<thead><tr><th>sec</th><th>名前</th><th>売上</th><th>自資比</th><th>健全</th></tr></thead>
+<tbody>
+<tr><td>5532</td><td>リアルゲイト</td><td>98億</td><td>16%</td><td>63</td></tr>
+<tr><td>3286</td><td>トラストHD</td><td>129億</td><td>14%</td><td>30</td></tr>
+<tr><td>2986</td><td>LAホールディングス</td><td>465億</td><td>29%</td><td>55</td></tr>
+<tr><td>3489</td><td>フェイスネットワーク</td><td>299億</td><td>33%</td><td>85</td></tr>
+<tr><td>3477</td><td>フォーライフ</td><td>148億</td><td>41%</td><td>60</td></tr>
+</tbody>
+</table>
+<p>確証なしの断定はリスクなので、社名のヒントを追加で求める。</p></div>
+<div class="turn user"><div class="role">User</div><p>業績やばくて、最近第一生命とつるみだしてから更に金借りてるみたいな感じなんだが</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p>「業績やばい」を条件追加 → 霞ヶ関キャピタル(+55%増収) は除外。健全度55以下・自己資本比率35%以下・不動産/サービス/建設・売上500億未満で再フィルタ。リストの中で<strong>ウェルス・マネジメント(3772、E03801)</strong>がドンピシャ。</p>
+
+<table>
+<thead><tr><th>項目</th><th>値</th></tr></thead>
+<tbody>
+<tr><td>業種</td><td>不動産業</td></tr>
+<tr><td>FY2026/3 通期決算 (5/12開示)</td><td><strong>赤字転落: 営業益▲1.07億 / 経常▲20.6億 / 純損▲11.8億</strong></td></tr>
+<tr><td>売上</td><td>183億 → 151億 (▲17.5%)</td></tr>
+<tr><td>自己資本比率</td><td>31%</td></tr>
+<tr><td>財務レバレッジ</td><td>3.20倍</td></tr>
+<tr><td>投下資本</td><td>378億（有利子負債で回す典型）</td></tr>
+<tr><td>健全度</td><td>43</td></tr>
+</tbody>
+</table>
+
+<p><strong>事業内容</strong>: 京都・大阪・東京でラグジュアリーホテル（ハイアットリージェンシー京都、コンラッド京都、ハイアットセントリック金沢、フォションホテル京都 等）を外資/有名ホテルブランドに誘致開発するモデル。「ホテル招致」というユーザーの表現にピタリ。第一生命との提携内容は <code>data/companies</code> 等には記載がないため、別途確認の必要あり。</p></div>
+<div class="turn user"><div class="role">User</div><p>それだ。その企業について、状況を分析してみて。第一生命とつるみだしてからの動きが注目らしいのよ。リクエスト使っていいから</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p>EDINET DB から <code>text_blocks_structured</code> / <code>financials</code> / <code>segments</code> を並列取得（3リクエスト消費）。財務時系列（借入推移）を集計。</p>
+
+<h3>有利子負債の推移（百万円）</h3>
+<table>
+<thead><tr><th>FY</th><th>短借</th><th>長借</th><th>1年内返済</th><th>有利子計</th><th>純資産</th><th>支払利息</th></tr></thead>
+<tbody>
+<tr><td>2021</td><td>624</td><td>3,884</td><td>409</td><td><strong>4,917</strong></td><td>8,628</td><td>306</td></tr>
+<tr><td>2022</td><td>830</td><td>4,445</td><td>99</td><td>5,374</td><td>10,926</td><td>506</td></tr>
+<tr><td>2023</td><td>340</td><td>11,720</td><td>640</td><td>12,700</td><td>15,790</td><td>795</td></tr>
+<tr><td>2024</td><td>4,700</td><td>19,650</td><td>2,070</td><td>26,420</td><td>18,550</td><td>718</td></tr>
+<tr><td>2025</td><td>720</td><td>23,850</td><td>2,764</td><td><strong>27,334</strong></td><td>19,398</td><td>1,085</td></tr>
+</tbody>
+</table>
+
+<p>3年で有利子負債 5.1倍 (54億→273億)、支払利息も2.1倍。FY2023→FY2024 で +137億の借入ジャンプ。capex は限定的 = SPC/REIT 経由のオフバランス開発で土地仕入と運転資金に借入を回す事業モデル。従業員 24人 で売上150〜290億をブン回す = ファンド組成と物件回転に振り切った薄い人員構造。</p>
+
+<h3>Webで提携情報を確認</h3>
+<ul>
+<li>2025-10-24に第一生命HDとウェルス・マネジメントが資本業務提携契約締結</li>
+<li>第一生命HDが<strong>サムティ保有のWM株を譲受</strong>で議決権 <strong>28.47%</strong> 取得</li>
+<li>WMは第一生命HDの<strong>持分法適用関連会社</strong>化</li>
+<li>2025年12月実行予定</li>
+<li>目的: 第一生命はWMのホテル開発・運営ノウハウを取り込み、不動産バリューチェーン強化</li>
+</ul></div>
+<div class="turn user"><div class="role">User</div><p>全部要る。フルで取って分析してみて</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p>決算短信PDF (2026/3期通期、2026-05-12開示) と第一生命HDの提携リリースPDFを <code>curl</code> でダウンロード、<code>pypdf</code> でテキスト化。BSと第一生命の取引明記が抜けた。</p>
+
+<h3>1. FY2026 セグメント別収益（重要発見）</h3>
+<table>
+<thead><tr><th>セグメント</th><th>FY25 売上</th><th>FY26 売上</th><th>FY25 OP</th><th>FY26 OP</th></tr></thead>
+<tbody>
+<tr><td>ホテル運営</td><td>78.8</td><td><strong>104.5 (+32.6%)</strong></td><td>9.6</td><td><strong>23.6 (+144.7%) ← 黒字化加速</strong></td></tr>
+<tr><td>アセマネ</td><td>21.3</td><td>13.3 (-37.4%)</td><td>11.8</td><td>2.97 (-74.9%)</td></tr>
+<tr><td>不動産</td><td>84.0</td><td>38.1 (-54.6%)</td><td>13.4</td><td><strong>▲14.7 ← ここで吹き飛ばした</strong></td></tr>
+</tbody>
+</table>
+<p>ホテル運営は計画通り黒字化進行中（京都2ホテル＝シックスセンシズ京都・バンヤンツリー東山京都 がランプアップ完了）。<strong>問題は不動産事業の売却が翌期にズレて開発コストだけ計上された</strong>こと。「業績やばい」の中身はホテル運営の失敗ではなく、販売用不動産が回せなかった単年要因。</p>
+
+<h3>2. 1年で +90% の借入爆発（短信BS, 単位: 百万円）</h3>
+<table>
+<thead><tr><th></th><th>FY2025末</th><th>FY2026末</th><th>増減</th></tr></thead>
+<tbody>
+<tr><td>短期借入金</td><td>720</td><td><strong>7,431</strong></td><td>+6,711 (10.3倍)</td></tr>
+<tr><td>1年内返済長期借入金</td><td>2,764</td><td><strong>20,795</strong></td><td>+18,031 (7.5倍)</td></tr>
+<tr><td>長期借入金</td><td>23,849</td><td>26,410</td><td>+2,561</td></tr>
+<tr><td>ノンリコース長期借入金</td><td>3,000</td><td>3,000</td><td>± 0</td></tr>
+<tr><td><strong>有利子負債合計</strong></td><td><strong>30,333</strong></td><td><strong>57,636</strong></td><td><strong>+27,303 (+90%)</strong></td></tr>
+</tbody>
+</table>
+<p>1年で 252億の新規長期借入を実行。自己資本比率は 31.2% → <strong>19.8%</strong> に急落（時価ベース 22.8%）。1年内返済の長期借入が <strong>207億</strong> にスタックされている = 短期で借換負担が来る構造。</p>
+
+<h3>3. 借入の使途: 販売用不動産</h3>
+<ul>
+<li>販売用不動産: 19,173 → <strong>42,861</strong> (+23,688百万、+124%)</li>
+<li>仕掛販売用不動産: 22,692 → 23,553 (+862)</li>
+<li>投資有価証券: 3,749 → <strong>8,687</strong> (+4,938)</li>
+<li><strong>営業CF ▲252億の出血を借入 +259億で埋め、現金は 89→41億まで流出</strong></li>
+</ul>
+
+<h3>4. 提携の効果が早くも財務に出ている (重要発見)</h3>
+<p>決算短信P3に明記:</p>
+<blockquote>「＆AND HOSTEL MINAMISENJU」のホステル物件を<strong>第一生命保険株式会社が出資を行う合同会社に譲渡</strong>しました</blockquote>
+<p>= 2025年10月の提携公表→12月実行 のわずか3ヶ月後の FY2026 期中、すでに第一生命系SPCへの売却が走っている。提携で約束した出口がすでに機能している。</p>
+
+<p>短信P5「今後の見通し」にも:</p>
+<blockquote><strong>第一ライフグループとの協働案件含めた既存不動産のコンバージョンや稼働中ホテルのリブランド</strong>等を通じた運営受託の拡大</blockquote>
+
+<h3>5. 構造的に何が起きているか</h3>
+<p><strong>サムティが抜けて第一生命が入った意味</strong>:</p>
+<ul>
+<li>サムティ＝中堅デベ。WMのホテル開発で<strong>仕入と転売をするパートナー</strong>だった</li>
+<li>第一生命＝メガ保険。<strong>保険資金の運用先としてホテル不動産が欲しい買い手</strong></li>
+<li>結果: WMのパートナーが「同業デベ」から「最終投資家」に格上げ</li>
+<li>これでWMは出口リスクを大幅に低減 → 借入で開発を加速できる構造に変わった</li>
+<li><strong>だから借入が爆増している</strong> — 1年で252億の新規借入 / 販売用不動産 +237億</li>
+</ul>
+
+<h3>6. リスク（投資家視点）</h3>
+<ol>
+<li>継続企業の前提に関する注記は無しだが、営業CF▲252億・現金41億・自己資本比率19.8% は危険水域</li>
+<li>販売用不動産 429億の評価リスク — 時価で値下がれば一気に減損</li>
+<li>1年内返済の長期借入 207億 — 借換不能なら即流動性危機</li>
+<li>支払利息は 10.85→12.68億、来期は更に膨らむ (金利上昇局面で重い)</li>
+<li>第一生命依存 — 持分法28%は経営支配ではないが事実上の傘下化、独立判断の幅は狭まった</li>
+<li>業績予想の利益ガイダンスを外した = 経営の見通し能力が低下しているシグナル</li>
+</ol></div>
+<div class="turn user"><div class="role">User</div><p>株価の予想してみて。3年後</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p>断定はできないので、ファクト → 仮定 → レンジ で並べる。</p>
+
+<h3>現在地（2026年5月時点）</h3>
+<table>
+<thead><tr><th>項目</th><th>値</th></tr></thead>
+<tbody>
+<tr><td>株価</td><td>1,098円 (5/11)</td></tr>
+<tr><td>時価総額</td><td>204億</td></tr>
+<tr><td>BPS (FY2026)</td><td>921円</td></tr>
+<tr><td>PBR</td><td>1.17倍</td></tr>
+<tr><td>EPS (FY2026 実績)</td><td>△61円</td></tr>
+<tr><td>EPS (FY2027 予想)</td><td>93.85円</td></tr>
+</tbody>
+</table>
+
+<h3>3年後（≒2029年3月期）シナリオ別レンジ</h3>
+
+<h4>🟢 楽観 (確率 ~20%): 資産循環ビジネスが完全機能</h4>
+<ul>
+<li>第一生命系SPCがWM開発ホテルを継続的に買い取り、ホテル運営OPマージン 20% 超で安定</li>
+<li>純利益 40-60億 (ROE 15-20%、FY2022水準を再現)、BPS 1,400-1,500円、EPS 210-310円</li>
+<li><strong>株価レンジ: 2,800-4,200円 (現値の 2.5-3.8倍)</strong></li>
+</ul>
+
+<h4>🟡 ベース (確率 ~45%): 第一生命の出口を使いつつもボラ大</h4>
+<ul>
+<li>FY2027予想 (純利益18億) は達成。以降 ROE 8-10% で推移</li>
+<li>純利益 18-25億、BPS 1,100-1,200円、EPS 95-130円</li>
+<li><strong>株価レンジ: 1,100-1,600円</strong></li>
+</ul>
+
+<h4>🔴 悲観 (確率 ~25%): 金利・市況・売却のいずれかが詰まる</h4>
+<ul>
+<li>日本長期金利2%超、販売用不動産の一部減損(40-60億の損失)、借入残高高止まり</li>
+<li>純損失累計 △40-90億、配当減配・無配、自己資本比率 15%前後</li>
+<li><strong>株価レンジ: 300-550円</strong></li>
+</ul>
+
+<h4>⚫ 最悪 (確率 ~10%): 流動性危機</h4>
+<ul>
+<li>1年内返済 281億に対し現金41億、借換不能で第一生命に救済増資依存</li>
+<li>大規模希薄化 or GC注記</li>
+<li><strong>株価レンジ: 100-300円</strong></li>
+</ul>
+
+<h3>期待値（加重平均）</h3>
+<table>
+<thead><tr><th>シナリオ</th><th>確率</th><th>中央値</th><th>寄与</th></tr></thead>
+<tbody>
+<tr><td>楽観</td><td>20%</td><td>3,500</td><td>700</td></tr>
+<tr><td>ベース</td><td>45%</td><td>1,350</td><td>608</td></tr>
+<tr><td>悲観</td><td>25%</td><td>425</td><td>106</td></tr>
+<tr><td>最悪</td><td>10%</td><td>200</td><td>20</td></tr>
+<tr><td><strong>期待値</strong></td><td></td><td></td><td><strong>~1,430円</strong></td></tr>
+</tbody>
+</table>
+<p>期待値ベースで現値+30%程度。<strong>ただし分散が極めて大きい</strong>。上下に 3〜4 倍動く可能性。プット/コール的に「ボラの高い両極化銘柄」と見るのが正確。</p>
+
+<h3>コメント（ファクトチェック視点）</h3>
+<p>これは「煽り投資家が好む銘柄構造」そのもの:</p>
+<ul>
+<li>ストーリーが派手（「メガ保険×ラグジュアリーホテル×インバウンド」）</li>
+<li>上に張ればテンバガー候補に見える</li>
+<li>下のテールリスクが急に来る（流動性危機・希薄化・減損のいずれか）</li>
+<li>数値ガイダンスをぼかしてきている = 投資家の評価軸を失う</li>
+</ul>
+<p>「3年で4倍」みたいな単純予想を流す動画があったら、下振れの確率35%が抜けてる点を反論材料に使える。バランスシートを読まずにストーリーだけで張ると、上の20%を狙って下の35%を踏むパターン。</p></div>
+<div class="turn user"><div class="role">User</div><p>今いくらなん？</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p>kabutan/Yahooファイナンスから取得。</p>
+<table>
+<thead><tr><th></th><th></th></tr></thead>
+<tbody>
+<tr><td>現値</td><td><strong>1,066円</strong> (2026-05-26 15:30 大引け)</td></tr>
+<tr><td>時価総額</td><td>204億</td></tr>
+<tr><td>来期予想PER</td><td>11.4倍 (会社予想EPS 93.85円ベース)</td></tr>
+<tr><td>BPS</td><td>921円 → PBR 1.16倍</td></tr>
+</tbody>
+</table>
+<p>予想分析で使った1,098円から ▲32円 (▲2.9%)。期待値ベース1,430円との乖離は +34%、悲観時425円との乖離は▲60%。</p></div>
+<div class="turn user"><div class="role">User</div><p>最低いくらあれば買えるかリサーチしてみて</p></div>
+<div class="turn assistant"><div class="role">Assistant</div><p><strong>最低 106,600円</strong> (単元100株 × 1,066円)。</p>
+<table>
+<tbody>
+<tr><td>単元株数</td><td>100株</td></tr>
+<tr><td>現値</td><td>1,066円</td></tr>
+<tr><td><strong>最低購入代金</strong></td><td><strong>106,600円</strong></td></tr>
+</tbody>
+</table>
+<p>これに証券会社の売買手数料（主要ネット証券だと無料〜数百円程度）。NISA成長投資枠でも対象。</p></div>
+<h2>参照ソース</h2>
+<ul>
+<li><a href="https://www.release.tdnet.info/inbs/140120260511521600.pdf">2026年3月期 決算短信PDF (TDnet, 2026-05-12開示)</a></li>
+<li><a href="https://www.dai-ichi-life-hd.com/newsroom/newsrelease/2025/pdf/index_041.pdf">第一生命HD・ウェルス・マネジメント 資本業務提携リリース (PDF, 2025-10-24)</a></li>
+<li><a href="https://www.nikkei.com/article/DGXZQOUB2473Z0U5A021C2000000/">第一生命HD、ホテル運営会社に28%出資 持ち分法適用会社に - 日経</a></li>
+<li><a href="https://www.nikkei.com/article/DGXZRSP698567_U5A021C2000000/">第一生命HDとウェルス・マネジメント、資本業務提携契約を締結 - 日経</a></li>
+<li><a href="https://www.nikkei.com/nkd/disclosure/tdnr/20251022577199/">TDnet 適時開示一覧（2025-10-24）</a></li>
+<li><a href="https://kabutan.jp/stock/?code=3772">ウェルス・マネジメント(3772) 株価チャート - 株探</a></li>
+<li><a href="https://finance.yahoo.co.jp/quote/3772.T">ウェルス・マネジメント(3772) - Yahoo!ファイナンス</a></li>
+<li><a href="https://irbank.net/3772">ウェルス・マネジメント（3772）株式情報 - IRBANK</a></li>
+</ul>
+
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
