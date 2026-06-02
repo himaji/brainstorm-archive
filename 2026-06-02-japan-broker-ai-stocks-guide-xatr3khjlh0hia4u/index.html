@@ -1,0 +1,311 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>日本のネット証券で買う「生成AI関連株」ガイド（2026年6月時点）</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --fg: #1f2328;
+    --fg-muted: #59636e;
+    --bg: #ffffff;
+    --bg-soft: #f6f8fa;
+    --border: #d0d7de;
+    --link: #0969da;
+    --code-bg: #f6f8fa;
+    --code-border: #d0d7de;
+    --quote-border: #d0d7de;
+    --user-accent: #0969da;
+    --assistant-accent: #8250df;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fg: #e6edf3;
+      --fg-muted: #9198a1;
+      --bg: #0d1117;
+      --bg-soft: #161b22;
+      --border: #30363d;
+      --link: #4493f8;
+      --code-bg: #161b22;
+      --code-border: #30363d;
+      --quote-border: #30363d;
+      --user-accent: #4493f8;
+      --assistant-accent: #c297ff;
+    }
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; overflow-x: hidden; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Kaku Gothic ProN",
+                 "Noto Sans JP", Meiryo, sans-serif;
+    color: var(--fg);
+    background: var(--bg);
+    line-height: 1.7;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: anywhere;
+    word-break: normal;
+  }
+  .wrap {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 48px 24px 96px;
+  }
+  header.page {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  header.page h1 {
+    margin: 0 0 8px;
+    font-size: 1.75rem;
+    line-height: 1.3;
+  }
+  header.page .meta {
+    color: var(--fg-muted);
+    font-size: 0.875rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  header.page .meta .source {
+    padding: 2px 8px;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+  }
+  main h2 {
+    margin-top: 2.5em;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--border);
+    font-size: 1.4rem;
+  }
+  main h3 { margin-top: 2em; font-size: 1.15rem; }
+  main h4 { margin-top: 1.5em; font-size: 1.0rem; }
+  main p { margin: 1em 0; }
+  main a { color: var(--link); text-decoration: none; }
+  main a:hover { text-decoration: underline; }
+  main ul, main ol { padding-left: 1.5em; }
+  main li { margin: 0.25em 0; }
+  main blockquote {
+    border-left: 4px solid var(--quote-border);
+    margin: 1em 0;
+    padding: 0.25em 1em;
+    color: var(--fg-muted);
+    background: var(--bg-soft);
+  }
+  main code {
+    font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    font-size: 0.9em;
+    padding: 0.15em 0.4em;
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 4px;
+  }
+  main pre {
+    background: var(--code-bg);
+    border: 1px solid var(--code-border);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  main pre code {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-size: 0.875em;
+  }
+  .table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 1em 0;
+  }
+  main table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 0;
+    font-size: 0.95em;
+    table-layout: auto;
+  }
+  main th, main td {
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    text-align: left;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+  }
+  main th { background: var(--bg-soft); }
+  main hr { border: 0; border-top: 1px solid var(--border); margin: 2em 0; }
+
+  /* 会話ログ用スタイル */
+  .turn {
+    margin: 1.5em 0;
+    padding: 14px 18px;
+    border-left: 4px solid var(--border);
+    background: var(--bg-soft);
+    border-radius: 0 6px 6px 0;
+  }
+  .turn.user { border-left-color: var(--user-accent); }
+  .turn.assistant { border-left-color: var(--assistant-accent); }
+  .turn .role {
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--fg-muted);
+    margin-bottom: 8px;
+  }
+  .turn.user .role { color: var(--user-accent); }
+  .turn.assistant .role { color: var(--assistant-accent); }
+  .turn > :first-child:not(.role) { margin-top: 0; }
+  .turn > :last-child { margin-bottom: 0; }
+
+  footer.page {
+    margin-top: 64px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="page">
+<h1>日本のネット証券で買う「生成AI関連株」ガイド（2026年6月時点）</h1>
+<div class="meta">
+<span>2026-06-02</span>
+<span class="source">会話セッションより</span>
+</div>
+</header>
+<main>
+<p><strong>TL;DR</strong></p>
+<ul>
+<li>Anthropic（Claude開発元）は未上場で直接は買えないが、出資企業のAmazon・Alphabet（Google）・Salesforce、およびAIインフラのNVIDIA・AMD・TSMC、日本のPKSHA・サイバーエージェント・さくらインターネットは、すべてSBI証券・楽天証券・マネックス証券などの日本のネット証券で買える。</li>
+<li>米国株は1株から（NVDA約3.4万円、AMZN約4.3万円〜META約10万円）、日本株は原則100株単位（PKSHA約32万円、サイバーエージェント約13.5万円）だが、単元未満株（S株・かぶミニ・ワン株）やPayPay証券のミニ株で数百〜数千円から始められる。</li>
+<li>米国株を買う基本は「①外国株式口座を開設→②円を入金→③円のままか米ドルに替えて→④ティッカーを指定して注文」。大手では為替手数料・売買手数料ともにほぼ無料化が進み、NISA成長投資枠なら売買手数料0円が一般的。</li>
+</ul>
+
+<h2>Key Findings</h2>
+<ol>
+<li><strong>Anthropicそのものは投資不可、出資企業経由が現実解。</strong> Anthropicは未上場の公益法人（PBC）で、Bloombergの2026年6月1日報道によれば、$65 billion規模の調達ラウンドを経て企業価値約$965 billionと評価され、OpenAIを抜き世界最高評価のAIスタートアップとなった（同日にSECへIPOを機密申請したと報じられている）。直接の株式購入はできないため、出資企業を買うのが日本の個人投資家の実質的な選択肢となる。</li>
+<li><strong>主要な出資企業はすべて日本のネット証券で売買可能。</strong> Amazon（最大の出資者、累計$8 billion出資。四半期報告では2026年3月31日時点で評価額約$74.2 billion＝転換社債$42.2B＋無議決権優先株$32B、<a href="https://letsdatascience.com/news/amazons-anthropic-stake-jumps-to-74-billion-b95a1d0a">Let's Data Science</a> 追加で最大$20 billionの可能性）、Alphabet/Google（追加$40 billionコミット発表前で推定14%保有。2026年Q1の記録的純利益$62.6 billionのうち約$28.7 billionが主にAnthropic保有株の評価益由来）、<a href="https://fortune.com/2026/04/30/google-amazon-ai-profits-anthropic-stake-bubble-earnings-2026/">Fortune</a> Salesforce（保有株評価額が約$5 billion。当初出資は2023年初の約$50 million）、<a href="https://seekingalpha.com/news/4599231-salesforce-stake-in-anthropic-valued-at-nearly-5b">Seeking Alpha</a> さらに2025年11月に出資参画したNVIDIA・Microsoft（Microsoft公式ブログ2025年11月18日：「NVIDIAが最大$10 billion、Microsoftが最大$5 billionをAnthropicに出資する」）<a href="https://blogs.microsoft.com/blog/2025/11/18/microsoft-nvidia-and-anthropic-announce-strategic-partnerships/">Microsoft Blogs</a> も対象。</li>
+<li><strong>AIインフラ・半導体銘柄も全て購入可能。</strong> NVIDIA、AMD、TSMC（米国ADR）はいずれも主要ネット証券で1株から買える。</li>
+<li><strong>日本の生成AI関連株は100株単位。</strong> PKSHA Technology（3993）、サイバーエージェント（4751）、さくらインターネット（3778）はいずれも東証上場で100株単位が基本。単元未満株なら1株から。</li>
+<li><strong>少額投資はミニ株・PayPay証券が最適。</strong> 日本株はS株（SBI）・かぶミニ（楽天）・ワン株（マネックス）で1株から、米国株はPayPay証券で1,000円から（PayPay銀行連携なら100円から）買える。</li>
+</ol>
+
+<h2>Details</h2>
+
+<h3>1. 株価・最低購入額の一覧（2026年6月1日前後）</h3>
+<p>為替は1ドル＝約159円で円換算（2026年5月末〜6月初は159円台で推移）。米国株は1株単位なので「最低購入額＝株価×1株」。</p>
+
+<h4>①Anthropicへの出資企業</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>銘柄</th><th>ティッカー</th><th>直近株価</th><th>1株の円換算（最低購入額）</th></tr></thead>
+<tbody>
+<tr><td>Amazon</td><td>AMZN</td><td>約270.64ドル（5/29）<a href="https://us.kabutan.jp/stocks/AMZN">Coca-Cola Company</a></td><td>約4.3万円</td></tr>
+<tr><td>Alphabet（Google）A株</td><td>GOOGL</td><td>約376.37ドル（6/1）</td><td>約6.0万円</td></tr>
+<tr><td>Salesforce</td><td>CRM</td><td>約209ドル（6/1、好決算で6/1に約8〜9%上昇。前営業日5/29は約191ドル）</td><td>約3.3万円</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>②生成AIモデル開発・大手テック</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>銘柄</th><th>ティッカー</th><th>直近株価</th><th>1株の円換算</th></tr></thead>
+<tbody>
+<tr><td>Microsoft（OpenAI連携）</td><td>MSFT</td><td>約450.24ドル（5/29）<a href="https://us.kabutan.jp/stocks/MSFT">Coca-Cola Company</a></td><td>約7.2万円</td></tr>
+<tr><td>Meta Platforms</td><td>META</td><td>約632.51ドル（5/29）<a href="https://finance.yahoo.co.jp/quote/META">Yahoo!ファイナンス</a></td><td>約10.1万円</td></tr>
+</tbody>
+</table>
+</div>
+<p>※OpenAIは未上場で直接買えない。露出を取るなら出資・提携先のMicrosoftが代表的。</p>
+
+<h4>③AIインフラ・半導体</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>銘柄</th><th>ティッカー</th><th>直近株価</th><th>1株の円換算</th></tr></thead>
+<tbody>
+<tr><td>NVIDIA</td><td>NVDA</td><td>約211ドル（5/29終値）→6/1に新製品発表で約224ドルへ上昇<a href="https://www.nikkei.com/nkd/company/us/NVDA/">Nikkei</a></td><td>約3.4〜3.6万円</td></tr>
+<tr><td>AMD</td><td>AMD</td><td>約506ドル（6/1）</td><td>約8.0万円</td></tr>
+<tr><td>TSMC（米国ADR）</td><td>TSM</td><td>約436ドル（6/1）</td><td>約6.9万円</td></tr>
+</tbody>
+</table>
+</div>
+
+<h4>④日本の生成AI関連株（100株単位）</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>銘柄</th><th>コード</th><th>直近株価</th><th>最低購入額（100株）</th></tr></thead>
+<tbody>
+<tr><td>PKSHA Technology</td><td>3993</td><td>3,210.0円（松井証券データ：2026/6/2 15:30時点、前日比+263.0円・+8.92%）<a href="https://finance.matsui.co.jp/stock/3993/index">Matsui Securities</a></td><td>約32.1万円</td></tr>
+<tr><td>サイバーエージェント</td><td>4751</td><td>約1,350円（6/1）</td><td>約13.5万円</td></tr>
+<tr><td>さくらインターネット</td><td>3778</td><td>約2,984円（6/1終値、6/2は一時2,920円）</td><td>約30万円</td></tr>
+</tbody>
+</table>
+</div>
+
+<h3>2. 日本から米国株を買う基本フロー</h3>
+<ol>
+<li><strong>総合口座を開設</strong>（本人確認書類提出。最短翌営業日）。</li>
+<li><strong>外国株式取引口座を開設</strong>（無料。総合口座と同時開設の場合も多いが未開設のことがあるので要確認）。</li>
+<li><strong>日本円を入金</strong>（即時入金・銀行振込など）。</li>
+<li><strong>決済方法を選ぶ</strong>：
+  <ul>
+  <li><strong>円貨決済</strong>：日本円のまま注文。証券会社が自動で両替。手軽だが取引のたびに為替コストがかかる方式。</li>
+  <li><strong>外貨決済</strong>：あらかじめ円→米ドルに両替し、ドル残高で注文。手間はあるがコストを抑えやすく、売却代金もドルで受取り再投資しやすい。</li>
+  </ul>
+</li>
+<li><strong>注文</strong>：取引画面で「買付」→ティッカー（例：NVDA）を入力→株数・価格（成行/指値/逆指値）・期間・決済方法を指定して発注。米国市場の取引時間は日本時間23:30〜翌6:00（サマータイム22:30〜翌5:00）。</li>
+</ol>
+
+<h3>3. 売買単位の違い</h3>
+<ul>
+<li><strong>日本株</strong>：原則100株単位（1単元）。株価×100が最低購入額。例：PKSHAは約32万円。</li>
+<li><strong>米国株</strong>：1株単位。株価×1が最低購入額。例：NVIDIAは約3.4万円。</li>
+<li>単元未満株（ミニ株）を使えば日本株も1株から買える。</li>
+</ul>
+
+<h3>4. 主要ネット証券の手数料（米国株、2026年）</h3>
+<ul>
+<li><strong>取引手数料</strong>：SBI証券・楽天証券は約定代金の0.495%（税込）、上限22ドル。<a href="https://single-stock.jp/jp/us/guide/sbi-securities-us-stocks-guide">Single-stock</a> <strong>NISA成長投資枠なら売買手数料が無料</strong>になるのが一般的。moomoo証券は0.132%で最安水準。</li>
+<li><strong>為替手数料</strong>：SBI・楽天・松井・moomooはリアルタイム為替取引の手数料を0円（無料）化。従来は片道25銭が標準だった。マネックス証券は買付時の為替手数料が無料。</li>
+<li><strong>売却時</strong>：別途SEC Fee（米国現地手数料、約定代金×0.0000206ドル）が少額かかる。</li>
+</ul>
+
+<h3>5. 少額から始める方法</h3>
+<ul>
+<li><strong>日本株を1株から</strong>：SBI証券「S株」（寄付取引は手数料無料、東証約3,800〜4,000銘柄）、楽天証券「かぶミニ」（寄付取引無料・リアルタイムはスプレッド0.22%）、マネックス証券「ワン株」（買付手数料無料）、三菱UFJ eスマート証券「プチ株」など。例：サイバーエージェントなら1株約1,350円から。</li>
+<li><strong>米国株を少額で</strong>：PayPay証券が1,000円から（PayPay銀行連携なら100円から）金額指定で購入可能。<a href="https://www.paypay-sec.co.jp/us-stock/">Paypay-sec</a> Amazon・Microsoft・NVIDIAなど有名銘柄に対応。スプレッド（実質手数料）は現地時間日中で基準価格の0.5%、加えて為替は1ドルあたり35銭。<a href="https://kakaku.com/stock/stock_companydetail.asp?companycd=1036">Kakaku</a></li>
+<li><strong>積立</strong>：SBI・楽天などは米国株・ETFの定期買付サービスがあり、毎月一定額で自動積立できる。</li>
+</ul>
+
+<h2>Recommendations</h2>
+<ul>
+<li><strong>まず1社、大手ネット証券の口座を開く</strong>：SBI証券か楽天証券なら日本株・米国株とも手数料が業界最安水準で、為替手数料も無料化済み。両方扱えるので「Anthropic出資企業（米国株）」と「日本のAI株」を1口座で完結できる。楽天経済圏なら楽天証券、ポイント・取扱国数重視ならSBI証券。</li>
+<li><strong>少額で試すならステップを分ける</strong>：(1) まずPayPay証券で米国株を1,000円から、またはSBIのS株で日本株を1株から購入して値動きに慣れる→(2) 慣れたら大手の外国株式口座でNISA成長投資枠を使い、手数料0円で本格購入。</li>
+<li><strong>コストを抑える判断基準</strong>：米ドルを継続保有・再投資するなら「外貨決済」、たまにしか取引しないなら「円貨決済（為替手数料無料の証券会社）」が手軽。1回の取引額が大きいほど、手数料上限22ドルと為替無料の効果が効く。</li>
+<li><strong>銘柄の選び方の目安</strong>：Anthropicへの「最も直接的」な露出はAmazon（未実現利益が決算に計上される構造）とAlphabet（2026年Q1純利益の約半分がAnthropic保有株の評価益由来）。<a href="https://thenextweb.com/news/amazon-q1-2026-anthropic-aws-earnings">TNW | Amazon</a> 半導体の裾野まで広く取るならNVIDIA・TSMC。日本株で身近に持ちたいならサイバーエージェント（約13.5万円）やさくらインターネット。</li>
+</ul>
+
+<h2>Caveats</h2>
+<ul>
+<li><strong>本資料は情報提供であり、投資勧誘・投資助言ではない。</strong> 売買の最終判断は自己責任で。</li>
+<li><strong>株価は常に変動する。</strong> 記載の株価は2026年5月29日〜6月2日時点の直近値で、円換算は1ドル159円前後の概算。実際の購入額は約定時の株価・為替で変わる。NVIDIAは6月1日の新製品発表で1日で約6%上昇、<a href="https://www.nikkei.com/nkd/company/us/NVDA/">Nikkei</a> Salesforceも6月1日に約8〜9%上昇するなど短期変動が大きい。</li>
+<li><strong>Anthropicは未上場。</strong> 出資企業を買っても、その企業価値に占めるAnthropic分はごく一部であり、「Anthropic株」を買うことにはならない。Business Insiderによれば2026年にSECへ機密でIPO申請済みで法律事務所Wilson Sonsiniを起用<a href="https://sacra.com/c/anthropic/">Sacra</a> と報じられる一方、2025年12月時点で広報責任者Sasha de Marignyは「当面上場の予定はない（no immediate plans to go public）」と発言<a href="https://sacra.com/c/anthropic/">Sacra</a> しており、IPO時期・条件は依然不確定。</li>
+<li><strong>為替リスク</strong>：米国株は円高に振れると円換算で目減りする。2026年5月は4月28日〜5月27日に総額11兆7,349億円という1か月としては過去最大の円買い介入が実施されるなど、為替が不安定。</li>
+<li><strong>PKSHAやさくらインターネットなどテーマ株はPERが極めて高い</strong>（さくらは2026年4月時点でPER1,110倍）局面があり、業績以上に期待で動きやすい点に注意。</li>
+<li>単元未満株は議決権がなく、リアルタイム約定でない場合（寄付のみ）や取扱銘柄が限られる場合がある。PayPay証券・日興フロッギーは単元未満株が証券会社名義のため株主優待の対象外。<a href="https://www.paypay-sec.co.jp/support/ca/">Paypay-sec</a></li>
+</ul>
+</main>
+<footer class="page">Generated by brainstorm-publish skill.</footer>
+</div>
+</body>
+</html>
